@@ -155,7 +155,7 @@ export function DashboardPage() {
 
       {/* ── Group progress ── */}
       <Card className="p-5">
-        <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Gruppenfortschritt</h3>
+        <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Gruppen-Fortschritt</h3>
         <GroupProgress progressList={progressList} />
       </Card>
 
