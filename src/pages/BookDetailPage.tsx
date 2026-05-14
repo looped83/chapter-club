@@ -215,59 +215,60 @@ export function BookDetailPage() {
         <div className="flex flex-col gap-4">
           {/* ── Meine Bewertung ── */}
           <Card className="p-5">
-            <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Meine Bewertung</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-stone-900 dark:text-white">Meine Bewertung</h3>
+              {myReview && !editingReview && (
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setConfirmDelete(true)}
+                    className="text-sm text-stone-400 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                  >
+                    Löschen
+                  </button>
+                  <button
+                    onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
+                    className="text-sm text-brand-600 dark:text-brand-400 hover:text-brand-500 dark:hover:text-brand-300 font-medium transition-colors"
+                  >
+                    Bearbeiten
+                  </button>
+                </div>
+              )}
+            </div>
 
             {myReview && !editingReview ? (
-              /* Horizontal strip: stars+rating | avatar | spacer | actions */
-              <div className="flex items-center gap-3 bg-stone-50 dark:bg-white/[0.06] rounded-2xl p-3 border border-stone-100 dark:border-white/10">
-                {/* Stars + rating — leftmost */}
-                <div className="flex flex-col items-start gap-0.5 flex-shrink-0">
-                  <StarRating rating={Number(myReview.rating)} size="sm" />
-                  <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
+              <div className="flex flex-col gap-3">
+                <div>
+                  <div className="flex justify-between items-center mb-1.5">
+                    <StarRating rating={Number(myReview.rating)} size="sm" />
+                    <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
+                  </div>
+                  <div className="h-2 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-brand-400 rounded-full transition-all duration-500"
+                      style={{ width: `${(Number(myReview.rating) / 5) * 100}%` }}
+                    />
+                  </div>
                 </div>
-
-                <div className="flex-1" />
-
-                {/* Actions — right edge */}
-                <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  {confirmDelete ? (
-                    <>
-                      <span className="text-[10px] text-stone-400 dark:text-white/50">Wirklich?</span>
-                      <div className="flex gap-2">
-                        <button
-                          onClick={async () => {
-                            await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
-                            setConfirmDelete(false)
-                          }}
-                          className="text-[10px] text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
-                        >
-                          Ja
-                        </button>
-                        <button
-                          onClick={() => setConfirmDelete(false)}
-                          className="text-[10px] text-stone-300 dark:text-white/30 hover:text-stone-500 dark:hover:text-white/60 transition-colors"
-                        >
-                          Nein
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
-                        className="text-xs text-brand-600 dark:text-brand-400 hover:text-brand-500 dark:hover:text-brand-300 font-medium transition-colors"
-                      >
-                        Bearbeiten
-                      </button>
-                      <button
-                        onClick={() => setConfirmDelete(true)}
-                        className="text-xs text-stone-300 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors"
-                      >
-                        Löschen
-                      </button>
-                    </>
-                  )}
-                </div>
+                {confirmDelete && (
+                  <div className="flex items-center gap-2 pt-1">
+                    <span className="text-xs text-stone-400 dark:text-white/50">Wirklich löschen?</span>
+                    <button
+                      onClick={async () => {
+                        await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
+                        setConfirmDelete(false)
+                      }}
+                      className="text-xs text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
+                    >
+                      Ja
+                    </button>
+                    <button
+                      onClick={() => setConfirmDelete(false)}
+                      className="text-xs text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors"
+                    >
+                      Nein
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <ReviewForm
