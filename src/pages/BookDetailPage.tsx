@@ -197,16 +197,32 @@ export function BookDetailPage() {
                   Bearbeiten
                 </button>
               )}
+              {editingProgress && (
+                <button
+                  onClick={() => setEditingProgress(false)}
+                  className="text-sm text-stone-400 dark:text-white/40 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
+                >
+                  Abbrechen
+                </button>
+              )}
             </div>
 
             {myProgress && !editingProgress ? (
               <ProgressSummary progress={myProgress} />
-            ) : (
+            ) : editingProgress ? (
               <ProgressSlider
                 bookId={book.id}
                 current={myProgress ?? null}
                 onSaved={() => setEditingProgress(false)}
               />
+            ) : (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setEditingProgress(true)}
+              >
+                + Fortschritt eintragen
+              </Button>
             )}
           </Card>
           <Card className="p-5">
