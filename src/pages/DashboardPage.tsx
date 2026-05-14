@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentBook } from '@/hooks/useCurrentBook'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
-import { useBookReviews } from '@/hooks/useReviews'
+import { useBookReviews, useMyReview } from '@/hooks/useReviews'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
@@ -11,6 +11,7 @@ import { BookCover } from '@/components/book/BookCover'
 import { AverageRating, StarRating } from '@/components/book/StarRating'
 import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
+import { ReviewForm } from '@/components/review/ReviewForm'
 
 const MONTH_NAMES = [
   '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -29,7 +30,9 @@ export function DashboardPage() {
   const { data: progressList = [] } = useBookProgress(book?.id ?? '')
   const { data: myProgress } = useMyProgress(book?.id ?? '', user?.id ?? '')
   const { data: reviews = [] } = useBookReviews(book?.id ?? '')
+  const { data: myReview } = useMyReview(book?.id ?? '', user?.id ?? '')
   const [showProgress, setShowProgress] = useState(false)
+  const [showReview, setShowReview] = useState(false)
 
   if (isLoading) return <PageSpinner />
 
@@ -115,9 +118,16 @@ export function DashboardPage() {
             <Button
               size="md"
               variant={showProgress ? 'secondary' : 'primary'}
-              onClick={() => setShowProgress((v) => !v)}
+              onClick={() => { setShowProgress((v) => !v); setShowReview(false) }}
             >
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
+            </Button>
+            <Button
+              size="md"
+              variant={showReview ? 'secondary' : 'primary'}
+              onClick={() => { setShowReview((v) => !v); setShowProgress(false) }}
+            >
+              {showReview ? 'Schließen' : myReview ? 'Bewertung bearbeiten' : 'Bewertung schreiben'}
             </Button>
             <Link to={`/book/${book.id}`}>
               <Button size="md" variant="ghost" className="text-white hover:bg-white/20 border border-white/20">
@@ -147,6 +157,18 @@ export function DashboardPage() {
             bookId={book.id}
             current={myProgress ?? null}
             onSaved={() => setShowProgress(false)}
+          />
+        </Card>
+      )}
+
+      {/* ── Inline review editor ── */}
+      {showReview && (
+        <Card className="p-5">
+          <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Meine Bewertung</h3>
+          <ReviewForm
+            bookId={book.id}
+            existing={myReview ?? null}
+            onSaved={() => setShowReview(false)}
           />
         </Card>
       )}
