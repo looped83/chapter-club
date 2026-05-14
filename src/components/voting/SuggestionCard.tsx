@@ -1,5 +1,6 @@
 import { BookCover } from '@/components/book/BookCover'
 import { Button } from '@/components/ui/Button'
+import { ExpandableText } from '@/components/ui/ExpandableText'
 import type { BookSuggestionWithProfile } from '@/types/database'
 
 interface SuggestionCardProps {
@@ -78,7 +79,12 @@ export function SuggestionCard({
           )}
 
           {suggestion.description && (
-            <p className="text-xs text-white/50 leading-relaxed line-clamp-2">{suggestion.description}</p>
+            <ExpandableText
+              text={suggestion.description}
+              lines={2}
+              className="text-xs text-white/50 leading-relaxed"
+              toggleClassName="text-white/30 hover:text-white/60 text-xs mt-0.5 transition-colors"
+            />
           )}
 
           {votingOpen && (

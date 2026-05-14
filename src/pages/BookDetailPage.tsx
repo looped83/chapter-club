@@ -4,6 +4,7 @@ import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview, useDeleteReview } from '@/hooks/useReviews'
 import type { ReadingProgress } from '@/types/database'
+import { ExpandableText } from '@/components/ui/ExpandableText'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
@@ -28,7 +29,6 @@ export function BookDetailPage() {
   const { data: reviews = [] } = useBookReviews(id!)
   const { data: myReview } = useMyReview(id!, user?.id ?? '')
   const [tab, setTab] = useState<'progress' | 'reviews'>('progress')
-  const [descExpanded, setDescExpanded] = useState(false)
   const [editingProgress, setEditingProgress] = useState(false)
   const [editingReview, setEditingReview] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
@@ -111,17 +111,12 @@ export function BookDetailPage() {
                 </p>
               )}
               {book.description && (
-                <div className="mt-1">
-                  <p className={`text-white/60 text-xs leading-relaxed ${descExpanded ? '' : 'line-clamp-2'}`}>
-                    {book.description}
-                  </p>
-                  <button
-                    onClick={() => setDescExpanded((v) => !v)}
-                    className="text-white/40 hover:text-white/70 text-xs mt-0.5 transition-colors"
-                  >
-                    {descExpanded ? 'weniger' : 'mehr'}
-                  </button>
-                </div>
+                <ExpandableText
+                  text={book.description}
+                  lines={2}
+                  className="text-white/60 text-xs leading-relaxed mt-1"
+                  toggleClassName="text-white/40 hover:text-white/70 text-xs mt-0.5 transition-colors"
+                />
               )}
             </div>
           </div>
