@@ -224,9 +224,6 @@ export function BookDetailPage() {
                   <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
                 </div>
 
-                {/* Avatar */}
-                <span className="text-2xl leading-none flex-shrink-0">{profile?.avatar_emoji ?? '📚'}</span>
-
                 <div className="flex-1" />
 
                 {/* Actions — right edge */}
@@ -331,11 +328,6 @@ function ProgressSummary({ progress }: { progress: ReadingProgress }) {
           />
         </div>
       </div>
-      {progress.mood && (
-        <p className="text-sm text-stone-500 dark:text-white/50">
-          Mood: <span className="text-xl">{progress.mood}</span>
-        </p>
-      )}
     </div>
   )
 }
