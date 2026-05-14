@@ -2,14 +2,10 @@ import { useState, useCallback } from 'react'
 import { useUpsertProgress } from '@/hooks/useBookProgress'
 import { useAuth } from '@/lib/AuthContext'
 import { Button } from '@/components/ui/Button'
+import { READING_STATUS_LABELS } from '@/lib/constants'
 import type { ReadingProgress, ReadingStatus } from '@/types/database'
 
-const STATUS_LABELS: Partial<Record<ReadingStatus, string>> = {
-  not_started: 'Noch nicht angefangen',
-  reading: 'Am Lesen',
-  paused: 'Pausiert',
-  abandoned: 'Abgebrochen',
-}
+const FORM_STATUSES: ReadingStatus[] = ['not_started', 'reading', 'paused', 'abandoned']
 
 interface ProgressSliderProps {
   bookId: string
@@ -76,7 +72,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
       <div>
         <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Status</p>
         <div className="flex flex-wrap gap-2">
-          {(Object.keys(STATUS_LABELS) as Array<keyof typeof STATUS_LABELS>).map((s) => (
+          {FORM_STATUSES.map((s) => (
             <button
               key={s}
               type="button"
@@ -89,7 +85,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
               ].join(' ')}
               aria-pressed={status === s}
             >
-              {STATUS_LABELS[s]}
+              {READING_STATUS_LABELS[s]}
             </button>
           ))}
         </div>

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -15,11 +15,7 @@ import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
 import { ReviewForm } from '@/components/review/ReviewForm'
 import { ReviewCard } from '@/components/review/ReviewCard'
-
-const MONTH_NAMES = [
-  '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-]
+import { MONTH_NAMES, READING_STATUS_LABELS } from '@/lib/constants'
 
 export function BookDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -62,6 +58,15 @@ export function BookDetailPage() {
   const enthusiasticReader = reviews.reduce<typeof reviews[0] | null>((best, r) =>
     (!best || r.rating > best.rating) ? r : best
   , null)
+
+  const sortedReviews = useMemo(
+    () => [...reviews].sort((a, b) => {
+      if (a.user_id === user?.id) return -1
+      if (b.user_id === user?.id) return 1
+      return 0
+    }),
+    [reviews, user?.id]
+  )
 
   return (
     <div className="flex flex-col gap-5">
@@ -311,65 +316,58 @@ export function BookDetailPage() {
           </Card>
 
           {/* ── Alle Reviews ── eigene zuerst */}
-          {reviews.length > 0 && (() => {
-            const sorted = [...reviews].sort((a, b) => {
-              if (a.user_id === user?.id) return -1
-              if (b.user_id === user?.id) return 1
-              return 0
-            })
-            return (
-              <Card className="p-5">
-                <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Alle Bewertungen</h3>
-                {/* Mobile: horizontal snap carousel; Desktop: vertical list */}
-                <div
-                  ref={carouselRef}
-                  role="group"
-                  aria-label="Bewertungen"
-                  tabIndex={0}
-                  onScroll={() => {
-                    if (!carouselRef.current) return
-                    const { scrollLeft, clientWidth } = carouselRef.current
-                    setCarouselIndex(Math.round(scrollLeft / clientWidth))
-                  }}
-                  onKeyDown={(e) => {
-                    const el = carouselRef.current
-                    if (!el) return
-                    if (e.key === 'ArrowRight') { e.preventDefault(); el.scrollBy({ left: el.clientWidth, behavior: 'smooth' }) }
-                    if (e.key === 'ArrowLeft')  { e.preventDefault(); el.scrollBy({ left: -el.clientWidth, behavior: 'smooth' }) }
-                  }}
-                  className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide md:flex-col md:overflow-x-visible md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 rounded-xl"
-                >
-                  {sorted.map((r) => (
-                    <div key={r.id} className="snap-start flex-shrink-0 w-full md:w-auto">
-                      <ReviewCard review={r} />
-                    </div>
+          {reviews.length > 0 && (
+            <Card className="p-5">
+              <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Alle Bewertungen</h3>
+              {/* Mobile: horizontal snap carousel; Desktop: vertical list */}
+              <div
+                ref={carouselRef}
+                role="group"
+                aria-label="Bewertungen"
+                tabIndex={0}
+                onScroll={() => {
+                  if (!carouselRef.current) return
+                  const { scrollLeft, clientWidth } = carouselRef.current
+                  setCarouselIndex(Math.round(scrollLeft / clientWidth))
+                }}
+                onKeyDown={(e) => {
+                  const el = carouselRef.current
+                  if (!el) return
+                  if (e.key === 'ArrowRight') { e.preventDefault(); el.scrollBy({ left: el.clientWidth, behavior: 'smooth' }) }
+                  if (e.key === 'ArrowLeft')  { e.preventDefault(); el.scrollBy({ left: -el.clientWidth, behavior: 'smooth' }) }
+                }}
+                className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide md:flex-col md:overflow-x-visible md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 rounded-xl"
+              >
+                {sortedReviews.map((r) => (
+                  <div key={r.id} className="snap-start flex-shrink-0 w-full md:w-auto">
+                    <ReviewCard review={r} />
+                  </div>
+                ))}
+              </div>
+              {/* Dot indicators — mobile only */}
+              {sortedReviews.length > 1 && (
+                <div className="flex justify-center gap-1.5 mt-3 md:hidden" role="group" aria-label="Bewertung auswählen">
+                  {sortedReviews.map((r, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      aria-label={`Bewertung von ${r.profiles?.display_name ?? i + 1}`}
+                      aria-current={i === carouselIndex ? 'true' : undefined}
+                      onClick={() => {
+                        carouselRef.current?.scrollTo({ left: i * carouselRef.current.clientWidth, behavior: 'smooth' })
+                      }}
+                      className={[
+                        'rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400',
+                        i === carouselIndex
+                          ? 'w-4 h-1.5 bg-brand-400'
+                          : 'w-1.5 h-1.5 bg-stone-300 dark:bg-white/20',
+                      ].join(' ')}
+                    />
                   ))}
                 </div>
-                {/* Dot indicators — mobile only */}
-                {sorted.length > 1 && (
-                  <div className="flex justify-center gap-1.5 mt-3 md:hidden" role="group" aria-label="Bewertung auswählen">
-                    {sorted.map((r, i) => (
-                      <button
-                        key={i}
-                        type="button"
-                        aria-label={`Bewertung von ${r.profiles?.display_name ?? i + 1}`}
-                        aria-current={i === carouselIndex ? 'true' : undefined}
-                        onClick={() => {
-                          carouselRef.current?.scrollTo({ left: i * carouselRef.current.clientWidth, behavior: 'smooth' })
-                        }}
-                        className={[
-                          'rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400',
-                          i === carouselIndex
-                            ? 'w-4 h-1.5 bg-brand-400'
-                            : 'w-1.5 h-1.5 bg-stone-300 dark:bg-white/20',
-                        ].join(' ')}
-                      />
-                    ))}
-                  </div>
-                )}
-              </Card>
-            )
-          })()}
+              )}
+            </Card>
+          )}
 
           {reviews.length === 0 && (
             <div className="text-center py-8 text-stone-400 dark:text-white/40 text-sm">
@@ -382,20 +380,12 @@ export function BookDetailPage() {
   )
 }
 
-const STATUS_LABELS: Record<string, string> = {
-  not_started: 'Noch nicht angefangen',
-  reading: 'Am Lesen',
-  finished: 'Fertig ✓',
-  paused: 'Pausiert',
-  abandoned: 'Abgebrochen',
-}
-
 function ProgressSummary({ progress }: { progress: ReadingProgress }) {
   return (
     <div className="flex flex-col gap-3">
       <div>
         <div className="flex justify-between items-center mb-1.5">
-          <span className="text-sm text-stone-600 dark:text-white/60">{STATUS_LABELS[progress.status] ?? progress.status}</span>
+          <span className="text-sm text-stone-600 dark:text-white/60">{READING_STATUS_LABELS[progress.status] ?? progress.status}</span>
           <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{progress.progress_percent}%</span>
         </div>
         <div className="h-2 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">

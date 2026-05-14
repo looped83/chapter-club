@@ -1,6 +1,7 @@
 import { Badge } from '@/components/ui/Badge'
 import { StarRating } from '@/components/book/StarRating'
 import { ExpandableText } from '@/components/ui/ExpandableText'
+import { IMPACT_LABELS } from '@/lib/constants'
 import type { ReviewWithProfile, Pace } from '@/types/database'
 
 interface ReviewCardProps {
@@ -12,8 +13,6 @@ const PACE_LABELS: Record<Pace, string> = {
   just_right: 'Genau richtig',
   too_fast: 'Zu schnell',
 }
-
-const IMPACT_LABELS = ['', '😐', '🙂', '😮', '😢', '🤯']
 
 export function ReviewCard({ review }: ReviewCardProps) {
   return (

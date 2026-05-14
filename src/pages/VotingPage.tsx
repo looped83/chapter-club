@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useSuggestions, useMyVote, useCastVote } from '@/hooks/useVoting'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { SuggestionCard } from '@/components/voting/SuggestionCard'
 import { SuggestionForm } from '@/components/voting/SuggestionForm'
 import type { BookSuggestionWithProfile } from '@/types/database'
+import { MONTH_NAMES } from '@/lib/constants'
 
 function getVotingMonth(): { month: number; year: number } {
   const now = new Date()
@@ -29,11 +30,6 @@ function getWinner(suggestions: BookSuggestionWithProfile[]): BookSuggestionWith
   })
 }
 
-const MONTH_NAMES = [
-  '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-]
-
 export function VotingPage() {
   const { user } = useAuth()
   const { month, year } = getVotingMonth()
@@ -47,6 +43,10 @@ export function VotingPage() {
   const hasMysuggestion = suggestions.some((s) => s.suggested_by === user?.id)
 
   const winner = getWinner(suggestions)
+  const sortedSuggestions = useMemo(
+    () => [...suggestions].sort((a, b) => b.vote_count - a.vote_count),
+    [suggestions]
+  )
 
   const now = new Date()
   const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate()
@@ -135,19 +135,17 @@ export function VotingPage() {
           <h2 className="font-semibold text-stone-900 dark:text-white">
             Vorschläge ({suggestions.length})
           </h2>
-          {[...suggestions]
-            .sort((a, b) => b.vote_count - a.vote_count)
-            .map((s) => (
-              <SuggestionCard
-                key={s.id}
-                suggestion={s}
-                isWinner={!votingOpen && winner?.id === s.id}
-                myVoteId={myVoteId}
-                onVote={handleVote}
-                votingOpen={votingOpen}
-                isVoting={castVote.isPending}
-              />
-            ))}
+          {sortedSuggestions.map((s) => (
+            <SuggestionCard
+              key={s.id}
+              suggestion={s}
+              isWinner={!votingOpen && winner?.id === s.id}
+              myVoteId={myVoteId}
+              onVote={handleVote}
+              votingOpen={votingOpen}
+              isVoting={castVote.isPending}
+            />
+          ))}
         </div>
       )}
     </div>

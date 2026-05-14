@@ -34,6 +34,7 @@ export function useMyReview(bookId: string, userId: string) {
       return data as Review | null
     },
     enabled: !!bookId && !!userId,
+    staleTime: 1000 * 60,
   })
 }
 

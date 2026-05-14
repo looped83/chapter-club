@@ -5,6 +5,7 @@ import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview } from '@/hooks/useReviews'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
+import { MONTH_NAMES } from '@/lib/constants'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { BookCover } from '@/components/book/BookCover'
@@ -12,11 +13,6 @@ import { AverageRating, StarRating } from '@/components/book/StarRating'
 import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
 import { ReviewForm } from '@/components/review/ReviewForm'
-
-const MONTH_NAMES = [
-  '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-  'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember',
-]
 
 function daysLeftInMonth() {
   const now = new Date()

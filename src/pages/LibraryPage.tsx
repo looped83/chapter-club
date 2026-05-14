@@ -6,11 +6,7 @@ import { BookCover } from '@/components/book/BookCover'
 import { AverageRating } from '@/components/book/StarRating'
 import { Badge } from '@/components/ui/Badge'
 import type { BookWithProfile } from '@/types/database'
-
-const MONTH_NAMES = [
-  '', 'Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun',
-  'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez',
-]
+import { MONTH_NAMES_SHORT } from '@/lib/constants'
 
 export function LibraryPage() {
   const { data: books = [], isLoading, error } = useBooks()
@@ -72,7 +68,7 @@ function BookCard({ book }: { book: BookWithProfile }) {
       <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
         <div className="flex items-center justify-between gap-1">
           <span className="text-white/50 text-[10px] font-medium">
-            {MONTH_NAMES[book.month]} {book.year}
+            {MONTH_NAMES_SHORT[book.month]} {book.year}
           </span>
           {book.is_current && <Badge variant="brand">Aktuell</Badge>}
         </div>
