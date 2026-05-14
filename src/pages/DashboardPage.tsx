@@ -168,7 +168,12 @@ export function DashboardPage() {
           </div>
           <div className="grid grid-cols-2 gap-3">
             {reviews.map((r) => (
-              <div key={r.id} className="flex flex-col items-center gap-2 bg-stone-100 dark:bg-white/10 rounded-2xl px-3 py-4">
+              <Link
+                key={r.id}
+                to={`/book/${book.id}`}
+                state={{ tab: 'reviews' }}
+                className="flex flex-col items-center gap-2 bg-stone-100 dark:bg-white/10 rounded-2xl px-3 py-4 hover:bg-stone-200 dark:hover:bg-white/15 transition-colors"
+              >
                 <span className="text-3xl leading-none">{r.profiles?.avatar_emoji ?? '📚'}</span>
                 <span className="text-xs font-medium text-stone-600 dark:text-white/70 truncate w-full text-center">
                   {r.profiles?.display_name}
@@ -177,7 +182,7 @@ export function DashboardPage() {
                 <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
                   {Number(r.rating).toFixed(1)}
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </Card>

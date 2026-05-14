@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview, useDeleteReview } from '@/hooks/useReviews'
@@ -23,13 +23,16 @@ const MONTH_NAMES = [
 export function BookDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const { user } = useAuth()
   const { data: book, isLoading } = useBook(id!)
   const { data: progressList = [] } = useBookProgress(id!)
   const { data: myProgress } = useMyProgress(id!, user?.id ?? '')
   const { data: reviews = [] } = useBookReviews(id!)
   const { data: myReview } = useMyReview(id!, user?.id ?? '')
-  const [tab, setTab] = useState<'progress' | 'reviews'>('progress')
+  const [tab, setTab] = useState<'progress' | 'reviews'>(
+    (location.state as { tab?: string } | null)?.tab === 'reviews' ? 'reviews' : 'progress'
+  )
   const [editingProgress, setEditingProgress] = useState(false)
   const [editingReview, setEditingReview] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
