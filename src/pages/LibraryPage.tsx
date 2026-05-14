@@ -50,36 +50,36 @@ function BookCard({ book }: { book: BookWithProfile }) {
   const ratings = reviews.map((r) => Number(r.rating))
 
   return (
-    <Link
-      to={`/book/${book.id}`}
-      className="group relative rounded-2xl overflow-hidden aspect-[2/3] block ring-1 ring-white/10 hover:ring-white/20 transition-all"
-    >
-      {/* Full-bleed cover */}
-      <BookCover
-        title={book.title}
-        coverUrl={book.cover_url}
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-      />
-
-      {/* Gradient overlay — always visible at bottom */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-      {/* Info strip at bottom */}
-      <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
-        <div className="flex items-center justify-between gap-1">
-          <span className="text-white/50 text-[10px] font-medium">
-            {MONTH_NAMES_SHORT[book.month]} {book.year}
-          </span>
-          {book.is_current && <Badge variant="brand">Aktuell</Badge>}
-        </div>
-        <h3 className="text-white text-xs font-semibold leading-tight line-clamp-2">
-          {book.title}
-        </h3>
-        <p className="text-white/60 text-[10px] truncate">{book.author}</p>
-        {ratings.length > 0 && (
-          <AverageRating ratings={ratings} onDark />
-        )}
+    <div className="flex flex-col gap-1.5">
+      {/* Month label — above the cover, always readable */}
+      <div className="flex items-center justify-between gap-1 px-0.5">
+        <span className="text-xs font-semibold text-stone-500 dark:text-white/50 tracking-wide">
+          {MONTH_NAMES_SHORT[book.month]} {book.year}
+        </span>
+        {book.is_current && <Badge variant="brand">Aktuell</Badge>}
       </div>
-    </Link>
+
+      {/* Cover card */}
+      <Link
+        to={`/book/${book.id}`}
+        className="group relative rounded-2xl overflow-hidden aspect-[2/3] block ring-1 ring-black/10 dark:ring-white/10 hover:ring-black/20 dark:hover:ring-white/20 transition-all"
+      >
+        <BookCover
+          title={book.title}
+          coverUrl={book.cover_url}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
+          <h3 className="text-white text-xs font-semibold leading-tight line-clamp-2">
+            {book.title}
+          </h3>
+          <p className="text-white/60 text-[10px] truncate">{book.author}</p>
+          {ratings.length > 0 && (
+            <AverageRating ratings={ratings} onDark />
+          )}
+        </div>
+      </Link>
+    </div>
   )
 }
