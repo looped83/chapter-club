@@ -1,5 +1,6 @@
 export type ReadingStatus = 'not_started' | 'reading' | 'finished' | 'paused' | 'abandoned'
 export type Mood = '😍' | '😭' | '🤯' | '💤' | '🔥' | '😐'
+export type Pace = 'too_slow' | 'just_right' | 'too_fast'
 
 export interface Profile {
   id: string
@@ -47,6 +48,10 @@ export interface Review {
   review_text: string | null
   favorite_quote: string | null
   contains_spoilers: boolean
+  emotional_impact: number | null
+  would_reread: boolean | null
+  pace: Pace | null
+  one_word: string | null
   created_at: string
   updated_at: string
 }

@@ -44,6 +44,10 @@ interface UpsertReviewInput {
   reviewText: string
   favoriteQuote: string
   containsSpoilers: boolean
+  emotionalImpact: number | null
+  wouldReread: boolean | null
+  pace: string | null
+  oneWord: string
 }
 
 export function useUpsertReview() {
@@ -60,6 +64,10 @@ export function useUpsertReview() {
             review_text: input.reviewText || null,
             favorite_quote: input.favoriteQuote || null,
             contains_spoilers: input.containsSpoilers,
+            emotional_impact: input.emotionalImpact,
+            would_reread: input.wouldReread,
+            pace: input.pace,
+            one_word: input.oneWord || null,
           },
           { onConflict: 'book_id,user_id' }
         )
