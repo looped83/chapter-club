@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { StarPicker } from '@/components/ui/StarPicker'
 import { Textarea } from '@/components/ui/Textarea'
 import { Input } from '@/components/ui/Input'
+import { IMPACT_LABELS } from '@/lib/constants'
 import type { Review, Pace } from '@/types/database'
 
 const schema = z.object({
@@ -28,8 +29,6 @@ const PACE_LABELS: Record<Pace, string> = {
   just_right: 'Genau richtig',
   too_fast: 'Zu schnell',
 }
-
-const IMPACT_LABELS = ['', '😐', '🙂', '😮', '😢', '🤯']
 
 interface ReviewFormProps {
   bookId: string

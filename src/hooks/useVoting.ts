@@ -48,6 +48,7 @@ export function useMyVote(userId: string, month: number, year: number) {
       return data as SuggestionVote | null
     },
     enabled: !!userId,
+    staleTime: 1000 * 30,
   })
 }
 

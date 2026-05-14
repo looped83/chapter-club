@@ -7,6 +7,11 @@ interface ExpandableTextProps {
   toggleClassName?: string
 }
 
+const CLAMP: Record<number, string> = {
+  1: 'line-clamp-1', 2: 'line-clamp-2', 3: 'line-clamp-3',
+  4: 'line-clamp-4', 5: 'line-clamp-5', 6: 'line-clamp-6',
+}
+
 export function ExpandableText({
   text,
   lines = 2,
@@ -20,7 +25,6 @@ export function ExpandableText({
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    // Compare full scrollHeight to clamped clientHeight
     setOverflows(el.scrollHeight > el.clientHeight + 2)
   }, [text])
 
@@ -28,10 +32,7 @@ export function ExpandableText({
     <div>
       <p
         ref={ref}
-        className={[
-          className,
-          !expanded ? `line-clamp-${lines}` : '',
-        ].join(' ')}
+        className={[className, !expanded ? (CLAMP[lines] ?? 'line-clamp-2') : ''].join(' ')}
       >
         {text}
       </p>
