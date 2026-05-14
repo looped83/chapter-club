@@ -51,7 +51,7 @@ export function LibraryPage() {
 
 function BookCard({ book }: { book: BookWithProfile }) {
   const { data: reviews = [] } = useBookReviews(book.id)
-  const ratings = reviews.map((r) => r.rating)
+  const ratings = reviews.map((r) => Number(r.rating))
 
   return (
     <Link

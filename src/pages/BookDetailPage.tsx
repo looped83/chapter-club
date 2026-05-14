@@ -39,7 +39,7 @@ export function BookDetailPage() {
     </div>
   )
 
-  const ratings = reviews.map((r) => r.rating)
+  const ratings = reviews.map((r) => Number(r.rating))
 
   const topReader = progressList.reduce<typeof progressList[0] | null>((best, p) =>
     (!best || p.progress_percent > best.progress_percent) ? p : best
@@ -99,7 +99,7 @@ export function BookDetailPage() {
                 <span className="text-xl">{enthusiasticReader.profiles?.avatar_emoji}</span>
                 <div>
                   <p className="text-sm font-medium text-stone-800 truncate">{enthusiasticReader.profiles?.display_name}</p>
-                  <p className="text-xs text-brand-600 font-bold">{enthusiasticReader.rating}/10</p>
+                  <p className="text-xs text-brand-600 font-bold">{Number(enthusiasticReader.rating).toFixed(1)}</p>
                 </div>
               </div>
             </Card>
@@ -111,7 +111,7 @@ export function BookDetailPage() {
                 <span className="text-xl">{criticalReader.profiles?.avatar_emoji}</span>
                 <div>
                   <p className="text-sm font-medium text-stone-800 truncate">{criticalReader.profiles?.display_name}</p>
-                  <p className="text-xs text-stone-500 font-bold">{criticalReader.rating}/10</p>
+                  <p className="text-xs text-stone-500 font-bold">{Number(criticalReader.rating).toFixed(1)}</p>
                 </div>
               </div>
             </Card>

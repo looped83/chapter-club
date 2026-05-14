@@ -24,8 +24,8 @@ export function ReviewCard({ review }: ReviewCardProps) {
           <span className="font-medium text-stone-800 text-sm">{review.profiles?.display_name}</span>
         </div>
         <div className="flex items-center gap-2 flex-wrap justify-end">
-          <StarRating rating={review.rating} size="sm" />
-          <span className="text-sm font-semibold text-stone-700">{review.rating}/10</span>
+          <StarRating rating={Number(review.rating)} size="sm" />
+          <span className="text-sm font-semibold text-stone-700">{Number(review.rating).toFixed(1)}</span>
           {review.contains_spoilers && <Badge variant="warning">Spoiler</Badge>}
         </div>
       </div>

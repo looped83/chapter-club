@@ -5,12 +5,13 @@ import { z } from 'zod'
 import { useUpsertReview } from '@/hooks/useReviews'
 import { useAuth } from '@/lib/AuthContext'
 import { Button } from '@/components/ui/Button'
+import { StarPicker } from '@/components/ui/StarPicker'
 import { Textarea } from '@/components/ui/Textarea'
 import { Input } from '@/components/ui/Input'
 import type { Review, Pace } from '@/types/database'
 
 const schema = z.object({
-  rating: z.number().int().min(1).max(10),
+  rating: z.number().min(0).max(5).multipleOf(0.5),
   reviewText: z.string().max(2000, 'Max. 2000 Zeichen').optional().default(''),
   favoriteQuote: z.string().max(500, 'Max. 500 Zeichen').optional().default(''),
   containsSpoilers: z.boolean().default(false),
@@ -51,7 +52,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      rating: existing?.rating ?? 7,
+      rating: existing?.rating ?? 0,
       reviewText: existing?.review_text ?? '',
       favoriteQuote: existing?.favorite_quote ?? '',
       containsSpoilers: existing?.contains_spoilers ?? false,
@@ -65,7 +66,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
   useEffect(() => {
     if (existing) {
       reset({
-        rating: existing.rating,
+        rating: Number(existing.rating),
         reviewText: existing.review_text ?? '',
         favoriteQuote: existing.favorite_quote ?? '',
         containsSpoilers: existing.contains_spoilers,
@@ -104,31 +105,16 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       {/* Rating */}
       <div>
         <p className="text-sm font-medium text-stone-700 mb-2">
-          Bewertung: <span className="text-brand-600 font-bold">{ratingValue}/10</span>
+          Bewertung:{' '}
+          <span className="text-brand-600 font-bold">
+            {ratingValue > 0 ? `${ratingValue} / 5` : 'noch nicht vergeben'}
+          </span>
         </p>
         <Controller
           name="rating"
           control={control}
           render={({ field }) => (
-            <div className="flex gap-1 flex-wrap" role="group" aria-label="Bewertung wählen">
-              {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
-                <button
-                  key={n}
-                  type="button"
-                  onClick={() => field.onChange(n)}
-                  className={[
-                    'w-9 h-9 rounded-xl text-sm font-semibold transition-all border',
-                    field.value === n
-                      ? 'bg-brand-500 text-white border-brand-500 scale-110'
-                      : 'bg-stone-50 text-stone-600 border-stone-200 hover:border-brand-300',
-                  ].join(' ')}
-                  aria-pressed={field.value === n}
-                  aria-label={`${n} von 10`}
-                >
-                  {n}
-                </button>
-              ))}
-            </div>
+            <StarPicker value={field.value} onChange={field.onChange} size="lg" />
           )}
         />
         {errors.rating && <p className="text-xs text-red-600 mt-1">{errors.rating.message}</p>}

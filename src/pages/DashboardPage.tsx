@@ -46,7 +46,7 @@ export function DashboardPage() {
     return <EmptyState />
   }
 
-  const ratings = reviews.map((r) => r.rating)
+  const ratings = reviews.map((r) => Number(r.rating))
   const daysLeft = daysLeftInMonth()
 
   return (
@@ -144,7 +144,7 @@ export function DashboardPage() {
             {reviews.map((r) => (
               <div key={r.id} className="flex items-center gap-2 bg-stone-50 rounded-xl px-3 py-2">
                 <span className="text-lg">{r.profiles?.avatar_emoji}</span>
-                <span className="text-sm font-semibold text-stone-700">{r.rating}/10</span>
+                <span className="text-sm font-semibold text-stone-700">{Number(r.rating).toFixed(1)}</span>
               </div>
             ))}
           </div>
