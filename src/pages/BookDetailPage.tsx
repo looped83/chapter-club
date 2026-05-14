@@ -27,6 +27,7 @@ export function BookDetailPage() {
   const { data: reviews = [] } = useBookReviews(id!)
   const { data: myReview } = useMyReview(id!, user?.id ?? '')
   const [tab, setTab] = useState<'progress' | 'reviews'>('progress')
+  const [editingReview, setEditingReview] = useState(false)
 
   if (isLoading) return <PageSpinner />
   if (!book) return (
@@ -160,8 +161,27 @@ export function BookDetailPage() {
       {tab === 'reviews' && (
         <div className="flex flex-col gap-4">
           <Card className="p-5">
-            <h3 className="font-semibold text-stone-900 mb-4">Mein Review</h3>
-            <ReviewForm bookId={book.id} existing={myReview ?? null} />
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-stone-900">Mein Review</h3>
+              {myReview && !editingReview && (
+                <button
+                  onClick={() => setEditingReview(true)}
+                  className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
+                >
+                  Bearbeiten
+                </button>
+              )}
+            </div>
+
+            {myReview && !editingReview ? (
+              <ReviewCard review={{ ...myReview, profiles: null }} />
+            ) : (
+              <ReviewForm
+                bookId={book.id}
+                existing={myReview ?? null}
+                onSaved={() => setEditingReview(false)}
+              />
+            )}
           </Card>
 
           {reviews.length > 0 && (
