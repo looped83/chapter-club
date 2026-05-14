@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview, useDeleteReview } from '@/hooks/useReviews'
@@ -22,6 +22,7 @@ const MONTH_NAMES = [
 
 export function BookDetailPage() {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const { user } = useAuth()
   const { data: book, isLoading } = useBook(id!)
   const { data: progressList = [] } = useBookProgress(id!)
@@ -82,12 +83,12 @@ export function BookDetailPage() {
 
         {/* Content */}
         <div className="relative z-10 p-5">
-          <Link
-            to="/"
+          <button
+            onClick={() => navigate(-1)}
             className="inline-flex items-center gap-1 text-white/60 hover:text-white text-xs mb-4 transition-colors"
           >
             ← Zurück
-          </Link>
+          </button>
 
           <div className="flex gap-4 items-start">
             {/* Cover */}
