@@ -84,13 +84,24 @@ export function DashboardPage() {
             </span>
           </h1>
 
+          {/* Stats */}
+          <div className="flex items-center gap-1.5 mb-5">
+            <span className="text-xs text-white/50">
+              {daysLeft > 0
+                ? `Noch ${daysLeft} ${daysLeft === 1 ? 'Tag' : 'Tage'} im Monat`
+                : 'Letzter Tag des Monats'}
+            </span>
+            <span className="text-white/20">·</span>
+            <span className="text-xs text-white/50">{progressList.length} von 4 lesen mit</span>
+          </div>
+
           {/* Cover */}
           <div className="w-36 md:w-44 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/20 mb-6 flex-shrink-0">
             <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
           </div>
 
           {/* Title & author */}
-          <h2 className="font-serif text-xl md:text-2xl font-bold text-white leading-tight max-w-xs">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold text-white leading-tight max-w-xs">
             {book.title}
           </h2>
           <p className="text-white/70 text-sm mt-1">{book.author}</p>
@@ -133,16 +144,6 @@ export function DashboardPage() {
           </div>
         </div>
 
-        {/* Countdown strip */}
-        <div className="relative z-10 border-t border-white/10 px-6 py-3 flex items-center justify-center gap-1.5">
-          <span className="text-xs text-white/50">
-            {daysLeft > 0
-              ? `Noch ${daysLeft} ${daysLeft === 1 ? 'Tag' : 'Tage'} im Monat`
-              : 'Letzter Tag des Monats'}
-          </span>
-          <span className="text-white/20">·</span>
-          <span className="text-xs text-white/50">{progressList.length} von 4 lesen mit</span>
-        </div>
       </div>
 
       {/* ── Inline progress editor ── */}
