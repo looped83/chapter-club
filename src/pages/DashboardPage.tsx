@@ -7,7 +7,6 @@ import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
 import { BookCover } from '@/components/book/BookCover'
 import { AverageRating } from '@/components/book/StarRating'
 import { GroupProgress } from '@/components/progress/GroupProgress'
@@ -42,96 +41,123 @@ export function DashboardPage() {
     )
   }
 
-  if (!book) {
-    return <EmptyState />
-  }
+  if (!book) return <EmptyState />
 
   const ratings = reviews.map((r) => Number(r.rating))
   const daysLeft = daysLeftInMonth()
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="font-serif text-2xl font-bold text-stone-900">
-          {MONTH_NAMES[book.month]} {book.year}
-        </h1>
-        <Badge variant="brand">
-          {daysLeft > 0 ? `${daysLeft} Tage` : 'Letzter Tag'}
-        </Badge>
-      </div>
+    <div className="flex flex-col gap-5">
 
-      {/* Book hero card */}
-      <Card className="overflow-hidden">
-        <div className="flex gap-4 p-5">
+      {/* ── Hero ── */}
+      <div className="relative overflow-hidden rounded-3xl min-h-[420px] flex flex-col">
+
+        {/* Blurred background */}
+        {book.cover_url ? (
+          <div
+            className="absolute inset-0 scale-110"
+            style={{
+              backgroundImage: `url(${book.cover_url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'blur(28px)',
+            }}
+            aria-hidden="true"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-300 via-brand-400 to-stone-500" aria-hidden="true" />
+        )}
+
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/80" aria-hidden="true" />
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center px-6 pt-8 pb-6 flex-1">
+
+          {/* Month label */}
+          <p className="text-white/60 text-xs font-semibold tracking-[0.2em] uppercase mb-1">
+            Buch des Monats
+          </p>
+          <h1 className="font-serif text-4xl md:text-5xl font-bold text-white mb-6 leading-none">
+            {MONTH_NAMES[book.month]}
+            <span className="block text-lg md:text-xl font-normal text-white/60 mt-1 tracking-wide">
+              {book.year}
+            </span>
+          </h1>
+
           {/* Cover */}
-          <div className="flex-shrink-0 w-24 md:w-32 rounded-xl overflow-hidden shadow-md self-start">
-            <BookCover
-              title={book.title}
-              coverUrl={book.cover_url}
-              className="w-full aspect-[2/3]"
-            />
+          <div className="w-36 md:w-44 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/20 mb-6 flex-shrink-0">
+            <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
           </div>
 
-          {/* Info */}
-          <div className="flex-1 min-w-0 flex flex-col gap-2">
-            <div>
-              <h2 className="font-serif text-xl md:text-2xl font-bold text-stone-900 leading-tight">
-                {book.title}
-              </h2>
-              <p className="text-stone-500 text-sm mt-0.5">{book.author}</p>
+          {/* Title & author */}
+          <h2 className="font-serif text-xl md:text-2xl font-bold text-white leading-tight max-w-xs">
+            {book.title}
+          </h2>
+          <p className="text-white/70 text-sm mt-1">{book.author}</p>
+
+          {/* Rating */}
+          {ratings.length > 0 && (
+            <div className="mt-3 flex justify-center">
+              <AverageRating ratings={ratings} onDark />
             </div>
+          )}
 
-            {book.profiles && (
-              <p className="text-xs text-stone-400">
-                vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
-              </p>
-            )}
+          {/* Suggested by */}
+          {book.profiles && (
+            <p className="text-white/50 text-xs mt-2">
+              vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
+            </p>
+          )}
 
-            <div className="mt-1">
-              <AverageRating ratings={ratings} />
-            </div>
-
-            {book.description && (
-              <p className="text-sm text-stone-600 leading-relaxed line-clamp-3 mt-1">
-                {book.description}
-              </p>
-            )}
-
-            <div className="flex gap-2 mt-2 flex-wrap">
-              <Button
-                size="sm"
-                variant={showProgress ? 'secondary' : 'primary'}
-                onClick={() => setShowProgress((v) => !v)}
-              >
-                {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
+          {/* Actions */}
+          <div className="flex gap-2 mt-5 flex-wrap justify-center">
+            <Button
+              size="md"
+              variant={showProgress ? 'secondary' : 'primary'}
+              onClick={() => setShowProgress((v) => !v)}
+            >
+              {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
+            </Button>
+            <Link to={`/book/${book.id}`}>
+              <Button size="md" variant="ghost" className="text-white hover:bg-white/20 border border-white/20">
+                Details →
               </Button>
-              <Link to={`/book/${book.id}`}>
-                <Button size="sm" variant="ghost">Details →</Button>
-              </Link>
-            </div>
+            </Link>
           </div>
         </div>
 
-        {/* Inline progress editor */}
-        {showProgress && (
-          <div className="border-t border-stone-100 px-5 py-4">
-            <ProgressSlider
-              bookId={book.id}
-              current={myProgress ?? null}
-              onSaved={() => setShowProgress(false)}
-            />
-          </div>
-        )}
-      </Card>
+        {/* Countdown strip */}
+        <div className="relative z-10 border-t border-white/10 px-6 py-3 flex items-center justify-center gap-1.5">
+          <span className="text-xs text-white/50">
+            {daysLeft > 0
+              ? `Noch ${daysLeft} ${daysLeft === 1 ? 'Tag' : 'Tage'} im Monat`
+              : 'Letzter Tag des Monats'}
+          </span>
+          <span className="text-white/20">·</span>
+          <span className="text-xs text-white/50">{progressList.length} von 4 lesen mit</span>
+        </div>
+      </div>
 
-      {/* Group progress */}
+      {/* ── Inline progress editor ── */}
+      {showProgress && (
+        <Card className="p-5">
+          <h3 className="font-semibold text-stone-900 mb-4">Mein Fortschritt</h3>
+          <ProgressSlider
+            bookId={book.id}
+            current={myProgress ?? null}
+            onSaved={() => setShowProgress(false)}
+          />
+        </Card>
+      )}
+
+      {/* ── Group progress ── */}
       <Card className="p-5">
         <h3 className="font-semibold text-stone-900 mb-4">Gruppenfortschritt</h3>
         <GroupProgress progressList={progressList} />
       </Card>
 
-      {/* Quick reviews teaser */}
+      {/* ── Reviews teaser ── */}
       {reviews.length > 0 && (
         <Card className="p-5">
           <div className="flex items-center justify-between mb-3">
@@ -144,7 +170,9 @@ export function DashboardPage() {
             {reviews.map((r) => (
               <div key={r.id} className="flex items-center gap-2 bg-stone-50 rounded-xl px-3 py-2">
                 <span className="text-lg">{r.profiles?.avatar_emoji}</span>
-                <span className="text-sm font-semibold text-stone-700">{Number(r.rating).toFixed(1)}</span>
+                <span className="text-sm font-semibold text-stone-700">
+                  {Number(r.rating).toFixed(1)}
+                </span>
               </div>
             ))}
           </div>
