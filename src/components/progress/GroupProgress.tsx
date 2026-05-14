@@ -49,32 +49,32 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
       <div className="grid grid-cols-2 gap-3">
         {progressList.map((p) => (
           <div key={p.id} className="flex flex-col gap-2.5 bg-stone-50 dark:bg-white/[0.06] rounded-2xl p-3 border border-stone-100 dark:border-white/10">
-            {/* Avatar + bar/percent — mirrors avatar | stars/number in ReviewCard */}
-            <div className="flex items-start justify-between">
+            {/* Avatar (left) | status pill (right) */}
+            <div className="flex items-start justify-between gap-1">
               <span className="text-3xl leading-none">{p.profiles?.avatar_emoji ?? '📚'}</span>
-              <div className="flex flex-col items-end gap-0.5">
-                <div className="h-2 w-14 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-brand-400 rounded-full transition-all duration-500"
-                    style={{ width: `${p.progress_percent}%` }}
-                  />
-                </div>
-                <span className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
-                  {p.progress_percent}<span className="text-xs font-normal text-stone-400 dark:text-white/40">%</span>
-                </span>
-              </div>
-            </div>
-
-            {/* Name + status pill */}
-            <div className="flex flex-col gap-1">
-              <span className="text-xs font-semibold text-stone-900 dark:text-white truncate">
-                {p.profiles?.display_name ?? 'Unbekannt'}
-              </span>
               <span className={[
-                'self-start text-[10px] font-medium px-1.5 py-0.5 rounded-full',
+                'text-[10px] font-medium px-1.5 py-0.5 rounded-full mt-0.5',
                 STATUS_COLOR[p.status] ?? 'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
               ].join(' ')}>
                 {STATUS_LABEL[p.status] ?? p.status}
+              </span>
+            </div>
+
+            {/* Name */}
+            <span className="text-xs font-semibold text-stone-900 dark:text-white truncate">
+              {p.profiles?.display_name ?? 'Unbekannt'}
+            </span>
+
+            {/* Bar + percent — bottom */}
+            <div className="flex items-center gap-2">
+              <div className="h-2 flex-1 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-brand-400 rounded-full transition-all duration-500"
+                  style={{ width: `${p.progress_percent}%` }}
+                />
+              </div>
+              <span className="font-serif text-base font-bold text-brand-600 dark:text-brand-400 leading-none flex-shrink-0">
+                {p.progress_percent}<span className="text-[10px] font-normal text-stone-400 dark:text-white/40">%</span>
               </span>
             </div>
           </div>
