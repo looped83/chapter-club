@@ -209,65 +209,69 @@ export function BookDetailPage() {
 
       {tab === 'reviews' && (
         <div className="flex flex-col gap-4">
-          {/* ── Mein Review ── */}
+          {/* ── Meine Review ── */}
           <Card className="p-5">
-            <h3 className="font-semibold text-white mb-4">Mein Review</h3>
+            <h3 className="font-semibold text-white mb-4">Meine Review</h3>
 
             {myReview && !editingReview ? (
-              <div className="flex flex-col gap-3">
-                {/* Compact summary tile */}
-                <div className="flex items-center gap-3 bg-white/[0.06] rounded-2xl p-3 border border-white/10">
-                  <span className="text-3xl leading-none">{profile?.avatar_emoji ?? '📚'}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
-                      <span className="text-xs font-semibold text-white">Dein Review</span>
-                      {myReview.one_word && (
-                        <span className="text-[10px] font-semibold text-brand-300 bg-brand-500/15 rounded-full px-2 py-0.5 border border-brand-500/20">
-                          „{myReview.one_word}"
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <StarRating rating={Number(myReview.rating)} size="sm" />
-                      <span className="text-xs font-bold text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
-                    </div>
-                  </div>
+              /* Horizontal strip: avatar | name+pill | stars+rating | actions */
+              <div className="flex items-center gap-3 bg-white/[0.06] rounded-2xl p-3 border border-white/10">
+                <span className="text-2xl leading-none flex-shrink-0">{profile?.avatar_emoji ?? '📚'}</span>
+
+                {/* Name + one_word pill */}
+                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
+                  <span className="text-xs font-semibold text-white">Meine Review</span>
+                  {myReview.one_word && (
+                    <span className="self-start text-[10px] font-medium text-brand-300 bg-brand-500/15 rounded-full px-1.5 py-0.5 border border-brand-500/20">
+                      „{myReview.one_word}"
+                    </span>
+                  )}
                 </div>
 
-                {/* Actions */}
-                <div className="flex items-center gap-4">
-                  <button
-                    onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
-                    className="text-sm text-brand-400 hover:text-brand-300 font-medium transition-colors"
-                  >
-                    Bearbeiten
-                  </button>
+                {/* Stars + rating centred */}
+                <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+                  <StarRating rating={Number(myReview.rating)} size="sm" />
+                  <span className="text-xs font-bold text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
+                </div>
+
+                {/* Actions — right edge */}
+                <div className="flex flex-col items-end gap-1 flex-shrink-0 pl-1">
                   {confirmDelete ? (
-                    <span className="flex items-center gap-2">
-                      <span className="text-xs text-white/50">Wirklich löschen?</span>
-                      <button
-                        onClick={async () => {
-                          await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
-                          setConfirmDelete(false)
-                        }}
-                        className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
-                      >
-                        Ja, löschen
-                      </button>
-                      <button
-                        onClick={() => setConfirmDelete(false)}
-                        className="text-xs text-white/30 hover:text-white/60 transition-colors"
-                      >
-                        Abbrechen
-                      </button>
-                    </span>
+                    <>
+                      <span className="text-[10px] text-white/50">Wirklich?</span>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={async () => {
+                            await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
+                            setConfirmDelete(false)
+                          }}
+                          className="text-[10px] text-red-400 hover:text-red-300 font-medium transition-colors"
+                        >
+                          Ja
+                        </button>
+                        <button
+                          onClick={() => setConfirmDelete(false)}
+                          className="text-[10px] text-white/30 hover:text-white/60 transition-colors"
+                        >
+                          Nein
+                        </button>
+                      </div>
+                    </>
                   ) : (
-                    <button
-                      onClick={() => setConfirmDelete(true)}
-                      className="text-sm text-white/30 hover:text-red-400 transition-colors"
-                    >
-                      Löschen
-                    </button>
+                    <>
+                      <button
+                        onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
+                        className="text-xs text-brand-400 hover:text-brand-300 font-medium transition-colors"
+                      >
+                        Bearbeiten
+                      </button>
+                      <button
+                        onClick={() => setConfirmDelete(true)}
+                        className="text-xs text-white/30 hover:text-red-400 transition-colors"
+                      >
+                        Löschen
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
