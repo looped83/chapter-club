@@ -9,7 +9,7 @@ import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
 import { BookCover } from '@/components/book/BookCover'
-import { AverageRating } from '@/components/book/StarRating'
+import { AverageRating, StarRating } from '@/components/book/StarRating'
 import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
 import { ReviewForm } from '@/components/review/ReviewForm'
@@ -22,7 +22,7 @@ const MONTH_NAMES = [
 
 export function BookDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { user } = useAuth()
+  const { user, profile } = useAuth()
   const { data: book, isLoading } = useBook(id!)
   const { data: progressList = [] } = useBookProgress(id!)
   const { data: myProgress } = useMyProgress(id!, user?.id ?? '')
@@ -209,11 +209,33 @@ export function BookDetailPage() {
 
       {tab === 'reviews' && (
         <div className="flex flex-col gap-4">
+          {/* ── Mein Review ── */}
           <Card className="p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-white">Mein Review</h3>
-              {myReview && !editingReview && (
-                <div className="flex items-center gap-3">
+            <h3 className="font-semibold text-white mb-4">Mein Review</h3>
+
+            {myReview && !editingReview ? (
+              <div className="flex flex-col gap-3">
+                {/* Compact summary tile */}
+                <div className="flex items-center gap-3 bg-white/[0.06] rounded-2xl p-3 border border-white/10">
+                  <span className="text-3xl leading-none">{profile?.avatar_emoji ?? '📚'}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-0.5">
+                      <span className="text-xs font-semibold text-white">Dein Review</span>
+                      {myReview.one_word && (
+                        <span className="text-[10px] font-semibold text-brand-300 bg-brand-500/15 rounded-full px-2 py-0.5 border border-brand-500/20">
+                          „{myReview.one_word}"
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <StarRating rating={Number(myReview.rating)} size="sm" />
+                      <span className="text-xs font-bold text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-4">
                   <button
                     onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
                     className="text-sm text-brand-400 hover:text-brand-300 font-medium transition-colors"
@@ -248,11 +270,7 @@ export function BookDetailPage() {
                     </button>
                   )}
                 </div>
-              )}
-            </div>
-
-            {myReview && !editingReview ? (
-              <ReviewCard review={{ ...myReview, profiles: null }} />
+              </div>
             ) : (
               <ReviewForm
                 bookId={book.id}
@@ -262,13 +280,20 @@ export function BookDetailPage() {
             )}
           </Card>
 
+          {/* ── Alle Reviews ── eigene zuerst */}
           {reviews.length > 0 && (
             <Card className="p-5">
               <h3 className="font-semibold text-white mb-4">Alle Reviews</h3>
               <div className="grid grid-cols-2 gap-3">
-                {reviews.map((r) => (
-                  <ReviewCard key={r.id} review={r} />
-                ))}
+                {[...reviews]
+                  .sort((a, b) => {
+                    if (a.user_id === user?.id) return -1
+                    if (b.user_id === user?.id) return 1
+                    return 0
+                  })
+                  .map((r) => (
+                    <ReviewCard key={r.id} review={r} />
+                  ))}
               </div>
             </Card>
           )}
