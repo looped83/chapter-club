@@ -19,7 +19,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
   return (
     <div className="flex flex-col gap-2.5 bg-white/[0.06] rounded-2xl p-3 border border-white/10">
 
-      {/* Header: Avatar + Rating — mirrors GroupProgress tile top row */}
+      {/* Avatar + rating — mirrors emoji | mood in GroupProgress */}
       <div className="flex items-start justify-between">
         <span className="text-3xl leading-none">{review.profiles?.avatar_emoji ?? '📚'}</span>
         <div className="flex flex-col items-end gap-0.5">
@@ -30,22 +30,22 @@ export function ReviewCard({ review }: ReviewCardProps) {
         </div>
       </div>
 
-      {/* Name + spoiler */}
-      <div className="flex items-center gap-1.5 flex-wrap">
-        <span className="text-xs font-semibold text-white">
-          {review.profiles?.display_name}
-        </span>
-        {review.contains_spoilers && <Badge variant="warning">Spoiler</Badge>}
+      {/* Name + one_word pill — mirrors name | status pill in GroupProgress */}
+      <div className="flex flex-col gap-1">
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <span className="text-xs font-semibold text-white">
+            {review.profiles?.display_name}
+          </span>
+          {review.contains_spoilers && <Badge variant="warning">Spoiler</Badge>}
+        </div>
+        {review.one_word && (
+          <span className="self-start text-[10px] font-medium text-brand-300 bg-brand-500/15 rounded-full px-1.5 py-0.5 border border-brand-500/20">
+            „{review.one_word}"
+          </span>
+        )}
       </div>
 
-      {/* One word — status-pill equivalent */}
-      {review.one_word && (
-        <span className="self-start text-[10px] font-semibold text-brand-300 bg-brand-500/15 rounded-full px-2 py-0.5 border border-brand-500/20">
-          „{review.one_word}"
-        </span>
-      )}
-
-      {/* Wrapped chips */}
+      {/* Chips — mirrors the bar+% row */}
       {(review.emotional_impact || review.pace || review.would_reread != null) && (
         <div className="flex flex-wrap gap-1">
           {review.emotional_impact && (
