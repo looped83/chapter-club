@@ -237,17 +237,11 @@ export function BookDetailPage() {
 
             {myReview && !editingReview ? (
               <div className="flex flex-col gap-3">
-                <div>
-                  <div className="flex justify-between items-center mb-1.5">
-                    <StarRating rating={Number(myReview.rating)} size="sm" />
-                    <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
-                  </div>
-                  <div className="h-2 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-brand-400 rounded-full transition-all duration-500"
-                      style={{ width: `${(Number(myReview.rating) / 5) * 100}%` }}
-                    />
-                  </div>
+                <div className="flex items-center gap-2">
+                  <StarRating rating={Number(myReview.rating)} size="sm" />
+                  <span className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
+                    {Number(myReview.rating).toFixed(1)}
+                  </span>
                 </div>
                 {confirmDelete && (
                   <div className="flex items-center gap-2 pt-1">
