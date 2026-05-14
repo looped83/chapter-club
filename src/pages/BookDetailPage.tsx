@@ -94,7 +94,7 @@ export function BookDetailPage() {
         <div className="grid grid-cols-2 gap-3">
           {enthusiasticReader && (
             <Card className="p-4">
-              <p className="text-xs text-stone-400 mb-1">Begeistert</p>
+              <p className="text-xs text-stone-400 mb-1">Am begeistertsten</p>
               <div className="flex items-center gap-2">
                 <span className="text-xl">{enthusiasticReader.profiles?.avatar_emoji}</span>
                 <div>
@@ -118,7 +118,7 @@ export function BookDetailPage() {
           )}
           {topReader && (
             <Card className="p-4">
-              <p className="text-xs text-stone-400 mb-1">Fleißigste Leserin</p>
+              <p className="text-xs text-stone-400 mb-1">Am weitesten gelesen</p>
               <div className="flex items-center gap-2">
                 <span className="text-xl">{topReader.profiles?.avatar_emoji}</span>
                 <div>
@@ -228,7 +228,7 @@ export function BookDetailPage() {
 
           {reviews.length === 0 && (
             <div className="text-center py-8 text-stone-400 text-sm">
-              Noch keine Reviews. Sei die Erste!
+              Noch keine Reviews. Schreib das erste!
             </div>
           )}
         </div>
