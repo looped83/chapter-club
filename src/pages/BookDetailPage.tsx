@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview, useDeleteReview } from '@/hooks/useReviews'
+import type { ReadingProgress } from '@/types/database'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
@@ -27,6 +28,8 @@ export function BookDetailPage() {
   const { data: reviews = [] } = useBookReviews(id!)
   const { data: myReview } = useMyReview(id!, user?.id ?? '')
   const [tab, setTab] = useState<'progress' | 'reviews'>('progress')
+  const [descExpanded, setDescExpanded] = useState(false)
+  const [editingProgress, setEditingProgress] = useState(false)
   const [editingReview, setEditingReview] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const deleteReview = useDeleteReview()
@@ -108,9 +111,17 @@ export function BookDetailPage() {
                 </p>
               )}
               {book.description && (
-                <p className="text-white/60 text-xs leading-relaxed mt-1 line-clamp-2">
-                  {book.description}
-                </p>
+                <div className="mt-1">
+                  <p className={`text-white/60 text-xs leading-relaxed ${descExpanded ? '' : 'line-clamp-2'}`}>
+                    {book.description}
+                  </p>
+                  <button
+                    onClick={() => setDescExpanded((v) => !v)}
+                    className="text-white/40 hover:text-white/70 text-xs mt-0.5 transition-colors"
+                  >
+                    {descExpanded ? 'weniger' : 'mehr'}
+                  </button>
+                </div>
               )}
             </div>
           </div>
@@ -172,8 +183,27 @@ export function BookDetailPage() {
       {tab === 'progress' && (
         <div className="flex flex-col gap-4">
           <Card className="p-5">
-            <h3 className="font-semibold text-stone-900 mb-4">Mein Fortschritt</h3>
-            <ProgressSlider bookId={book.id} current={myProgress ?? null} />
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-stone-900">Mein Fortschritt</h3>
+              {myProgress && !editingProgress && (
+                <button
+                  onClick={() => setEditingProgress(true)}
+                  className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
+                >
+                  Bearbeiten
+                </button>
+              )}
+            </div>
+
+            {myProgress && !editingProgress ? (
+              <ProgressSummary progress={myProgress} />
+            ) : (
+              <ProgressSlider
+                bookId={book.id}
+                current={myProgress ?? null}
+                onSaved={() => setEditingProgress(false)}
+              />
+            )}
           </Card>
           <Card className="p-5">
             <h3 className="font-semibold text-stone-900 mb-4">Gruppe</h3>
@@ -254,6 +284,38 @@ export function BookDetailPage() {
             </div>
           )}
         </div>
+      )}
+    </div>
+  )
+}
+
+const STATUS_LABELS: Record<string, string> = {
+  not_started: 'Noch nicht angefangen',
+  reading: 'Am Lesen',
+  finished: 'Fertig ✓',
+  paused: 'Pausiert',
+  abandoned: 'Abgebrochen',
+}
+
+function ProgressSummary({ progress }: { progress: ReadingProgress }) {
+  return (
+    <div className="flex flex-col gap-3">
+      <div>
+        <div className="flex justify-between items-center mb-1.5">
+          <span className="text-sm text-stone-600">{STATUS_LABELS[progress.status] ?? progress.status}</span>
+          <span className="text-sm font-bold text-brand-600">{progress.progress_percent}%</span>
+        </div>
+        <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-brand-400 rounded-full transition-all duration-500"
+            style={{ width: `${progress.progress_percent}%` }}
+          />
+        </div>
+      </div>
+      {progress.mood && (
+        <p className="text-sm text-stone-500">
+          Mood: <span className="text-xl">{progress.mood}</span>
+        </p>
       )}
     </div>
   )
