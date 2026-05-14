@@ -54,84 +54,114 @@ export function BookDetailPage() {
   , null)
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Back */}
-      <Link to="/" className="text-sm text-stone-500 hover:text-brand-600 transition-colors self-start">
-        ← Zurück
-      </Link>
+    <div className="flex flex-col gap-5">
 
-      {/* Book header */}
-      <Card className="overflow-hidden">
-        <div className="flex gap-4 p-5">
-          <div className="flex-shrink-0 w-24 md:w-32 rounded-xl overflow-hidden shadow-md self-start">
+      {/* ── Hero ── */}
+      <div className="relative overflow-hidden rounded-3xl">
+
+        {/* Blurred background */}
+        {book.cover_url ? (
+          <div
+            className="absolute inset-0 scale-110"
+            style={{
+              backgroundImage: `url(${book.cover_url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'blur(28px)',
+            }}
+            aria-hidden="true"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-300 via-brand-400 to-stone-500" aria-hidden="true" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/80" aria-hidden="true" />
+
+        {/* Back link */}
+        <div className="relative z-10 px-5 pt-5">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1 text-white/70 hover:text-white text-sm transition-colors"
+          >
+            ← Zurück
+          </Link>
+        </div>
+
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center px-6 pt-4 pb-6">
+          {/* Month label */}
+          <p className="text-white/50 text-xs font-semibold tracking-[0.2em] uppercase mb-4">
+            {MONTH_NAMES[book.month]} {book.year}
+          </p>
+
+          {/* Cover */}
+          <div className="w-32 md:w-40 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/20 mb-5 flex-shrink-0">
             <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
           </div>
-          <div className="flex-1 min-w-0 flex flex-col gap-2">
-            <div>
-              <p className="text-xs text-stone-400 mb-1">
-                {MONTH_NAMES[book.month]} {book.year}
-              </p>
-              <h1 className="font-serif text-xl md:text-2xl font-bold text-stone-900 leading-tight">
-                {book.title}
-              </h1>
-              <p className="text-stone-500 text-sm mt-0.5">{book.author}</p>
-            </div>
-            {book.profiles && (
-              <p className="text-xs text-stone-400">
-                vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
-              </p>
-            )}
-            <AverageRating ratings={ratings} />
-            {book.description && (
-              <p className="text-sm text-stone-600 leading-relaxed mt-1">{book.description}</p>
-            )}
-          </div>
-        </div>
-      </Card>
 
-      {/* Highlights */}
+          {/* Title & author */}
+          <h1 className="font-serif text-2xl md:text-3xl font-bold text-white leading-tight max-w-sm">
+            {book.title}
+          </h1>
+          <p className="text-white/70 text-sm mt-1">{book.author}</p>
+
+          {/* Rating */}
+          <div className="mt-3">
+            <AverageRating ratings={ratings} onDark />
+          </div>
+
+          {/* Suggested by */}
+          {book.profiles && (
+            <p className="text-white/40 text-xs mt-2">
+              vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
+            </p>
+          )}
+
+          {/* Description */}
+          {book.description && (
+            <p className="text-white/60 text-sm leading-relaxed mt-4 max-w-sm line-clamp-3">
+              {book.description}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* ── Highlights ── */}
       {reviews.length >= 2 && (
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           {enthusiasticReader && (
-            <Card className="p-4">
-              <p className="text-xs text-stone-400 mb-1">Am begeistertsten</p>
-              <div className="flex items-center gap-2">
-                <span className="text-xl">{enthusiasticReader.profiles?.avatar_emoji}</span>
-                <div>
-                  <p className="text-sm font-medium text-stone-800 truncate">{enthusiasticReader.profiles?.display_name}</p>
-                  <p className="text-xs text-brand-600 font-bold">{Number(enthusiasticReader.rating).toFixed(1)}</p>
-                </div>
+            <Card className="p-3">
+              <p className="text-xs text-stone-400 mb-2 leading-tight">Am begeistertsten</p>
+              <div className="flex flex-col items-center gap-1 text-center">
+                <span className="text-2xl">{enthusiasticReader.profiles?.avatar_emoji}</span>
+                <p className="text-xs font-medium text-stone-800 truncate w-full">{enthusiasticReader.profiles?.display_name}</p>
+                <p className="text-xs text-brand-600 font-bold">{Number(enthusiasticReader.rating).toFixed(1)} ★</p>
               </div>
             </Card>
           )}
           {criticalReader && criticalReader.id !== enthusiasticReader?.id && (
-            <Card className="p-4">
-              <p className="text-xs text-stone-400 mb-1">Kritischste Stimme</p>
-              <div className="flex items-center gap-2">
-                <span className="text-xl">{criticalReader.profiles?.avatar_emoji}</span>
-                <div>
-                  <p className="text-sm font-medium text-stone-800 truncate">{criticalReader.profiles?.display_name}</p>
-                  <p className="text-xs text-stone-500 font-bold">{Number(criticalReader.rating).toFixed(1)}</p>
-                </div>
+            <Card className="p-3">
+              <p className="text-xs text-stone-400 mb-2 leading-tight">Kritischste Stimme</p>
+              <div className="flex flex-col items-center gap-1 text-center">
+                <span className="text-2xl">{criticalReader.profiles?.avatar_emoji}</span>
+                <p className="text-xs font-medium text-stone-800 truncate w-full">{criticalReader.profiles?.display_name}</p>
+                <p className="text-xs text-stone-500 font-bold">{Number(criticalReader.rating).toFixed(1)} ★</p>
               </div>
             </Card>
           )}
           {topReader && (
-            <Card className="p-4">
-              <p className="text-xs text-stone-400 mb-1">Am weitesten gelesen</p>
-              <div className="flex items-center gap-2">
-                <span className="text-xl">{topReader.profiles?.avatar_emoji}</span>
-                <div>
-                  <p className="text-sm font-medium text-stone-800 truncate">{topReader.profiles?.display_name}</p>
-                  <p className="text-xs text-green-600 font-bold">{topReader.progress_percent}%</p>
-                </div>
+            <Card className="p-3">
+              <p className="text-xs text-stone-400 mb-2 leading-tight">Am weitesten gelesen</p>
+              <div className="flex flex-col items-center gap-1 text-center">
+                <span className="text-2xl">{topReader.profiles?.avatar_emoji}</span>
+                <p className="text-xs font-medium text-stone-800 truncate w-full">{topReader.profiles?.display_name}</p>
+                <p className="text-xs text-green-600 font-bold">{topReader.progress_percent}%</p>
               </div>
             </Card>
           )}
         </div>
       )}
 
-      {/* Tabs */}
+      {/* ── Tabs ── */}
       <div className="flex gap-1 bg-stone-100 rounded-2xl p-1">
         {(['progress', 'reviews'] as const).map((t) => (
           <button
@@ -142,7 +172,7 @@ export function BookDetailPage() {
               tab === t ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-700',
             ].join(' ')}
           >
-            {t === 'progress' ? 'Fortschritt' : 'Reviews'}
+            {t === 'progress' ? 'Fortschritt' : `Reviews${reviews.length > 0 ? ` (${reviews.length})` : ''}`}
           </button>
         ))}
       </div>
