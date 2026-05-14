@@ -104,9 +104,9 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       {/* Rating */}
       <div>
-        <p className="text-sm font-medium text-white/70 mb-2">
+        <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">
           Bewertung:{' '}
-          <span className="text-brand-400 font-bold">
+          <span className="text-brand-600 dark:text-brand-400 font-bold">
             {ratingValue > 0 ? `${ratingValue} / 5` : 'noch nicht vergeben'}
           </span>
         </p>
@@ -117,12 +117,12 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
             <StarPicker value={field.value} onChange={field.onChange} size="lg" />
           )}
         />
-        {errors.rating && <p className="text-xs text-red-400 mt-1">{errors.rating.message}</p>}
+        {errors.rating && <p className="text-xs text-red-600 dark:text-red-400 mt-1">{errors.rating.message}</p>}
       </div>
 
       {/* Emotional Impact */}
       <div>
-        <p className="text-sm font-medium text-white/70 mb-2">Emotionaler Impact</p>
+        <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Emotionaler Impact</p>
         <div className="flex gap-2" role="group" aria-label="Emotionaler Impact">
           {[1, 2, 3, 4, 5].map((n) => (
             <button
@@ -133,13 +133,13 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
                 'flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all',
                 emotionalImpact === n
                   ? 'border-brand-400 bg-brand-500/20 scale-105'
-                  : 'border-white/20 hover:border-white/30',
+                  : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               ].join(' ')}
               aria-pressed={emotionalImpact === n}
               aria-label={`Impact ${n}`}
             >
               <span className="text-xl">{IMPACT_LABELS[n]}</span>
-              <span className="text-xs text-white/40">{n}</span>
+              <span className="text-xs text-stone-400 dark:text-white/40">{n}</span>
             </button>
           ))}
         </div>
@@ -147,7 +147,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
 
       {/* Pace */}
       <div>
-        <p className="text-sm font-medium text-white/70 mb-2">Lesetempo</p>
+        <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Lesetempo</p>
         <div className="flex gap-2 flex-wrap" role="group" aria-label="Lesetempo">
           {(['too_slow', 'just_right', 'too_fast'] as Pace[]).map((p) => (
             <button
@@ -158,7 +158,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
                 'px-3 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 pace === p
                   ? 'bg-brand-500 text-white border-brand-500'
-                  : 'bg-white/10 text-white/60 border-white/20 hover:border-white/30',
+                  : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               ].join(' ')}
               aria-pressed={pace === p}
             >
@@ -170,7 +170,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
 
       {/* Would Reread */}
       <div>
-        <p className="text-sm font-medium text-white/70 mb-2">Würdest du es nochmal lesen?</p>
+        <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Würdest du es nochmal lesen?</p>
         <div className="flex gap-2" role="group" aria-label="Nochmal lesen">
           {([true, false] as const).map((val) => (
             <button
@@ -181,7 +181,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
                 'px-4 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 wouldReread === val
                   ? 'bg-brand-500 text-white border-brand-500'
-                  : 'bg-white/10 text-white/60 border-white/20 hover:border-white/30',
+                  : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               ].join(' ')}
               aria-pressed={wouldReread === val}
             >
@@ -200,7 +200,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       />
 
       {/* Divider */}
-      <hr className="border-white/10" />
+      <hr className="border-stone-100 dark:border-white/10" />
 
       {/* Review Text */}
       <Textarea
@@ -222,10 +222,10 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       <label className="flex items-center gap-2.5 cursor-pointer">
         <input
           type="checkbox"
-          className="rounded border-white/30 accent-brand-500 w-4 h-4"
+          className="rounded border-stone-300 dark:border-white/30 accent-brand-500 w-4 h-4"
           {...register('containsSpoilers')}
         />
-        <span className="text-sm text-white/70">Enthält Spoiler</span>
+        <span className="text-sm text-stone-600 dark:text-white/70">Enthält Spoiler</span>
       </label>
 
       <Button type="submit" loading={isSubmitting} disabled={!isDirty && !!existing} className="self-start">
@@ -233,13 +233,13 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       </Button>
 
       {upsert.isError && (
-        <p role="alert" className="text-sm text-red-400">
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           Fehler beim Speichern. Bitte erneut versuchen.
         </p>
       )}
 
       {upsert.isSuccess && !isDirty && (
-        <p className="text-sm text-green-400">✓ Review gespeichert</p>
+        <p className="text-sm text-green-700 dark:text-green-400">✓ Bewertung gespeichert</p>
       )}
     </form>
   )

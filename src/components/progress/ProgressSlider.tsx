@@ -49,10 +49,10 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
       {/* Percent slider */}
       <div>
         <div className="flex justify-between items-center mb-2">
-          <label htmlFor="progress-slider" className="text-sm font-medium text-white/70">
+          <label htmlFor="progress-slider" className="text-sm font-medium text-stone-700 dark:text-white/70">
             Lesefortschritt
           </label>
-          <span className="text-sm font-semibold text-brand-400">{percent}%</span>
+          <span className="text-sm font-semibold text-brand-600 dark:text-brand-400">{percent}%</span>
         </div>
         <input
           id="progress-slider"
@@ -69,7 +69,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
           aria-label="Lesefortschritt in Prozent"
         />
         {/* Visual bar */}
-        <div className="mt-1.5 h-1.5 rounded-full bg-white/10 overflow-hidden">
+        <div className="mt-1.5 h-1.5 rounded-full bg-stone-100 dark:bg-white/10 overflow-hidden">
           <div
             className="h-full rounded-full bg-brand-400 transition-all duration-300"
             style={{ width: `${percent}%` }}
@@ -79,7 +79,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
 
       {/* Status */}
       <div>
-        <p className="text-sm font-medium text-white/70 mb-2">Status</p>
+        <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Status</p>
         <div className="flex flex-wrap gap-2">
           {(Object.keys(STATUS_LABELS) as ReadingStatus[]).map((s) => (
             <button
@@ -90,7 +90,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
                 'px-3 py-1.5 rounded-xl text-xs font-medium transition-colors border',
                 status === s
                   ? 'bg-brand-500 text-white border-brand-500'
-                  : 'bg-white/10 text-white/60 border-white/20 hover:border-white/30',
+                  : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               ].join(' ')}
               aria-pressed={status === s}
             >
@@ -102,7 +102,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
 
       {/* Mood */}
       <div>
-        <p className="text-sm font-medium text-white/70 mb-2">Mood</p>
+        <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Mood</p>
         <div className="flex gap-2 flex-wrap">
           {MOODS.map((m) => (
             <button
@@ -113,7 +113,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
                 'w-10 h-10 rounded-xl text-xl transition-all border',
                 mood === m
                   ? 'ring-2 ring-brand-400 border-brand-400 scale-110'
-                  : 'border-white/20 hover:border-white/30 hover:scale-105',
+                  : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30 hover:scale-105',
               ].join(' ')}
               aria-label={`Mood: ${m}`}
               aria-pressed={mood === m}
@@ -134,7 +134,7 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
       </Button>
 
       {upsert.isError && (
-        <p role="alert" className="text-sm text-red-400">
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
           Fehler beim Speichern. Bitte erneut versuchen.
         </p>
       )}

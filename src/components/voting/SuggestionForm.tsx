@@ -85,7 +85,7 @@ export function SuggestionForm({ month, year, onSubmitted }: SuggestionFormProps
       />
 
       {submit.isError && (
-        <p role="alert" className="text-sm text-red-400 bg-red-500/20 rounded-xl px-3 py-2">
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/20 rounded-xl px-3 py-2">
           Fehler beim Einreichen. Hast du bereits einen Vorschlag für diesen Monat?
         </p>
       )}
