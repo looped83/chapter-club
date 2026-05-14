@@ -12,7 +12,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-medium text-white/70">
+          <label htmlFor={inputId} className="text-sm font-medium text-stone-600 dark:text-white/70">
             {label}
           </label>
         )}
@@ -20,12 +20,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           className={[
-            'w-full rounded-xl border px-3.5 py-2.5 text-sm text-white placeholder:text-white/30',
-            'bg-white/10 transition-colors duration-150',
+            'w-full rounded-xl border px-3.5 py-2.5 text-sm',
+            'text-stone-900 dark:text-white',
+            'placeholder:text-stone-400 dark:placeholder:text-white/30',
+            'bg-white dark:bg-white/10 transition-colors duration-150',
             'focus:outline-none focus:ring-2 focus:ring-brand-400 focus:border-brand-400',
             error
               ? 'border-red-400 focus:ring-red-400 focus:border-red-400'
-              : 'border-white/20 hover:border-white/30',
+              : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
             className,
           ].join(' ')}
           aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
@@ -33,12 +35,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {...props}
         />
         {hint && !error && (
-          <p id={`${inputId}-hint`} className="text-xs text-white/40">
+          <p id={`${inputId}-hint`} className="text-xs text-stone-400 dark:text-white/40">
             {hint}
           </p>
         )}
         {error && (
-          <p id={`${inputId}-error`} role="alert" className="text-xs text-red-400">
+          <p id={`${inputId}-error`} role="alert" className="text-xs text-red-600 dark:text-red-400">
             {error}
           </p>
         )}

@@ -36,18 +36,18 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="text-5xl mb-3" aria-hidden="true">📖</div>
-          <h1 className="font-serif text-2xl font-bold text-white">Chapter Club</h1>
-          <p className="text-white/50 text-sm mt-1">Unser privater Bücher-Kreis</p>
+          <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Chapter Club</h1>
+          <p className="text-stone-500 dark:text-white/50 text-sm mt-1">Unser privater Bücher-Kreis</p>
         </div>
 
         {/* Card */}
-        <div className="bg-white/[0.07] backdrop-blur-sm rounded-3xl border border-white/10 p-6">
-          <h2 className="text-lg font-semibold text-white mb-6">
+        <div className="bg-white dark:bg-white/[0.07] backdrop-blur-sm rounded-3xl border border-stone-200 dark:border-white/10 p-6">
+          <h2 className="text-lg font-semibold text-stone-900 dark:text-white mb-6">
             {mode === 'login' ? 'Willkommen zurück' : 'Konto erstellen'}
           </h2>
 
@@ -75,8 +75,8 @@ export function LoginPage() {
                 className={[
                   'text-sm rounded-xl px-3 py-2',
                   authError.startsWith('Bestätigung')
-                    ? 'bg-green-500/20 text-green-400'
-                    : 'bg-red-500/20 text-red-400',
+                    ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400'
+                    : 'bg-red-50 dark:bg-red-500/20 text-red-600 dark:text-red-400',
                 ].join(' ')}
               >
                 {authError}
@@ -95,7 +95,7 @@ export function LoginPage() {
                 setMode(mode === 'login' ? 'signup' : 'login')
                 setAuthError(null)
               }}
-              className="text-sm text-white/40 hover:text-brand-400 transition-colors"
+              className="text-sm text-stone-400 dark:text-white/40 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
             >
               {mode === 'login'
                 ? 'Noch kein Konto? Registrieren'

@@ -36,7 +36,7 @@ export function DashboardPage() {
   if (error) {
     return (
       <div className="text-center py-16">
-        <p className="text-white/50">Fehler beim Laden. Bitte Seite neu laden.</p>
+        <p className="text-stone-500 dark:text-white/50">Fehler beim Laden. Bitte Seite neu laden.</p>
       </div>
     )
   }
@@ -142,7 +142,7 @@ export function DashboardPage() {
       {/* ── Inline progress editor ── */}
       {showProgress && (
         <Card className="p-5">
-          <h3 className="font-semibold text-white mb-4">Mein Fortschritt</h3>
+          <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Mein Fortschritt</h3>
           <ProgressSlider
             bookId={book.id}
             current={myProgress ?? null}
@@ -153,7 +153,7 @@ export function DashboardPage() {
 
       {/* ── Group progress ── */}
       <Card className="p-5">
-        <h3 className="font-semibold text-white mb-4">Gruppenfortschritt</h3>
+        <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Gruppenfortschritt</h3>
         <GroupProgress progressList={progressList} />
       </Card>
 
@@ -161,20 +161,20 @@ export function DashboardPage() {
       {reviews.length > 0 && (
         <Card className="p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-white">Bewertungen</h3>
-            <Link to={`/book/${book.id}`} className="text-sm text-brand-400 hover:text-brand-300 transition-colors">
+            <h3 className="font-semibold text-stone-900 dark:text-white">Bewertungen</h3>
+            <Link to={`/book/${book.id}`} className="text-sm text-brand-600 dark:text-brand-400 hover:text-brand-500 dark:hover:text-brand-300 transition-colors">
               Alle ansehen
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {reviews.map((r) => (
-              <div key={r.id} className="flex flex-col items-center gap-2 bg-white/10 rounded-2xl px-3 py-4">
+              <div key={r.id} className="flex flex-col items-center gap-2 bg-stone-100 dark:bg-white/10 rounded-2xl px-3 py-4">
                 <span className="text-3xl leading-none">{r.profiles?.avatar_emoji ?? '📚'}</span>
-                <span className="text-xs font-medium text-white/70 truncate w-full text-center">
+                <span className="text-xs font-medium text-stone-600 dark:text-white/70 truncate w-full text-center">
                   {r.profiles?.display_name}
                 </span>
                 <StarRating rating={Number(r.rating)} size="sm" />
-                <span className="text-sm font-bold text-brand-400">
+                <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
                   {Number(r.rating).toFixed(1)}
                 </span>
               </div>
@@ -190,8 +190,8 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
       <div className="text-6xl" aria-hidden="true">📚</div>
-      <h2 className="font-serif text-xl font-bold text-white">Noch kein aktuelles Buch</h2>
-      <p className="text-white/50 text-sm max-w-sm">
+      <h2 className="font-serif text-xl font-bold text-stone-900 dark:text-white">Noch kein aktuelles Buch</h2>
+      <p className="text-stone-500 dark:text-white/50 text-sm max-w-sm">
         Für diesen Monat wurde noch kein Buch eingetragen. Schaut im Voting nach, welches Buch als
         nächstes dran ist.
       </p>

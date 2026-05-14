@@ -20,7 +20,7 @@ export function LibraryPage() {
   if (error) {
     return (
       <div className="text-center py-16">
-        <p className="text-white/50">Fehler beim Laden.</p>
+        <p className="text-stone-500 dark:text-white/50">Fehler beim Laden.</p>
       </div>
     )
   }
@@ -29,8 +29,8 @@ export function LibraryPage() {
     return (
       <div className="flex flex-col items-center py-20 gap-4 text-center">
         <div className="text-5xl">📚</div>
-        <h2 className="font-serif text-xl font-bold text-white">Noch keine Bücher</h2>
-        <p className="text-white/50 text-sm max-w-xs">
+        <h2 className="font-serif text-xl font-bold text-stone-900 dark:text-white">Noch keine Bücher</h2>
+        <p className="text-stone-500 dark:text-white/50 text-sm max-w-xs">
           Sobald das erste Buch eingetragen ist, erscheint es hier.
         </p>
       </div>
@@ -39,7 +39,7 @@ export function LibraryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-2xl font-bold text-white">Unsere Bibliothek</h1>
+      <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Unsere Bibliothek</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {books.map((book) => (
           <BookCard key={book.id} book={book} />
