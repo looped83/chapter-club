@@ -39,7 +39,7 @@ export function LibraryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Unsere Bibliothek</h1>
+      <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Bibliothek</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {books.map((book) => (
           <BookCard key={book.id} book={book} />
