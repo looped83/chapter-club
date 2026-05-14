@@ -58,7 +58,6 @@ export function BookDetailPage() {
 
       {/* ── Hero ── */}
       <div className="relative overflow-hidden rounded-3xl">
-
         {/* Blurred background */}
         {book.cover_url ? (
           <div
@@ -74,54 +73,47 @@ export function BookDetailPage() {
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-brand-300 via-brand-400 to-stone-500" aria-hidden="true" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/50 to-black/80" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/75" aria-hidden="true" />
 
-        {/* Back link */}
-        <div className="relative z-10 px-5 pt-5">
+        {/* Content */}
+        <div className="relative z-10 p-5">
           <Link
             to="/"
-            className="inline-flex items-center gap-1 text-white/70 hover:text-white text-sm transition-colors"
+            className="inline-flex items-center gap-1 text-white/60 hover:text-white text-xs mb-4 transition-colors"
           >
             ← Zurück
           </Link>
-        </div>
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col items-center text-center px-6 pt-4 pb-6">
-          {/* Month label */}
-          <p className="text-white/50 text-xs font-semibold tracking-[0.2em] uppercase mb-4">
-            {MONTH_NAMES[book.month]} {book.year}
-          </p>
+          <div className="flex gap-4 items-start">
+            {/* Cover */}
+            <div className="flex-shrink-0 w-20 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20">
+              <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
+            </div>
 
-          {/* Cover */}
-          <div className="w-32 md:w-40 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/20 mb-5 flex-shrink-0">
-            <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
+            {/* Info */}
+            <div className="flex-1 min-w-0 flex flex-col gap-1.5">
+              <p className="text-white/50 text-xs tracking-widest uppercase">
+                {MONTH_NAMES[book.month]} {book.year}
+              </p>
+              <h1 className="font-serif text-xl font-bold text-white leading-tight">
+                {book.title}
+              </h1>
+              <p className="text-white/70 text-sm">{book.author}</p>
+              <div className="mt-1">
+                <AverageRating ratings={ratings} onDark />
+              </div>
+              {book.profiles && (
+                <p className="text-white/40 text-xs mt-0.5">
+                  vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
+                </p>
+              )}
+              {book.description && (
+                <p className="text-white/60 text-xs leading-relaxed mt-1 line-clamp-2">
+                  {book.description}
+                </p>
+              )}
+            </div>
           </div>
-
-          {/* Title & author */}
-          <h1 className="font-serif text-2xl md:text-3xl font-bold text-white leading-tight max-w-sm">
-            {book.title}
-          </h1>
-          <p className="text-white/70 text-sm mt-1">{book.author}</p>
-
-          {/* Rating */}
-          <div className="mt-3">
-            <AverageRating ratings={ratings} onDark />
-          </div>
-
-          {/* Suggested by */}
-          {book.profiles && (
-            <p className="text-white/40 text-xs mt-2">
-              vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
-            </p>
-          )}
-
-          {/* Description */}
-          {book.description && (
-            <p className="text-white/60 text-sm leading-relaxed mt-4 max-w-sm line-clamp-3">
-              {book.description}
-            </p>
-          )}
         </div>
       </div>
 
