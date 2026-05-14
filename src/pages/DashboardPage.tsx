@@ -36,7 +36,7 @@ export function DashboardPage() {
   if (error) {
     return (
       <div className="text-center py-16">
-        <p className="text-stone-500">Fehler beim Laden. Bitte Seite neu laden.</p>
+        <p className="text-white/50">Fehler beim Laden. Bitte Seite neu laden.</p>
       </div>
     )
   }
@@ -142,7 +142,7 @@ export function DashboardPage() {
       {/* ── Inline progress editor ── */}
       {showProgress && (
         <Card className="p-5">
-          <h3 className="font-semibold text-stone-900 mb-4">Mein Fortschritt</h3>
+          <h3 className="font-semibold text-white mb-4">Mein Fortschritt</h3>
           <ProgressSlider
             bookId={book.id}
             current={myProgress ?? null}
@@ -153,7 +153,7 @@ export function DashboardPage() {
 
       {/* ── Group progress ── */}
       <Card className="p-5">
-        <h3 className="font-semibold text-stone-900 mb-4">Gruppenfortschritt</h3>
+        <h3 className="font-semibold text-white mb-4">Gruppenfortschritt</h3>
         <GroupProgress progressList={progressList} />
       </Card>
 
@@ -161,16 +161,16 @@ export function DashboardPage() {
       {reviews.length > 0 && (
         <Card className="p-5">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-stone-900">Bewertungen</h3>
-            <Link to={`/book/${book.id}`} className="text-sm text-brand-600 hover:underline">
+            <h3 className="font-semibold text-white">Bewertungen</h3>
+            <Link to={`/book/${book.id}`} className="text-sm text-brand-400 hover:text-brand-300 transition-colors">
               Alle ansehen
             </Link>
           </div>
           <div className="flex flex-wrap gap-3">
             {reviews.map((r) => (
-              <div key={r.id} className="flex items-center gap-2 bg-stone-50 rounded-xl px-3 py-2">
+              <div key={r.id} className="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-2">
                 <span className="text-lg">{r.profiles?.avatar_emoji}</span>
-                <span className="text-sm font-semibold text-stone-700">
+                <span className="text-sm font-semibold text-white/70">
                   {Number(r.rating).toFixed(1)}
                 </span>
               </div>
@@ -186,8 +186,8 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center py-20 gap-4 text-center">
       <div className="text-6xl" aria-hidden="true">📚</div>
-      <h2 className="font-serif text-xl font-bold text-stone-900">Noch kein aktuelles Buch</h2>
-      <p className="text-stone-500 text-sm max-w-sm">
+      <h2 className="font-serif text-xl font-bold text-white">Noch kein aktuelles Buch</h2>
+      <p className="text-white/50 text-sm max-w-sm">
         Für diesen Monat wurde noch kein Buch eingetragen. Schaut im Voting nach, welches Buch als
         nächstes dran ist.
       </p>

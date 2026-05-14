@@ -12,11 +12,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen bg-stone-50 flex flex-col">
+    <div className="min-h-screen bg-stone-950 flex flex-col">
       {/* Top bar – desktop */}
-      <header className="hidden md:flex sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-stone-100">
+      <header className="hidden md:flex sticky top-0 z-40 bg-stone-950/90 backdrop-blur border-b border-white/10">
         <div className="max-w-4xl mx-auto w-full px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="font-serif text-xl font-bold text-stone-900 tracking-tight hover:text-brand-600 transition-colors">
+          <Link to="/" className="font-serif text-xl font-bold text-white tracking-tight hover:text-brand-400 transition-colors">
             📖 Chapter Club
           </Link>
           <nav className="flex items-center gap-1" aria-label="Hauptnavigation">
@@ -27,8 +27,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 className={[
                   'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
                   location.pathname === to
-                    ? 'bg-brand-50 text-brand-700'
-                    : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100',
+                    ? 'bg-white/10 text-white'
+                    : 'text-white/50 hover:text-white hover:bg-white/10',
                 ].join(' ')}
               >
                 {label}
@@ -37,11 +37,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </nav>
           <Link
             to="/profile"
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-white/10 transition-colors"
             aria-label="Profil bearbeiten"
           >
             <span className="text-lg leading-none">{profile?.avatar_emoji}</span>
-            <span className="text-sm text-stone-600 font-medium">{profile?.display_name}</span>
+            <span className="text-sm text-white/60 font-medium">{profile?.display_name}</span>
           </Link>
         </div>
       </header>
@@ -53,7 +53,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       {/* Bottom nav – mobile */}
       <nav
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur border-t border-stone-100"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-stone-950/95 backdrop-blur border-t border-white/10"
         aria-label="Mobile Navigation"
       >
         <div className="flex items-center justify-around h-16 px-2">
@@ -65,7 +65,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 to={to}
                 className={[
                   'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
-                  active ? 'text-brand-600' : 'text-stone-400 hover:text-stone-700',
+                  active ? 'text-brand-400' : 'text-white/40 hover:text-white',
                 ].join(' ')}
                 aria-current={active ? 'page' : undefined}
               >
@@ -79,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             to="/profile"
             className={[
               'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
-              location.pathname === '/profile' ? 'text-brand-600' : 'text-stone-400 hover:text-stone-700',
+              location.pathname === '/profile' ? 'text-brand-400' : 'text-white/40 hover:text-white',
             ].join(' ')}
             aria-current={location.pathname === '/profile' ? 'page' : undefined}
             aria-label="Profil"

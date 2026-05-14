@@ -20,7 +20,7 @@ export function LibraryPage() {
   if (error) {
     return (
       <div className="text-center py-16">
-        <p className="text-stone-500">Fehler beim Laden.</p>
+        <p className="text-white/50">Fehler beim Laden.</p>
       </div>
     )
   }
@@ -29,8 +29,8 @@ export function LibraryPage() {
     return (
       <div className="flex flex-col items-center py-20 gap-4 text-center">
         <div className="text-5xl">📚</div>
-        <h2 className="font-serif text-xl font-bold text-stone-900">Noch keine Bücher</h2>
-        <p className="text-stone-500 text-sm max-w-xs">
+        <h2 className="font-serif text-xl font-bold text-white">Noch keine Bücher</h2>
+        <p className="text-white/50 text-sm max-w-xs">
           Sobald das erste Buch eingetragen ist, erscheint es hier.
         </p>
       </div>
@@ -39,7 +39,7 @@ export function LibraryPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-serif text-2xl font-bold text-stone-900">Unsere Bibliothek</h1>
+      <h1 className="font-serif text-2xl font-bold text-white">Unsere Bibliothek</h1>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {books.map((book) => (
           <BookCard key={book.id} book={book} />
@@ -56,36 +56,32 @@ function BookCard({ book }: { book: BookWithProfile }) {
   return (
     <Link
       to={`/book/${book.id}`}
-      className="group flex flex-col bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden hover:shadow-md hover:border-stone-200 transition-all"
+      className="group relative rounded-2xl overflow-hidden aspect-[2/3] block ring-1 ring-white/10 hover:ring-white/20 transition-all"
     >
-      {/* Cover */}
-      <div className="w-full aspect-[2/3] overflow-hidden">
-        <BookCover
-          title={book.title}
-          coverUrl={book.cover_url}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
-      </div>
+      {/* Full-bleed cover */}
+      <BookCover
+        title={book.title}
+        coverUrl={book.cover_url}
+        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+      />
 
-      {/* Info */}
-      <div className="p-3 flex flex-col gap-1">
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-stone-400">
+      {/* Gradient overlay — always visible at bottom */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+
+      {/* Info strip at bottom */}
+      <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
+        <div className="flex items-center justify-between gap-1">
+          <span className="text-white/50 text-[10px] font-medium">
             {MONTH_NAMES[book.month]} {book.year}
           </span>
           {book.is_current && <Badge variant="brand">Aktuell</Badge>}
         </div>
-        <h3 className="text-sm font-semibold text-stone-900 leading-tight line-clamp-2">
+        <h3 className="text-white text-xs font-semibold leading-tight line-clamp-2">
           {book.title}
         </h3>
-        <p className="text-xs text-stone-500 truncate">{book.author}</p>
+        <p className="text-white/60 text-[10px] truncate">{book.author}</p>
         {ratings.length > 0 && (
-          <AverageRating ratings={ratings} />
-        )}
-        {book.profiles && (
-          <p className="text-xs text-stone-400 truncate">
-            {book.profiles.avatar_emoji} {book.profiles.display_name}
-          </p>
+          <AverageRating ratings={ratings} onDark />
         )}
       </div>
     </Link>

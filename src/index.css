@@ -9,7 +9,7 @@
   }
 
   body {
-    @apply bg-stone-50 text-stone-900 font-sans;
+    @apply bg-stone-950 text-white font-sans;
   }
 
   *:focus-visible {
@@ -24,7 +24,7 @@
   }
 
   input[type="range"]::-webkit-slider-runnable-track {
-    @apply h-2 rounded-full bg-stone-200;
+    @apply h-2 rounded-full bg-white/20;
   }
 
   input[type="range"]::-webkit-slider-thumb {
@@ -41,7 +41,7 @@
   }
 
   input[type="range"]::-moz-range-track {
-    @apply h-2 rounded-full bg-stone-200;
+    @apply h-2 rounded-full bg-white/20;
   }
 
   input[type="range"]::-moz-range-thumb {

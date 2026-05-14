@@ -8,7 +8,7 @@ export function Card({ children, className = '', as: Tag = 'div' }: CardProps) {
   return (
     <Tag
       className={[
-        'bg-white rounded-2xl border border-stone-100 shadow-sm',
+        'bg-white/[0.07] backdrop-blur-sm rounded-2xl border border-white/10',
         className,
       ].join(' ')}
     >

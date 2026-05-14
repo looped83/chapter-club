@@ -51,12 +51,12 @@ export function ProfilePage() {
 
   return (
     <div className="flex flex-col gap-6 max-w-sm mx-auto">
-      <h1 className="font-serif text-2xl font-bold text-stone-900">Mein Profil</h1>
+      <h1 className="font-serif text-2xl font-bold text-white">Mein Profil</h1>
 
       <Card className="p-5">
         {/* Avatar preview */}
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 rounded-3xl bg-brand-50 border-2 border-brand-200 flex items-center justify-center text-4xl">
+          <div className="w-20 h-20 rounded-3xl bg-white/10 border-2 border-white/20 flex items-center justify-center text-4xl">
             {selectedEmoji}
           </div>
         </div>
@@ -70,7 +70,7 @@ export function ProfilePage() {
           />
 
           <div>
-            <p className="text-sm font-medium text-stone-700 mb-2">Avatar</p>
+            <p className="text-sm font-medium text-white/70 mb-2">Avatar</p>
             <div className="flex flex-wrap gap-2">
               {AVATARS.map((emoji) => (
                 <button
@@ -81,7 +81,7 @@ export function ProfilePage() {
                     'w-11 h-11 rounded-xl text-2xl transition-all border',
                     selectedEmoji === emoji
                       ? 'ring-2 ring-brand-400 border-brand-400 scale-110'
-                      : 'border-stone-200 hover:border-stone-300',
+                      : 'border-white/20 hover:border-white/30',
                   ].join(' ')}
                   aria-label={`Avatar ${emoji}`}
                   aria-pressed={selectedEmoji === emoji}
@@ -100,12 +100,12 @@ export function ProfilePage() {
 
       {/* Account info */}
       <Card className="p-5">
-        <h2 className="font-semibold text-stone-900 mb-3">Account</h2>
-        <p className="text-sm text-stone-500">{user?.email}</p>
+        <h2 className="font-semibold text-white mb-3">Account</h2>
+        <p className="text-sm text-white/50">{user?.email}</p>
         <Button
           variant="ghost"
           size="sm"
-          className="mt-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+          className="mt-3 text-red-400 hover:text-red-300 hover:bg-red-500/10"
           onClick={() => supabase.auth.signOut()}
         >
           Abmelden
