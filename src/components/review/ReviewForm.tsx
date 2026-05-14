@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/Input'
 import type { Review, Pace } from '@/types/database'
 
 const schema = z.object({
-  rating: z.number().min(0).max(5).multipleOf(0.5),
+  rating: z.number().min(0.5, 'Bitte eine Bewertung vergeben').max(5).multipleOf(0.5),
   reviewText: z.string().max(2000, 'Max. 2000 Zeichen').optional().default(''),
   favoriteQuote: z.string().max(500, 'Max. 500 Zeichen').optional().default(''),
   containsSpoilers: z.boolean().default(false),

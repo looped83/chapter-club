@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useId } from 'react'
 
 interface StarPickerProps {
   value: number
@@ -9,8 +9,8 @@ interface StarPickerProps {
 
 const sizes = { sm: 'w-5 h-5', md: 'w-8 h-8', lg: 'w-10 h-10' }
 
-function StarSvg({ fillAmount, index }: { fillAmount: number; index: number }) {
-  const clipId = `star-clip-${index}`
+function StarSvg({ fillAmount, index, instanceId }: { fillAmount: number; index: number; instanceId: string }) {
+  const clipId = `${instanceId}-s${index}`
   const fillWidth = Math.round(fillAmount * 24)
 
   return (
@@ -40,6 +40,7 @@ function StarSvg({ fillAmount, index }: { fillAmount: number; index: number }) {
 
 export function StarPicker({ value, onChange, readOnly = false, size = 'md' }: StarPickerProps) {
   const [hovered, setHovered] = useState<number | null>(null)
+  const instanceId = useId()
   const display = hovered ?? value
 
   return (
@@ -53,7 +54,7 @@ export function StarPicker({ value, onChange, readOnly = false, size = 'md' }: S
         const fillAmount = Math.min(1, Math.max(0, display - (star - 1)))
         return (
           <div key={star} className={`relative ${sizes[size]} flex-shrink-0`}>
-            <StarSvg fillAmount={fillAmount} index={star} />
+            <StarSvg fillAmount={fillAmount} index={star} instanceId={instanceId} />
             {!readOnly && (
               <>
                 {/* left half → half star */}

@@ -132,7 +132,7 @@ export function BookDetailPage() {
 
       {/* ── Highlights ── */}
       {reviews.length >= 2 && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className={['grid gap-3', criticalReader && criticalReader.id !== enthusiasticReader?.id ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
           {enthusiasticReader && (
             <Card className="p-3">
               <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Am begeistertsten</p>
@@ -171,7 +171,7 @@ export function BookDetailPage() {
         {(['progress', 'reviews'] as const).map((t) => (
           <button
             key={t}
-            onClick={() => setTab(t)}
+            onClick={() => { setTab(t); setCarouselIndex(0); setConfirmDelete(false) }}
             className={[
               'flex-1 py-2 rounded-xl text-sm font-medium transition-colors',
               tab === t
