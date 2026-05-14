@@ -82,3 +82,18 @@ export function useUpsertReview() {
     },
   })
 }
+
+export function useDeleteReview() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ reviewId, bookId, userId }: { reviewId: string; bookId: string; userId: string }) => {
+      const { error } = await supabase.from('reviews').delete().eq('id', reviewId)
+      if (error) throw error
+      return { bookId, userId }
+    },
+    onSuccess: (_data, input) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookReviews(input.bookId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.myReview(input.bookId, input.userId) })
+    },
+  })
+}

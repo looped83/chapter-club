@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
-import { useBookReviews, useMyReview } from '@/hooks/useReviews'
+import { useBookReviews, useMyReview, useDeleteReview } from '@/hooks/useReviews'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
@@ -28,6 +28,8 @@ export function BookDetailPage() {
   const { data: myReview } = useMyReview(id!, user?.id ?? '')
   const [tab, setTab] = useState<'progress' | 'reviews'>('progress')
   const [editingReview, setEditingReview] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const deleteReview = useDeleteReview()
 
   if (isLoading) return <PageSpinner />
   if (!book) return (
@@ -164,12 +166,41 @@ export function BookDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-900">Mein Review</h3>
               {myReview && !editingReview && (
-                <button
-                  onClick={() => setEditingReview(true)}
-                  className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
-                >
-                  Bearbeiten
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
+                    className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
+                  >
+                    Bearbeiten
+                  </button>
+                  {confirmDelete ? (
+                    <span className="flex items-center gap-2">
+                      <span className="text-xs text-stone-500">Wirklich löschen?</span>
+                      <button
+                        onClick={async () => {
+                          await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
+                          setConfirmDelete(false)
+                        }}
+                        className="text-xs text-red-600 hover:text-red-700 font-medium transition-colors"
+                      >
+                        Ja, löschen
+                      </button>
+                      <button
+                        onClick={() => setConfirmDelete(false)}
+                        className="text-xs text-stone-400 hover:text-stone-600 transition-colors"
+                      >
+                        Abbrechen
+                      </button>
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmDelete(true)}
+                      className="text-sm text-stone-400 hover:text-red-500 transition-colors"
+                    >
+                      Löschen
+                    </button>
+                  )}
+                </div>
               )}
             </div>
 
