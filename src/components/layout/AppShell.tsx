@@ -19,15 +19,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex flex-col">
-      {/* Top bar – mobile: logo only */}
-      <header className="md:hidden sticky top-0 z-40 bg-white/90 dark:bg-stone-950/90 backdrop-blur border-b border-stone-200 dark:border-white/10">
-        <div className="px-4 h-12 flex items-center">
-          <Link to="/" className="font-serif text-lg font-bold text-stone-900 dark:text-white tracking-tight">
-            📖 Chapter Club
-          </Link>
-        </div>
-      </header>
-
       {/* Top bar – desktop */}
       <header className="hidden md:flex sticky top-0 z-40 bg-white/90 dark:bg-stone-950/90 backdrop-blur border-b border-stone-200 dark:border-white/10">
         <div className="max-w-4xl mx-auto w-full px-6 h-16 flex items-center justify-between">
