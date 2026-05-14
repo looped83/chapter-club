@@ -117,7 +117,7 @@ export function DashboardPage() {
           <div className="flex items-center gap-3 mt-5 flex-wrap justify-center">
             <button
               onClick={() => { setShowProgress((v) => !v); setShowReview(false) }}
-              className="px-5 py-2 bg-white text-stone-900 rounded-xl text-sm font-semibold shadow hover:bg-stone-100 transition-colors"
+              className="px-5 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-600 transition-colors"
             >
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
             </button>
