@@ -71,10 +71,10 @@ function BookCard({ book }: { book: BookWithProfile }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
-          <h3 className="text-white text-xs font-semibold leading-tight line-clamp-2">
+          <h3 className="text-white text-sm font-semibold leading-tight line-clamp-2">
             {book.title}
           </h3>
-          <p className="text-white/60 text-[10px] truncate">{book.author}</p>
+          <p className="text-white/60 text-xs truncate">{book.author}</p>
           {ratings.length > 0 && (
             <AverageRating ratings={ratings} onDark />
           )}
