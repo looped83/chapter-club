@@ -8,6 +8,7 @@ import { ExpandableText } from '@/components/ui/ExpandableText'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
 import { BookCover } from '@/components/book/BookCover'
 import { AverageRating, StarRating } from '@/components/book/StarRating'
 import { GroupProgress } from '@/components/progress/GroupProgress'
@@ -237,6 +238,14 @@ export function BookDetailPage() {
                   </button>
                 </div>
               )}
+              {editingReview && (
+                <button
+                  onClick={() => { setEditingReview(false); setConfirmDelete(false) }}
+                  className="text-sm text-stone-400 dark:text-white/40 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
+                >
+                  Abbrechen
+                </button>
+              )}
             </div>
 
             {myReview && !editingReview ? (
@@ -268,12 +277,20 @@ export function BookDetailPage() {
                   </div>
                 )}
               </div>
-            ) : (
+            ) : editingReview ? (
               <ReviewForm
                 bookId={book.id}
                 existing={myReview ?? null}
                 onSaved={() => setEditingReview(false)}
               />
+            ) : (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setEditingReview(true)}
+              >
+                + Bewertung schreiben
+              </Button>
             )}
           </Card>
 
