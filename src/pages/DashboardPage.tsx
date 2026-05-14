@@ -114,25 +114,24 @@ export function DashboardPage() {
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 mt-5 flex-wrap justify-center">
-            <Button
-              size="md"
-              variant={showProgress ? 'secondary' : 'primary'}
+          <div className="flex items-center gap-3 mt-5 flex-wrap justify-center">
+            <button
               onClick={() => { setShowProgress((v) => !v); setShowReview(false) }}
+              className="px-5 py-2 bg-white text-stone-900 rounded-xl text-sm font-semibold shadow hover:bg-stone-100 transition-colors"
             >
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
-            </Button>
-            <Button
-              size="md"
-              variant={showReview ? 'secondary' : 'primary'}
+            </button>
+            <button
               onClick={() => { setShowReview((v) => !v); setShowProgress(false) }}
+              className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors"
             >
-              {showReview ? 'Schließen' : myReview ? 'Bewertung bearbeiten' : 'Bewertung schreiben'}
-            </Button>
-            <Link to={`/book/${book.id}`}>
-              <Button size="md" variant="ghost" className="text-white hover:bg-white/20 border border-white/20">
-                Details →
-              </Button>
+              {showReview ? 'Schließen' : myReview ? 'Bearbeiten' : 'Bewerten'}
+            </button>
+            <Link
+              to={`/book/${book.id}`}
+              className="px-1 text-sm text-white/40 font-medium hover:text-white/70 transition-colors"
+            >
+              Details →
             </Link>
           </div>
         </div>
