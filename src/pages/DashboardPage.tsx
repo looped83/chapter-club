@@ -8,7 +8,7 @@ import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { BookCover } from '@/components/book/BookCover'
-import { AverageRating } from '@/components/book/StarRating'
+import { AverageRating, StarRating } from '@/components/book/StarRating'
 import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
 
@@ -160,17 +160,21 @@ export function DashboardPage() {
       {/* ── Reviews teaser ── */}
       {reviews.length > 0 && (
         <Card className="p-5">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-white">Bewertungen</h3>
             <Link to={`/book/${book.id}`} className="text-sm text-brand-400 hover:text-brand-300 transition-colors">
               Alle ansehen
             </Link>
           </div>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {reviews.map((r) => (
-              <div key={r.id} className="flex items-center gap-2 bg-white/10 rounded-xl px-3 py-2">
-                <span className="text-lg">{r.profiles?.avatar_emoji}</span>
-                <span className="text-sm font-semibold text-white/70">
+              <div key={r.id} className="flex flex-col items-center gap-2 bg-white/10 rounded-2xl px-3 py-4">
+                <span className="text-3xl leading-none">{r.profiles?.avatar_emoji ?? '📚'}</span>
+                <span className="text-xs font-medium text-white/70 truncate w-full text-center">
+                  {r.profiles?.display_name}
+                </span>
+                <StarRating rating={Number(r.rating)} size="sm" />
+                <span className="text-sm font-bold text-brand-400">
                   {Number(r.rating).toFixed(1)}
                 </span>
               </div>
