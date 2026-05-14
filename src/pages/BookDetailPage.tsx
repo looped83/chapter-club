@@ -37,6 +37,17 @@ export function BookDetailPage() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const deleteReview = useDeleteReview()
 
+  const ratings = reviews.map((r) => Number(r.rating))
+
+  const sortedReviews = useMemo(
+    () => [...reviews].sort((a, b) => {
+      if (a.user_id === user?.id) return -1
+      if (b.user_id === user?.id) return 1
+      return 0
+    }),
+    [reviews, user?.id]
+  )
+
   if (isLoading) return <PageSpinner />
   if (!book) return (
     <div className="text-center py-16">
@@ -44,8 +55,6 @@ export function BookDetailPage() {
       <Link to="/" className="text-brand-600 dark:text-brand-400 text-sm mt-2 block">← Zurück</Link>
     </div>
   )
-
-  const ratings = reviews.map((r) => Number(r.rating))
 
   const topReader = progressList.reduce<typeof progressList[0] | null>((best, p) =>
     (!best || p.progress_percent > best.progress_percent) ? p : best
@@ -58,15 +67,6 @@ export function BookDetailPage() {
   const enthusiasticReader = reviews.reduce<typeof reviews[0] | null>((best, r) =>
     (!best || r.rating > best.rating) ? r : best
   , null)
-
-  const sortedReviews = useMemo(
-    () => [...reviews].sort((a, b) => {
-      if (a.user_id === user?.id) return -1
-      if (b.user_id === user?.id) return 1
-      return 0
-    }),
-    [reviews, user?.id]
-  )
 
   return (
     <div className="flex flex-col gap-5">
