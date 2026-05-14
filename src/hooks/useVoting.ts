@@ -57,20 +57,29 @@ export function useCastVote(month: number, year: number) {
     mutationFn: async ({ userId, suggestionId }: { userId: string; suggestionId: string }) => {
       const { data: existing } = await supabase
         .from('suggestion_votes')
-        .select('id')
+        .select('id, suggestion_id')
         .eq('user_id', userId)
         .eq('target_month', month)
         .eq('target_year', year)
         .maybeSingle()
 
-      const existingVote = existing as { id: string } | null
+      const existingVote = existing as { id: string; suggestion_id: string } | null
 
       if (existingVote) {
-        const { error } = await supabase
-          .from('suggestion_votes')
-          .update({ suggestion_id: suggestionId })
-          .eq('id', existingVote.id)
-        if (error) throw error
+        // Toggle: clicking the already-voted suggestion removes the vote
+        if (existingVote.suggestion_id === suggestionId) {
+          const { error } = await supabase
+            .from('suggestion_votes')
+            .delete()
+            .eq('id', existingVote.id)
+          if (error) throw error
+        } else {
+          const { error } = await supabase
+            .from('suggestion_votes')
+            .update({ suggestion_id: suggestionId })
+            .eq('id', existingVote.id)
+          if (error) throw error
+        }
       } else {
         const { error } = await supabase
           .from('suggestion_votes')
