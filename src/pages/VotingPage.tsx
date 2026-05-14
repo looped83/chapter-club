@@ -48,6 +48,9 @@ export function VotingPage() {
 
   const winner = getWinner(suggestions)
 
+  const now = new Date()
+  const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate()
+
   if (isLoading) return <PageSpinner />
 
   const myVoteId = myVote?.suggestion_id ?? null
@@ -75,6 +78,10 @@ export function VotingPage() {
             <div>
               <p className="font-medium text-stone-900 dark:text-white text-sm">Voting läuft</p>
               <p className="text-xs text-stone-500 dark:text-white/50">Bis Monatsende abstimmen</p>
+            </div>
+            <div className="ml-auto text-right">
+              <p className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">{daysLeft}</p>
+              <p className="text-[10px] text-stone-400 dark:text-white/40 mt-0.5">{daysLeft === 1 ? 'Tag' : 'Tage'}</p>
             </div>
           </div>
         ) : (
