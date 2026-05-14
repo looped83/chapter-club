@@ -34,10 +34,7 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
     <div className="flex flex-col gap-5">
       {/* Group average — prominent */}
       <div className="flex items-end gap-4">
-        <div>
-          <p className="text-xs text-stone-400 dark:text-white/40 font-medium uppercase tracking-widest mb-0.5">Gruppe</p>
-          <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none">{Math.round(avg)}<span className="text-2xl text-stone-400 dark:text-white/50">%</span></p>
-        </div>
+        <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none">{Math.round(avg)}<span className="text-2xl text-stone-400 dark:text-white/50">%</span></p>
         <div className="flex-1 pb-1">
           <div className="h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
             <div
@@ -48,17 +45,27 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
         </div>
       </div>
 
-      {/* Per-person tiles */}
+      {/* Per-person tiles — same layout as ReviewCard */}
       <div className="grid grid-cols-2 gap-3">
         {progressList.map((p) => (
-          <div key={p.id} className="flex flex-col gap-2.5 bg-stone-50 dark:bg-white/[0.06] rounded-2xl p-3">
-            {/* Avatar + mood */}
+          <div key={p.id} className="flex flex-col gap-2.5 bg-stone-50 dark:bg-white/[0.06] rounded-2xl p-3 border border-stone-100 dark:border-white/10">
+            {/* Avatar + bar/percent — mirrors avatar | stars/number in ReviewCard */}
             <div className="flex items-start justify-between">
               <span className="text-3xl leading-none">{p.profiles?.avatar_emoji ?? '📚'}</span>
-              {p.mood && <span className="text-xl leading-none">{p.mood}</span>}
+              <div className="flex flex-col items-end gap-0.5">
+                <div className="h-2 w-14 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-brand-400 rounded-full transition-all duration-500"
+                    style={{ width: `${p.progress_percent}%` }}
+                  />
+                </div>
+                <span className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
+                  {p.progress_percent}<span className="text-xs font-normal text-stone-400 dark:text-white/40">%</span>
+                </span>
+              </div>
             </div>
 
-            {/* Name + status */}
+            {/* Name + status pill */}
             <div className="flex flex-col gap-1">
               <span className="text-xs font-semibold text-stone-900 dark:text-white truncate">
                 {p.profiles?.display_name ?? 'Unbekannt'}
@@ -69,21 +76,6 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
               ].join(' ')}>
                 {STATUS_LABEL[p.status] ?? p.status}
               </span>
-            </div>
-
-            {/* Progress bar + percent */}
-            <div>
-              <div className="flex justify-between items-center mb-1">
-                <div className="h-2 flex-1 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden mr-2">
-                  <div
-                    className="h-full bg-brand-400 rounded-full transition-all duration-500"
-                    style={{ width: `${p.progress_percent}%` }}
-                  />
-                </div>
-                <span className="text-xs font-bold text-brand-600 dark:text-brand-400 flex-shrink-0 w-8 text-right">
-                  {p.progress_percent}%
-                </span>
-              </div>
             </div>
           </div>
         ))}

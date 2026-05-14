@@ -23,10 +23,10 @@ export function ReviewCard({ review }: ReviewCardProps) {
       <div className="flex items-start justify-between">
         <span className="text-3xl leading-none">{review.profiles?.avatar_emoji ?? '📚'}</span>
         <div className="flex flex-col items-end gap-0.5">
+          <StarRating rating={Number(review.rating)} size="sm" />
           <span className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
             {Number(review.rating).toFixed(1)}
           </span>
-          <StarRating rating={Number(review.rating)} size="sm" />
         </div>
       </div>
 
