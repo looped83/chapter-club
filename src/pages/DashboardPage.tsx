@@ -90,7 +90,7 @@ export function DashboardPage() {
           </div>
 
           {/* Title & author */}
-          <h2 className="font-serif text-xl md:text-2xl font-bold text-white leading-tight max-w-xs">
+          <h2 className="font-serif text-2xl md:text-3xl font-bold text-white leading-tight max-w-xs">
             {book.title}
           </h2>
           <p className="text-white/70 text-sm mt-1">{book.author}</p>
