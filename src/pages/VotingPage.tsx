@@ -61,8 +61,8 @@ export function VotingPage() {
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div>
-        <h1 className="font-serif text-2xl font-bold text-stone-900">Voting</h1>
-        <p className="text-stone-500 text-sm mt-0.5">
+        <h1 className="font-serif text-2xl font-bold text-white">Voting</h1>
+        <p className="text-white/50 text-sm mt-0.5">
           Nächster Monat: {MONTH_NAMES[month]} {year}
         </p>
       </div>
@@ -73,17 +73,17 @@ export function VotingPage() {
           <div className="flex items-center gap-3">
             <span className="text-2xl">🗳️</span>
             <div>
-              <p className="font-medium text-stone-900 text-sm">Voting läuft</p>
-              <p className="text-xs text-stone-500">Bis Monatsende abstimmen</p>
+              <p className="font-medium text-white text-sm">Voting läuft</p>
+              <p className="text-xs text-white/50">Bis Monatsende abstimmen</p>
             </div>
           </div>
         ) : (
           <div className="flex items-center gap-3">
             <span className="text-2xl">🏁</span>
             <div>
-              <p className="font-medium text-stone-900 text-sm">Voting beendet</p>
+              <p className="font-medium text-white text-sm">Voting beendet</p>
               {winner && (
-                <p className="text-xs text-brand-600">
+                <p className="text-xs text-brand-400">
                   Gewinner: <strong>{winner.title}</strong>
                 </p>
               )}
@@ -104,7 +104,7 @@ export function VotingPage() {
 
           {showForm && (
             <Card className="p-5 mt-4">
-              <h2 className="font-semibold text-stone-900 mb-4">Buch vorschlagen</h2>
+              <h2 className="font-semibold text-white mb-4">Buch vorschlagen</h2>
               <SuggestionForm month={month} year={year} onSubmitted={() => setShowForm(false)} />
             </Card>
           )}
@@ -112,20 +112,20 @@ export function VotingPage() {
       )}
 
       {hasMysuggestion && votingOpen && (
-        <p className="text-sm text-stone-500 bg-stone-50 rounded-xl px-4 py-3">
+        <p className="text-sm text-white/50 bg-white/10 rounded-xl px-4 py-3">
           ✓ Du hast bereits einen Vorschlag eingereicht.
         </p>
       )}
 
       {/* Suggestions list */}
       {suggestions.length === 0 ? (
-        <div className="text-center py-12 text-stone-400">
+        <div className="text-center py-12 text-white/40">
           <div className="text-4xl mb-3">📬</div>
           <p className="text-sm">Noch keine Vorschläge für {MONTH_NAMES[month]}.</p>
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <h2 className="font-semibold text-stone-900">
+          <h2 className="font-semibold text-white">
             Vorschläge ({suggestions.length})
           </h2>
           {[...suggestions]

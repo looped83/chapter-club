@@ -37,8 +37,8 @@ export function BookDetailPage() {
   if (isLoading) return <PageSpinner />
   if (!book) return (
     <div className="text-center py-16">
-      <p className="text-stone-500">Buch nicht gefunden.</p>
-      <Link to="/" className="text-brand-600 text-sm mt-2 block">← Zurück</Link>
+      <p className="text-white/50">Buch nicht gefunden.</p>
+      <Link to="/" className="text-brand-400 text-sm mt-2 block">← Zurück</Link>
     </div>
   )
 
@@ -128,31 +128,31 @@ export function BookDetailPage() {
         <div className="grid grid-cols-3 gap-3">
           {enthusiasticReader && (
             <Card className="p-3">
-              <p className="text-xs text-stone-400 mb-2 leading-tight">Am begeistertsten</p>
+              <p className="text-xs text-white/40 mb-2 leading-tight">Am begeistertsten</p>
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-2xl">{enthusiasticReader.profiles?.avatar_emoji}</span>
-                <p className="text-xs font-medium text-stone-800 truncate w-full">{enthusiasticReader.profiles?.display_name}</p>
-                <p className="text-xs text-brand-600 font-bold">{Number(enthusiasticReader.rating).toFixed(1)} ★</p>
+                <p className="text-xs font-medium text-white truncate w-full">{enthusiasticReader.profiles?.display_name}</p>
+                <p className="text-xs text-brand-400 font-bold">{Number(enthusiasticReader.rating).toFixed(1)} ★</p>
               </div>
             </Card>
           )}
           {criticalReader && criticalReader.id !== enthusiasticReader?.id && (
             <Card className="p-3">
-              <p className="text-xs text-stone-400 mb-2 leading-tight">Kritischste Stimme</p>
+              <p className="text-xs text-white/40 mb-2 leading-tight">Kritischste Stimme</p>
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-2xl">{criticalReader.profiles?.avatar_emoji}</span>
-                <p className="text-xs font-medium text-stone-800 truncate w-full">{criticalReader.profiles?.display_name}</p>
-                <p className="text-xs text-stone-500 font-bold">{Number(criticalReader.rating).toFixed(1)} ★</p>
+                <p className="text-xs font-medium text-white truncate w-full">{criticalReader.profiles?.display_name}</p>
+                <p className="text-xs text-white/50 font-bold">{Number(criticalReader.rating).toFixed(1)} ★</p>
               </div>
             </Card>
           )}
           {topReader && (
             <Card className="p-3">
-              <p className="text-xs text-stone-400 mb-2 leading-tight">Am weitesten gelesen</p>
+              <p className="text-xs text-white/40 mb-2 leading-tight">Am weitesten gelesen</p>
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-2xl">{topReader.profiles?.avatar_emoji}</span>
-                <p className="text-xs font-medium text-stone-800 truncate w-full">{topReader.profiles?.display_name}</p>
-                <p className="text-xs text-green-600 font-bold">{topReader.progress_percent}%</p>
+                <p className="text-xs font-medium text-white truncate w-full">{topReader.profiles?.display_name}</p>
+                <p className="text-xs text-green-400 font-bold">{topReader.progress_percent}%</p>
               </div>
             </Card>
           )}
@@ -160,14 +160,14 @@ export function BookDetailPage() {
       )}
 
       {/* ── Tabs ── */}
-      <div className="flex gap-1 bg-stone-100 rounded-2xl p-1">
+      <div className="flex gap-1 bg-white/10 rounded-2xl p-1">
         {(['progress', 'reviews'] as const).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
             className={[
               'flex-1 py-2 rounded-xl text-sm font-medium transition-colors',
-              tab === t ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-700',
+              tab === t ? 'bg-white/15 text-white shadow-sm' : 'text-white/40 hover:text-white/70',
             ].join(' ')}
           >
             {t === 'progress' ? 'Fortschritt' : `Reviews${reviews.length > 0 ? ` (${reviews.length})` : ''}`}
@@ -179,11 +179,11 @@ export function BookDetailPage() {
         <div className="flex flex-col gap-4">
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-stone-900">Mein Fortschritt</h3>
+              <h3 className="font-semibold text-white">Mein Fortschritt</h3>
               {myProgress && !editingProgress && (
                 <button
                   onClick={() => setEditingProgress(true)}
-                  className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
+                  className="text-sm text-brand-400 hover:text-brand-300 font-medium transition-colors"
                 >
                   Bearbeiten
                 </button>
@@ -201,7 +201,7 @@ export function BookDetailPage() {
             )}
           </Card>
           <Card className="p-5">
-            <h3 className="font-semibold text-stone-900 mb-4">Gruppe</h3>
+            <h3 className="font-semibold text-white mb-4">Gruppe</h3>
             <GroupProgress progressList={progressList} />
           </Card>
         </div>
@@ -211,30 +211,30 @@ export function BookDetailPage() {
         <div className="flex flex-col gap-4">
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-stone-900">Mein Review</h3>
+              <h3 className="font-semibold text-white">Mein Review</h3>
               {myReview && !editingReview && (
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => { setEditingReview(true); setConfirmDelete(false) }}
-                    className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
+                    className="text-sm text-brand-400 hover:text-brand-300 font-medium transition-colors"
                   >
                     Bearbeiten
                   </button>
                   {confirmDelete ? (
                     <span className="flex items-center gap-2">
-                      <span className="text-xs text-stone-500">Wirklich löschen?</span>
+                      <span className="text-xs text-white/50">Wirklich löschen?</span>
                       <button
                         onClick={async () => {
                           await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
                           setConfirmDelete(false)
                         }}
-                        className="text-xs text-red-600 hover:text-red-700 font-medium transition-colors"
+                        className="text-xs text-red-400 hover:text-red-300 font-medium transition-colors"
                       >
                         Ja, löschen
                       </button>
                       <button
                         onClick={() => setConfirmDelete(false)}
-                        className="text-xs text-stone-400 hover:text-stone-600 transition-colors"
+                        className="text-xs text-white/30 hover:text-white/60 transition-colors"
                       >
                         Abbrechen
                       </button>
@@ -242,7 +242,7 @@ export function BookDetailPage() {
                   ) : (
                     <button
                       onClick={() => setConfirmDelete(true)}
-                      className="text-sm text-stone-400 hover:text-red-500 transition-colors"
+                      className="text-sm text-white/30 hover:text-red-400 transition-colors"
                     >
                       Löschen
                     </button>
@@ -264,7 +264,7 @@ export function BookDetailPage() {
 
           {reviews.length > 0 && (
             <Card className="p-5">
-              <h3 className="font-semibold text-stone-900 mb-4">Alle Reviews</h3>
+              <h3 className="font-semibold text-white mb-4">Alle Reviews</h3>
               <div className="flex flex-col gap-3">
                 {reviews.map((r) => (
                   <ReviewCard key={r.id} review={r} />
@@ -274,7 +274,7 @@ export function BookDetailPage() {
           )}
 
           {reviews.length === 0 && (
-            <div className="text-center py-8 text-stone-400 text-sm">
+            <div className="text-center py-8 text-white/40 text-sm">
               Noch keine Reviews. Schreib das erste!
             </div>
           )}
@@ -297,10 +297,10 @@ function ProgressSummary({ progress }: { progress: ReadingProgress }) {
     <div className="flex flex-col gap-3">
       <div>
         <div className="flex justify-between items-center mb-1.5">
-          <span className="text-sm text-stone-600">{STATUS_LABELS[progress.status] ?? progress.status}</span>
-          <span className="text-sm font-bold text-brand-600">{progress.progress_percent}%</span>
+          <span className="text-sm text-white/60">{STATUS_LABELS[progress.status] ?? progress.status}</span>
+          <span className="text-sm font-bold text-brand-400">{progress.progress_percent}%</span>
         </div>
-        <div className="h-2 bg-stone-100 rounded-full overflow-hidden">
+        <div className="h-2 bg-white/10 rounded-full overflow-hidden">
           <div
             className="h-full bg-brand-400 rounded-full transition-all duration-500"
             style={{ width: `${progress.progress_percent}%` }}
@@ -308,7 +308,7 @@ function ProgressSummary({ progress }: { progress: ReadingProgress }) {
         </div>
       </div>
       {progress.mood && (
-        <p className="text-sm text-stone-500">
+        <p className="text-sm text-white/50">
           Mood: <span className="text-xl">{progress.mood}</span>
         </p>
       )}
