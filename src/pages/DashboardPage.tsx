@@ -14,11 +14,6 @@ import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
 import { ReviewForm } from '@/components/review/ReviewForm'
 
-function daysLeftInMonth() {
-  const now = new Date()
-  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0)
-  return lastDay.getDate() - now.getDate()
-}
 
 export function DashboardPage() {
   const { user } = useAuth()
@@ -43,7 +38,6 @@ export function DashboardPage() {
   if (!book) return <EmptyState />
 
   const ratings = reviews.map((r) => Number(r.rating))
-  const daysLeft = daysLeftInMonth()
 
   return (
     <div className="flex flex-col gap-5">
@@ -83,17 +77,6 @@ export function DashboardPage() {
               {book.year}
             </span>
           </h1>
-
-          {/* Stats */}
-          <div className="flex items-center gap-1.5 mb-5">
-            <span className="text-xs text-white/50">
-              {daysLeft > 0
-                ? `Noch ${daysLeft} ${daysLeft === 1 ? 'Tag' : 'Tage'} im Monat`
-                : 'Letzter Tag des Monats'}
-            </span>
-            <span className="text-white/20">·</span>
-            <span className="text-xs text-white/50">{progressList.length} von 4 lesen mit</span>
-          </div>
 
           {/* Cover */}
           <div className="w-36 md:w-44 rounded-2xl overflow-hidden shadow-2xl ring-4 ring-white/20 mb-6 flex-shrink-0">
