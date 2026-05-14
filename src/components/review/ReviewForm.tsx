@@ -229,7 +229,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       </label>
 
       <Button type="submit" loading={isSubmitting} disabled={!isDirty && !!existing} className="self-start">
-        {existing ? 'Review aktualisieren' : 'Review speichern'}
+        {existing ? 'Bewertung aktualisieren' : 'Bewertung speichern'}
       </Button>
 
       {upsert.isError && (

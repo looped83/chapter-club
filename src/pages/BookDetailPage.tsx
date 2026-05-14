@@ -170,7 +170,7 @@ export function BookDetailPage() {
               tab === t ? 'bg-white/15 text-white shadow-sm' : 'text-white/40 hover:text-white/70',
             ].join(' ')}
           >
-            {t === 'progress' ? 'Fortschritt' : `Reviews${reviews.length > 0 ? ` (${reviews.length})` : ''}`}
+            {t === 'progress' ? 'Fortschritt' : `Bewertungen${reviews.length > 0 ? ` (${reviews.length})` : ''}`}
           </button>
         ))}
       </div>
@@ -209,33 +209,26 @@ export function BookDetailPage() {
 
       {tab === 'reviews' && (
         <div className="flex flex-col gap-4">
-          {/* ── Meine Review ── */}
+          {/* ── Meine Bewertung ── */}
           <Card className="p-5">
-            <h3 className="font-semibold text-white mb-4">Meine Review</h3>
+            <h3 className="font-semibold text-white mb-4">Meine Bewertung</h3>
 
             {myReview && !editingReview ? (
-              /* Horizontal strip: avatar | name+pill | stars+rating | actions */
+              /* Horizontal strip: stars+rating | avatar | spacer | actions */
               <div className="flex items-center gap-3 bg-white/[0.06] rounded-2xl p-3 border border-white/10">
+                {/* Stars + rating — leftmost */}
+                <div className="flex flex-col items-start gap-0.5 flex-shrink-0">
+                  <StarRating rating={Number(myReview.rating)} size="sm" />
+                  <span className="text-sm font-bold text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
+                </div>
+
+                {/* Avatar */}
                 <span className="text-2xl leading-none flex-shrink-0">{profile?.avatar_emoji ?? '📚'}</span>
 
-                {/* Name + one_word pill */}
-                <div className="flex flex-col gap-0.5 min-w-0 flex-1">
-                  <span className="text-xs font-semibold text-white">Meine Review</span>
-                  {myReview.one_word && (
-                    <span className="self-start text-[10px] font-medium text-brand-300 bg-brand-500/15 rounded-full px-1.5 py-0.5 border border-brand-500/20">
-                      „{myReview.one_word}"
-                    </span>
-                  )}
-                </div>
-
-                {/* Stars + rating centred */}
-                <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
-                  <StarRating rating={Number(myReview.rating)} size="sm" />
-                  <span className="text-xs font-bold text-brand-400">{Number(myReview.rating).toFixed(1)}</span>
-                </div>
+                <div className="flex-1" />
 
                 {/* Actions — right edge */}
-                <div className="flex flex-col items-end gap-1 flex-shrink-0 pl-1">
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
                   {confirmDelete ? (
                     <>
                       <span className="text-[10px] text-white/50">Wirklich?</span>
@@ -287,7 +280,7 @@ export function BookDetailPage() {
           {/* ── Alle Reviews ── eigene zuerst */}
           {reviews.length > 0 && (
             <Card className="p-5">
-              <h3 className="font-semibold text-white mb-4">Alle Reviews</h3>
+              <h3 className="font-semibold text-white mb-4">Alle Bewertungen</h3>
               <div className="flex flex-col gap-3">
                 {[...reviews]
                   .sort((a, b) => {
@@ -304,7 +297,7 @@ export function BookDetailPage() {
 
           {reviews.length === 0 && (
             <div className="text-center py-8 text-white/40 text-sm">
-              Noch keine Reviews. Schreib das erste!
+              Noch keine Bewertungen. Schreib die erste!
             </div>
           )}
         </div>
