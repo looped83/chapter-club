@@ -9,14 +9,27 @@ export function StarRating({ rating, size = 'md' }: StarRatingProps) {
   return <StarPicker value={rating} onChange={() => undefined} readOnly size={size} />
 }
 
-export function AverageRating({ ratings }: { ratings: number[] }) {
-  if (!ratings.length) return <span className="text-stone-400 text-sm">Noch keine Bewertungen</span>
+interface AverageRatingProps {
+  ratings: number[]
+  onDark?: boolean
+}
+
+export function AverageRating({ ratings, onDark = false }: AverageRatingProps) {
+  if (!ratings.length) return (
+    <span className={`text-sm ${onDark ? 'text-white/50' : 'text-stone-400'}`}>
+      Noch keine Bewertungen
+    </span>
+  )
   const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length
   return (
     <span className="flex items-center gap-2">
       <StarPicker value={avg} onChange={() => undefined} readOnly size="sm" />
-      <span className="text-stone-600 text-sm font-medium">{avg.toFixed(1)}</span>
-      <span className="text-stone-400 text-xs">({ratings.length})</span>
+      <span className={`text-sm font-medium ${onDark ? 'text-white/90' : 'text-stone-600'}`}>
+        {avg.toFixed(1)}
+      </span>
+      <span className={`text-xs ${onDark ? 'text-white/50' : 'text-stone-400'}`}>
+        ({ratings.length})
+      </span>
     </span>
   )
 }
