@@ -39,6 +39,7 @@ export function ExpandableText({
         <button
           type="button"
           onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
           className={toggleClassName}
         >
           {expanded ? 'weniger' : 'mehr'}

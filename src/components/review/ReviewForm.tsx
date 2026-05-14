@@ -239,7 +239,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       )}
 
       {upsert.isSuccess && !isDirty && (
-        <p className="text-sm text-green-700 dark:text-green-400">✓ Bewertung gespeichert</p>
+        <p role="status" className="text-sm text-green-700 dark:text-green-400">✓ Bewertung gespeichert</p>
       )}
     </form>
   )

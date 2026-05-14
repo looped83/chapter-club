@@ -117,18 +117,19 @@ export function DashboardPage() {
           <div className="flex items-center gap-3 mt-5 flex-wrap justify-center">
             <button
               onClick={() => { setShowProgress((v) => !v); setShowReview(false) }}
-              className="px-5 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-600 transition-colors"
+              className="px-5 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
             >
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
             </button>
             <button
               onClick={() => { setShowReview((v) => !v); setShowProgress(false) }}
-              className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors"
+              className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             >
               {showReview ? 'Schließen' : myReview ? 'Bearbeiten' : 'Bewerten'}
             </button>
             <Link
               to={`/book/${book.id}`}
+              aria-label={`Details: ${book.title}`}
               className="px-1 text-sm text-white/40 font-medium hover:text-white/70 transition-colors"
             >
               Details →

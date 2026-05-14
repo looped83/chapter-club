@@ -323,12 +323,21 @@ export function BookDetailPage() {
                 {/* Mobile: horizontal snap carousel; Desktop: vertical list */}
                 <div
                   ref={carouselRef}
+                  role="group"
+                  aria-label="Bewertungen"
+                  tabIndex={0}
                   onScroll={() => {
                     if (!carouselRef.current) return
                     const { scrollLeft, clientWidth } = carouselRef.current
                     setCarouselIndex(Math.round(scrollLeft / clientWidth))
                   }}
-                  className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide md:flex-col md:overflow-x-visible md:gap-3"
+                  onKeyDown={(e) => {
+                    const el = carouselRef.current
+                    if (!el) return
+                    if (e.key === 'ArrowRight') { e.preventDefault(); el.scrollBy({ left: el.clientWidth, behavior: 'smooth' }) }
+                    if (e.key === 'ArrowLeft')  { e.preventDefault(); el.scrollBy({ left: -el.clientWidth, behavior: 'smooth' }) }
+                  }}
+                  className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide md:flex-col md:overflow-x-visible md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 rounded-xl"
                 >
                   {sorted.map((r) => (
                     <div key={r.id} className="snap-start flex-shrink-0 w-full md:w-auto">
@@ -338,12 +347,18 @@ export function BookDetailPage() {
                 </div>
                 {/* Dot indicators — mobile only */}
                 {sorted.length > 1 && (
-                  <div className="flex justify-center gap-1.5 mt-3 md:hidden">
-                    {sorted.map((_, i) => (
-                      <div
+                  <div className="flex justify-center gap-1.5 mt-3 md:hidden" role="group" aria-label="Bewertung auswählen">
+                    {sorted.map((r, i) => (
+                      <button
                         key={i}
+                        type="button"
+                        aria-label={`Bewertung von ${r.profiles?.display_name ?? i + 1}`}
+                        aria-current={i === carouselIndex ? 'true' : undefined}
+                        onClick={() => {
+                          carouselRef.current?.scrollTo({ left: i * carouselRef.current.clientWidth, behavior: 'smooth' })
+                        }}
                         className={[
-                          'rounded-full transition-all duration-200',
+                          'rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400',
                           i === carouselIndex
                             ? 'w-4 h-1.5 bg-brand-400'
                             : 'w-1.5 h-1.5 bg-stone-300 dark:bg-white/20',
