@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -32,6 +32,8 @@ export function BookDetailPage() {
   const [editingProgress, setEditingProgress] = useState(false)
   const [editingReview, setEditingReview] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const [carouselIndex, setCarouselIndex] = useState(0)
+  const carouselRef = useRef<HTMLDivElement>(null)
   const deleteReview = useDeleteReview()
 
   if (isLoading) return <PageSpinner />
@@ -277,22 +279,50 @@ export function BookDetailPage() {
           </Card>
 
           {/* ── Alle Reviews ── eigene zuerst */}
-          {reviews.length > 0 && (
-            <Card className="p-5">
-              <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Alle Bewertungen</h3>
-              <div className="flex flex-col gap-3">
-                {[...reviews]
-                  .sort((a, b) => {
-                    if (a.user_id === user?.id) return -1
-                    if (b.user_id === user?.id) return 1
-                    return 0
-                  })
-                  .map((r) => (
-                    <ReviewCard key={r.id} review={r} />
+          {reviews.length > 0 && (() => {
+            const sorted = [...reviews].sort((a, b) => {
+              if (a.user_id === user?.id) return -1
+              if (b.user_id === user?.id) return 1
+              return 0
+            })
+            return (
+              <Card className="p-5">
+                <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Alle Bewertungen</h3>
+                {/* Mobile: horizontal snap carousel; Desktop: vertical list */}
+                <div
+                  ref={carouselRef}
+                  onScroll={() => {
+                    if (!carouselRef.current) return
+                    const { scrollLeft, clientWidth } = carouselRef.current
+                    setCarouselIndex(Math.round(scrollLeft / clientWidth))
+                  }}
+                  className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide md:flex-col md:overflow-x-visible md:gap-3"
+                >
+                  {sorted.map((r) => (
+                    <div key={r.id} className="snap-start flex-shrink-0 w-full md:w-auto">
+                      <ReviewCard review={r} />
+                    </div>
                   ))}
-              </div>
-            </Card>
-          )}
+                </div>
+                {/* Dot indicators — mobile only */}
+                {sorted.length > 1 && (
+                  <div className="flex justify-center gap-1.5 mt-3 md:hidden">
+                    {sorted.map((_, i) => (
+                      <div
+                        key={i}
+                        className={[
+                          'rounded-full transition-all duration-200',
+                          i === carouselIndex
+                            ? 'w-4 h-1.5 bg-brand-400'
+                            : 'w-1.5 h-1.5 bg-stone-300 dark:bg-white/20',
+                        ].join(' ')}
+                      />
+                    ))}
+                  </div>
+                )}
+              </Card>
+            )
+          })()}
 
           {reviews.length === 0 && (
             <div className="text-center py-8 text-stone-400 dark:text-white/40 text-sm">

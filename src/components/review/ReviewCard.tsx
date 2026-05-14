@@ -75,7 +75,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
       {review.review_text && (
         <ExpandableText
           text={review.review_text}
-          lines={3}
+          lines={4}
           className="text-xs text-stone-600 dark:text-white/70 leading-relaxed"
           toggleClassName="text-stone-300 dark:text-white/30 hover:text-stone-500 dark:hover:text-white/60 text-[10px] mt-0.5 transition-colors"
         />
