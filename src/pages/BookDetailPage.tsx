@@ -236,7 +236,7 @@ export function BookDetailPage() {
             </div>
 
             {myReview && !editingReview ? (
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-3 min-h-[2.125rem]">
                 <div className="flex items-center gap-2">
                   <StarRating rating={Number(myReview.rating)} size="sm" />
                   <span className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
