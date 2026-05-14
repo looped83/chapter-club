@@ -69,13 +69,10 @@ export function DashboardPage() {
 
           {/* Month label */}
           <p className="text-white/60 text-xs font-semibold tracking-[0.2em] uppercase mb-1">
-            Buch des Monats
+            Buch des Monats · {book.year}
           </p>
           <h1 className="font-serif text-4xl md:text-5xl font-bold text-white mb-6 leading-none">
             {MONTH_NAMES[book.month]}
-            <span className="block text-lg md:text-xl font-normal text-white/60 mt-1 tracking-wide">
-              {book.year}
-            </span>
           </h1>
 
           {/* Cover */}
