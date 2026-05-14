@@ -7,6 +7,12 @@ const navItems = [
   { to: '/voting', label: 'Voting', icon: VotingIcon },
 ]
 
+function isNavActive(to: string, pathname: string): boolean {
+  if (pathname === to) return true
+  if (to === '/library' && pathname.startsWith('/book/')) return true
+  return false
+}
+
 export function AppShell({ children }: { children: React.ReactNode }) {
   const { profile } = useAuth()
   const location = useLocation()
@@ -26,7 +32,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 to={to}
                 className={[
                   'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
-                  location.pathname === to
+                  isNavActive(to, location.pathname)
                     ? 'bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white'
                     : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100 dark:text-white/50 dark:hover:text-white dark:hover:bg-white/10',
                 ].join(' ')}
@@ -58,7 +64,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         <div className="flex items-center justify-around h-16 px-2">
           {navItems.map(({ to, label, icon: Icon }) => {
-            const active = location.pathname === to
+            const active = isNavActive(to, location.pathname)
             return (
               <Link
                 key={to}
