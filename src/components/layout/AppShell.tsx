@@ -1,12 +1,10 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/lib/AuthContext'
-import { supabase } from '@/lib/supabase'
 
 const navItems = [
   { to: '/', label: 'Home', icon: HomeIcon },
   { to: '/library', label: 'Bibliothek', icon: LibraryIcon },
   { to: '/voting', label: 'Voting', icon: VotingIcon },
-  { to: '/profile', label: 'Profil', icon: ProfileIcon },
 ]
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -37,15 +35,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Link>
             ))}
           </nav>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-stone-500">{profile?.avatar_emoji} {profile?.display_name}</span>
-            <button
-              onClick={() => supabase.auth.signOut()}
-              className="text-xs text-stone-400 hover:text-stone-700 transition-colors"
-            >
-              Abmelden
-            </button>
-          </div>
+          <Link
+            to="/profile"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-stone-100 transition-colors"
+            aria-label="Profil bearbeiten"
+          >
+            <span className="text-lg leading-none">{profile?.avatar_emoji}</span>
+            <span className="text-sm text-stone-600 font-medium">{profile?.display_name}</span>
+          </Link>
         </div>
       </header>
 
@@ -77,6 +74,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Link>
             )
           })}
+          {/* Avatar als Profil-Link */}
+          <Link
+            to="/profile"
+            className={[
+              'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
+              location.pathname === '/profile' ? 'text-brand-600' : 'text-stone-400 hover:text-stone-700',
+            ].join(' ')}
+            aria-current={location.pathname === '/profile' ? 'page' : undefined}
+            aria-label="Profil"
+          >
+            <span className="text-xl leading-none h-5 flex items-center">{profile?.avatar_emoji ?? '👤'}</span>
+            <span className="text-[10px] font-medium truncate">{profile?.display_name?.split(' ')[0] ?? 'Profil'}</span>
+          </Link>
         </div>
       </nav>
     </div>
@@ -106,15 +116,6 @@ function VotingIcon({ className }: { className?: string }) {
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M20 6H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1z" />
-    </svg>
-  )
-}
-
-function ProfileIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-      <circle cx="12" cy="7" r="4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
