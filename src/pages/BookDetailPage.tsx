@@ -22,7 +22,7 @@ const MONTH_NAMES = [
 
 export function BookDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { user, profile } = useAuth()
+  const { user } = useAuth()
   const { data: book, isLoading } = useBook(id!)
   const { data: progressList = [] } = useBookProgress(id!)
   const { data: myProgress } = useMyProgress(id!, user?.id ?? '')
