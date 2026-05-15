@@ -2,10 +2,10 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './lib/AuthContext'
 import { AppShell } from './components/layout/AppShell'
-import { LoginPage } from './pages/LoginPage'
 import { PageSpinner } from './components/ui/Spinner'
 import { ErrorBoundary } from './components/ui/ErrorBoundary'
 
+const LoginPage = lazy(() => import('./pages/LoginPage').then(m => ({ default: m.LoginPage })))
 const DashboardPage = lazy(() => import('./pages/DashboardPage').then(m => ({ default: m.DashboardPage })))
 const BookDetailPage = lazy(() => import('./pages/BookDetailPage').then(m => ({ default: m.BookDetailPage })))
 const LibraryPage = lazy(() => import('./pages/LibraryPage').then(m => ({ default: m.LibraryPage })))
@@ -17,7 +17,11 @@ export default function App() {
 
   if (loading) return <PageSpinner />
 
-  if (!session) return <LoginPage />
+  if (!session) return (
+    <Suspense fallback={<PageSpinner />}>
+      <LoginPage />
+    </Suspense>
+  )
 
   return (
     <ErrorBoundary>
