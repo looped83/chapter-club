@@ -14,7 +14,8 @@ export function BacklogLeader({ leader, targetMonth, targetYear, votingOpen }: B
   return (
     <Card as="section" className="p-4" aria-label={votingOpen ? 'Aktuell führendes Buch' : 'Gewinnerbuch'}>
       <p className="text-xs text-stone-500 dark:text-white/50 font-medium uppercase tracking-wide mb-3">
-        {votingOpen ? '📊 Aktuell führend' : '🏆 Gewinner'} · {MONTH_NAMES[targetMonth]}{' '}
+        <span aria-hidden="true">{votingOpen ? '📊' : '🏆'}</span>{' '}
+        {votingOpen ? 'Aktuell führend' : 'Gewinner'} · {MONTH_NAMES[targetMonth]}{' '}
         {targetYear}
       </p>
       <div className="flex items-center gap-3">

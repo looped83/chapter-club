@@ -38,33 +38,36 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
     )
   }
 
-  const avg = useMemo(
-    () => progressList.reduce((sum, p) => sum + p.progress_percent, 0) / progressList.length,
-    [progressList],
-  )
-
-  const sorted = useMemo(
-    () => [...progressList].sort((a, b) => b.progress_percent - a.progress_percent),
-    [progressList],
-  )
+  const { avg, sorted } = useMemo(() => {
+    const sorted = [...progressList].sort((a, b) => b.progress_percent - a.progress_percent)
+    const avg = progressList.reduce((sum, p) => sum + p.progress_percent, 0) / progressList.length
+    return { avg, sorted }
+  }, [progressList])
 
   return (
     <div className="flex flex-col gap-4">
       {/* Group average */}
       <div className="flex items-end gap-3">
-        <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none">
+        <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none" aria-label={`Gruppendurchschnitt: ${Math.round(avg)} Prozent`}>
           {Math.round(avg)}
-          <span className="text-2xl font-bold text-brand-500 dark:text-brand-400">%</span>
+          <span className="text-2xl font-bold text-brand-500 dark:text-brand-400" aria-hidden="true">%</span>
         </p>
         <div className="flex-1 pb-1.5">
-          <div className="h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+          <div
+            className="h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden"
+            role="progressbar"
+            aria-valuenow={Math.round(avg)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Gruppenfortschritt"
+          >
             <div
               className="h-full bg-gradient-to-r from-brand-400 to-brand-500 rounded-full transition-all duration-700"
               style={{ width: `${avg}%` }}
             />
           </div>
         </div>
-        <p className="text-xs text-stone-400 dark:text-white/40 pb-1.5 flex-shrink-0">Ø Gruppe</p>
+        <p className="text-xs text-stone-400 dark:text-white/40 pb-1.5 flex-shrink-0" aria-hidden="true">Ø Gruppe</p>
       </div>
 
       {/* Per-person rows – all in one tile */}
@@ -73,7 +76,7 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
           <div key={p.id} className="flex items-center gap-3">
             {/* Avatar + name */}
             <div className="flex items-center gap-2 w-24 flex-shrink-0">
-              <span className="text-xl leading-none flex-shrink-0">
+              <span className="text-xl leading-none flex-shrink-0" aria-hidden="true">
                 {p.profiles?.avatar_emoji ?? '📚'}
               </span>
               <span className="text-xs font-semibold text-stone-800 dark:text-white/90 truncate">
@@ -93,7 +96,14 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
             </span>
 
             {/* Progress bar */}
-            <div className="flex-1 h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+            <div
+              className="flex-1 h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden"
+              role="progressbar"
+              aria-valuenow={p.progress_percent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`${p.profiles?.display_name?.split(' ')[0] ?? 'Person'}: ${p.progress_percent}%`}
+            >
               <div
                 className={[
                   'h-full rounded-full transition-all duration-500',

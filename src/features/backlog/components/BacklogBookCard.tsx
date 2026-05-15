@@ -109,7 +109,7 @@ export function BacklogBookCard({
             <div className="min-w-0">
               {isWinner && (
                 <span className="inline-block text-xs font-semibold text-brand-300 mb-1">
-                  🏆 Gewinner
+                  <span aria-hidden="true">🏆</span> Gewinner
                 </span>
               )}
               {isOwner && isActive && !isWinner && (
@@ -127,7 +127,7 @@ export function BacklogBookCard({
           </div>
 
           <p className="text-xs text-white/50">
-            vorgeschlagen von {book.profiles?.avatar_emoji} {book.profiles?.display_name}
+            vorgeschlagen von <span aria-hidden="true">{book.profiles?.avatar_emoji}</span> {book.profiles?.display_name}
           </p>
 
           {book.reason && (

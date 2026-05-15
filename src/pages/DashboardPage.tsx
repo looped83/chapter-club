@@ -96,7 +96,7 @@ export function DashboardPage() {
           {/* Suggested by */}
           {book.profiles && (
             <p className="text-white/50 text-xs mt-2">
-              vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
+              vorgeschlagen von <span aria-hidden="true">{book.profiles.avatar_emoji}</span> {book.profiles.display_name}
             </p>
           )}
 
