@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useCallback } from 'react'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -37,7 +37,7 @@ export function BookDetailPage() {
   const carouselRef = useRef<HTMLDivElement>(null)
   const deleteReview = useDeleteReview()
 
-  const ratings = reviews.map((r) => Number(r.rating))
+  const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
 
   const sortedReviews = useMemo(
     () => [...reviews].sort((a, b) => {
@@ -48,6 +48,25 @@ export function BookDetailPage() {
     [reviews, user?.id]
   )
 
+  const { topReader, criticalReader, enthusiasticReader } = useMemo(() => ({
+    topReader: progressList.reduce<typeof progressList[0] | null>(
+      (best, p) => (!best || p.progress_percent > best.progress_percent) ? p : best, null
+    ),
+    criticalReader: reviews.reduce<typeof reviews[0] | null>(
+      (worst, r) => (!worst || r.rating < worst.rating) ? r : worst, null
+    ),
+    enthusiasticReader: reviews.reduce<typeof reviews[0] | null>(
+      (best, r) => (!best || r.rating > best.rating) ? r : best, null
+    ),
+  }), [progressList, reviews])
+
+  const handleCarouselKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const el = carouselRef.current
+    if (!el) return
+    if (e.key === 'ArrowRight') { e.preventDefault(); el.scrollBy({ left: el.clientWidth, behavior: 'smooth' }) }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); el.scrollBy({ left: -el.clientWidth, behavior: 'smooth' }) }
+  }, [])
+
   if (isLoading) return <PageSpinner />
   if (!book) return (
     <div className="text-center py-16">
@@ -55,18 +74,6 @@ export function BookDetailPage() {
       <Link to="/" className="text-brand-600 dark:text-brand-400 text-sm mt-2 block">← Zurück</Link>
     </div>
   )
-
-  const topReader = progressList.reduce<typeof progressList[0] | null>((best, p) =>
-    (!best || p.progress_percent > best.progress_percent) ? p : best
-  , null)
-
-  const criticalReader = reviews.reduce<typeof reviews[0] | null>((worst, r) =>
-    (!worst || r.rating < worst.rating) ? r : worst
-  , null)
-
-  const enthusiasticReader = reviews.reduce<typeof reviews[0] | null>((best, r) =>
-    (!best || r.rating > best.rating) ? r : best
-  , null)
 
   return (
     <div className="flex flex-col gap-5">
@@ -342,12 +349,7 @@ export function BookDetailPage() {
                   const { scrollLeft, clientWidth } = carouselRef.current
                   setCarouselIndex(Math.round(scrollLeft / clientWidth))
                 }}
-                onKeyDown={(e) => {
-                  const el = carouselRef.current
-                  if (!el) return
-                  if (e.key === 'ArrowRight') { e.preventDefault(); el.scrollBy({ left: el.clientWidth, behavior: 'smooth' }) }
-                  if (e.key === 'ArrowLeft')  { e.preventDefault(); el.scrollBy({ left: -el.clientWidth, behavior: 'smooth' }) }
-                }}
+                onKeyDown={handleCarouselKeyDown}
                 className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide md:flex-col md:overflow-x-visible md:gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 rounded-xl"
               >
                 {sortedReviews.map((r) => (

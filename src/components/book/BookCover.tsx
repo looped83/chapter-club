@@ -1,3 +1,5 @@
+import { memo } from 'react'
+
 interface BookCoverProps {
   title: string
   coverUrl: string | null
@@ -12,11 +14,10 @@ const FALLBACK_COLORS = [
 ]
 
 function colorForTitle(title: string) {
-  const idx = title.charCodeAt(0) % FALLBACK_COLORS.length
-  return FALLBACK_COLORS[idx]
+  return FALLBACK_COLORS[title.charCodeAt(0) % FALLBACK_COLORS.length]
 }
 
-export function BookCover({ title, coverUrl, className = '' }: BookCoverProps) {
+export const BookCover = memo(function BookCover({ title, coverUrl, className = '' }: BookCoverProps) {
   if (coverUrl) {
     return (
       <img
@@ -42,4 +43,4 @@ export function BookCover({ title, coverUrl, className = '' }: BookCoverProps) {
       </span>
     </div>
   )
-}
+})

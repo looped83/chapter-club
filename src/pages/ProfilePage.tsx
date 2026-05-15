@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -28,6 +28,11 @@ export function ProfilePage() {
   const { profile, user } = useAuth()
   const { theme, setTheme } = useTheme()
   const [saved, setSaved] = useState(false)
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => { if (savedTimerRef.current) clearTimeout(savedTimerRef.current) }
+  }, [])
 
   const {
     register,
@@ -45,6 +50,10 @@ export function ProfilePage() {
 
   const selectedEmoji = watch('avatar_emoji')
 
+  const handleAvatarSelect = useCallback((emoji: string) => {
+    setValue('avatar_emoji', emoji, { shouldDirty: true })
+  }, [setValue])
+
   async function onSubmit(data: FormData) {
     if (!user) return
     const { error } = await supabase
@@ -53,7 +62,8 @@ export function ProfilePage() {
       .eq('id', user.id)
     if (!error) {
       setSaved(true)
-      setTimeout(() => setSaved(false), 2500)
+      if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
+      savedTimerRef.current = setTimeout(() => setSaved(false), 2500)
     }
   }
 
@@ -84,7 +94,7 @@ export function ProfilePage() {
                 <button
                   key={emoji}
                   type="button"
-                  onClick={() => { setValue('avatar_emoji', emoji, { shouldDirty: true }) }}
+                  onClick={() => handleAvatarSelect(emoji)}
                   className={[
                     'w-11 h-11 rounded-xl text-2xl transition-all border',
                     selectedEmoji === emoji

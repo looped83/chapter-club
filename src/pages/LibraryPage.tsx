@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Link } from 'react-router-dom'
 import { useBooks } from '@/hooks/useBooks'
 import { useBookReviews } from '@/hooks/useReviews'
@@ -47,7 +48,7 @@ export function LibraryPage() {
   )
 }
 
-function BookCard({ book }: { book: BookWithProfile }) {
+const BookCard = memo(function BookCard({ book }: { book: BookWithProfile }) {
   const { data: reviews = [] } = useBookReviews(book.id)
   const ratings = reviews.map((r) => Number(r.rating))
 
@@ -85,4 +86,4 @@ function BookCard({ book }: { book: BookWithProfile }) {
       </Link>
     </div>
   )
-}
+})

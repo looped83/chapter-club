@@ -5,28 +5,37 @@ interface GroupProgressProps {
   progressList: ReadingProgressWithProfile[]
 }
 
-const STATUS_LABEL: Record<string, string> = {
-  not_started: 'Noch nicht',
-  reading: 'Am Lesen',
-  finished: 'Fertig',
-  paused: 'Pausiert',
-  abandoned: 'Abgebrochen',
+const STATUS_CONFIG: Record<string, { label: string; color: string; barColor: string }> = {
+  not_started: {
+    label: 'Noch nicht',
+    color: 'text-stone-400 dark:text-white/40 bg-stone-100 dark:bg-white/10',
+    barColor: 'bg-stone-300 dark:bg-white/20',
+  },
+  reading: {
+    label: 'Am Lesen',
+    color: 'text-brand-600 dark:text-brand-300 bg-brand-50 dark:bg-brand-500/20',
+    barColor: 'bg-gradient-to-r from-brand-400 to-brand-500',
+  },
+  finished: {
+    label: 'Fertig',
+    color: 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/20',
+    barColor: 'bg-gradient-to-r from-green-400 to-green-500',
+  },
+  paused: {
+    label: 'Pausiert',
+    color: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/20',
+    barColor: 'bg-gradient-to-r from-amber-400 to-amber-500',
+  },
+  abandoned: {
+    label: 'Abgebrochen',
+    color: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/20',
+    barColor: 'bg-gradient-to-r from-red-400 to-red-500',
+  },
 }
 
-const STATUS_COLOR: Record<string, string> = {
-  not_started: 'text-stone-400 dark:text-white/40 bg-stone-100 dark:bg-white/10',
-  reading: 'text-brand-600 dark:text-brand-300 bg-brand-50 dark:bg-brand-500/20',
-  finished: 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/20',
-  paused: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/20',
-  abandoned: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/20',
-}
-
-const BAR_COLOR: Record<string, string> = {
-  not_started: 'bg-stone-300 dark:bg-white/20',
-  reading: 'bg-gradient-to-r from-brand-400 to-brand-500',
-  finished: 'bg-gradient-to-r from-green-400 to-green-500',
-  paused: 'bg-gradient-to-r from-amber-400 to-amber-500',
-  abandoned: 'bg-gradient-to-r from-red-400 to-red-500',
+const FALLBACK_STATUS_CONFIG = {
+  color: 'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
+  barColor: 'bg-brand-400',
 }
 
 export function GroupProgress({ progressList }: GroupProgressProps) {
@@ -88,11 +97,10 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
             <span
               className={[
                 'text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0',
-                STATUS_COLOR[p.status] ??
-                  'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
+                (STATUS_CONFIG[p.status] ?? FALLBACK_STATUS_CONFIG).color,
               ].join(' ')}
             >
-              {STATUS_LABEL[p.status] ?? p.status}
+              {STATUS_CONFIG[p.status]?.label ?? p.status}
             </span>
 
             {/* Progress bar */}
@@ -107,7 +115,7 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
               <div
                 className={[
                   'h-full rounded-full transition-all duration-500',
-                  BAR_COLOR[p.status] ?? 'bg-brand-400',
+                  (STATUS_CONFIG[p.status] ?? FALLBACK_STATUS_CONFIG).barColor,
                 ].join(' ')}
                 style={{ width: `${p.progress_percent}%` }}
               />
