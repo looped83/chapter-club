@@ -1,6 +1,7 @@
 export const STALE_TIMES = {
   short: 30_000,
   medium: 60_000,
+  progress: 120_000,
   long: 300_000,
 } as const
 

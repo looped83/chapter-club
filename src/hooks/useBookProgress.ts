@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { queryKeys } from '@/lib/queryKeys'
+import { queryKeys, STALE_TIMES } from '@/lib/queryKeys'
 import type { ReadingProgress, ReadingProgressWithProfile, ReadingStatus, Mood } from '@/types/database'
 
 export function useBookProgress(bookId: string) {
@@ -16,8 +16,8 @@ export function useBookProgress(bookId: string) {
       return (data ?? []) as ReadingProgressWithProfile[]
     },
     enabled: !!bookId,
-    staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 4,
+    staleTime: STALE_TIMES.progress,
+    gcTime: STALE_TIMES.progress * 2,
   })
 }
 
@@ -35,8 +35,8 @@ export function useMyProgress(bookId: string, userId: string) {
       return data as ReadingProgress | null
     },
     enabled: !!bookId && !!userId,
-    staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 4,
+    staleTime: STALE_TIMES.progress,
+    gcTime: STALE_TIMES.progress * 2,
   })
 }
 

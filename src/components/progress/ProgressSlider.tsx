@@ -30,9 +30,13 @@ export const ProgressSlider = memo(function ProgressSlider({ bookId, current, on
 
   const handleSave = useCallback(async () => {
     if (!user) return
-    await upsert.mutateAsync({ bookId, userId: user.id, progressPercent: percent, status, mood: current?.mood ?? null })
-    setSaved(true)
-    onSaved?.()
+    try {
+      await upsert.mutateAsync({ bookId, userId: user.id, progressPercent: percent, status, mood: current?.mood ?? null })
+      setSaved(true)
+      onSaved?.()
+    } catch {
+      // error displayed via upsert.isError
+    }
   }, [user, upsert, bookId, percent, status, current?.mood, onSaved])
 
   return (
