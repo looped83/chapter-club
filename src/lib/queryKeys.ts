@@ -14,4 +14,5 @@ export const queryKeys = {
   myReview: (bookId: string, userId: string) => ['reviews', bookId, userId] as const,
   profiles: ['profiles'] as const,
   backlog: (month: number, year: number) => ['backlog', month, year] as const,
+  backlogUser: (month: number, year: number, userId: string) => ['backlog', month, year, userId] as const,
 }

@@ -17,6 +17,7 @@ export function useBookProgress(bookId: string) {
     },
     enabled: !!bookId,
     staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 4,
   })
 }
 
@@ -35,6 +36,7 @@ export function useMyProgress(bookId: string, userId: string) {
     },
     enabled: !!bookId && !!userId,
     staleTime: 1000 * 60 * 2,
+    gcTime: 1000 * 60 * 4,
   })
 }
 
