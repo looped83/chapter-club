@@ -17,7 +17,7 @@ import { GroupProgress } from '@/components/progress/GroupProgress'
 import { ProgressSlider } from '@/components/progress/ProgressSlider'
 import { ReviewForm } from '@/components/review/ReviewForm'
 import { ReviewCard } from '@/components/review/ReviewCard'
-import { MONTH_NAMES, READING_STATUS_LABELS } from '@/lib/constants'
+import { MONTH_NAMES, READING_STATUS_LABELS, ERROR_MESSAGES } from '@/lib/constants'
 
 export function BookDetailPage() {
   const { id = '' } = useParams<{ id: string }>()
@@ -307,30 +307,37 @@ export function BookDetailPage() {
                   </span>
                 </div>
                 {confirmDelete && (
-                  <div role="alertdialog" aria-label="Bewertung löschen bestätigen" className="flex items-center gap-2 pt-1">
-                    <span className="text-xs text-stone-400 dark:text-white/50">Wirklich löschen?</span>
-                    <button
-                      onClick={async () => {
-                        if (!user) return
-                        try {
-                          await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user.id })
-                          setConfirmDelete(false)
-                        } catch {
-                          // error displayed via deleteReview.isError
-                        }
-                      }}
-                      aria-label="Bewertung endgültig löschen"
-                      className="text-xs text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
-                    >
-                      Ja
-                    </button>
-                    <button
-                      onClick={() => setConfirmDelete(false)}
-                      aria-label="Löschen abbrechen"
-                      className="text-xs text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors"
-                    >
-                      Nein
-                    </button>
+                  <div role="alertdialog" aria-label="Bewertung löschen bestätigen" className="flex flex-col gap-1.5 pt-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-stone-400 dark:text-white/50">Wirklich löschen?</span>
+                      <button
+                        onClick={async () => {
+                          if (!user) return
+                          try {
+                            await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user.id })
+                            setConfirmDelete(false)
+                          } catch {
+                            // error shown below via deleteReview.isError
+                          }
+                        }}
+                        aria-label="Bewertung endgültig löschen"
+                        className="text-xs text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
+                      >
+                        Ja
+                      </button>
+                      <button
+                        onClick={() => setConfirmDelete(false)}
+                        aria-label="Löschen abbrechen"
+                        className="text-xs text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors"
+                      >
+                        Nein
+                      </button>
+                    </div>
+                    {deleteReview.isError && (
+                      <p role="alert" className="text-xs text-red-600 dark:text-red-400">
+                        {ERROR_MESSAGES.deleteFailed}
+                      </p>
+                    )}
                   </div>
                 )}
               </div>

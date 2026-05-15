@@ -6,7 +6,7 @@ interface StarRatingProps {
   size?: 'sm' | 'md'
 }
 
-const noop = () => undefined
+const noop = () => {}
 
 export const StarRating = memo(function StarRating({ rating, size = 'md' }: StarRatingProps) {
   return <StarPicker value={rating} onChange={noop} readOnly size={size} />
