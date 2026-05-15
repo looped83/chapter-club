@@ -78,32 +78,45 @@ export function VotingPage() {
       </div>
 
       {/* Status Banner */}
-      <Card className="p-4">
-        {votingOpen ? (
-          <div className="flex items-center gap-3">
-            <span className="text-2xl" aria-hidden="true">
+      {votingOpen ? (
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 p-5 shadow-lg shadow-brand-500/25">
+          <div
+            className="absolute inset-0 opacity-[0.07]"
+            style={{
+              backgroundImage:
+                'radial-gradient(circle, white 1px, transparent 1px)',
+              backgroundSize: '20px 20px',
+            }}
+            aria-hidden="true"
+          />
+          <div className="relative flex items-center gap-4">
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
               🗳️
-            </span>
-            <div>
-              <p className="font-medium text-stone-900 dark:text-white text-sm">Voting läuft</p>
-              <p className="text-xs text-stone-500 dark:text-white/50">
-                Stimmt ab, welches Buch im {MONTH_NAMES[month]} gelesen wird
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                </span>
+                <p className="font-bold text-white text-base">Voting läuft!</p>
+              </div>
+              <p className="text-white/75 text-xs">
+                Welches Buch lesen wir im {MONTH_NAMES[month]} {year}?
               </p>
             </div>
-            <div className="ml-auto text-right" aria-label={`${daysLeft} Tage verbleibend`}>
-              <p className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
-                {daysLeft}
-              </p>
-              <p className="text-[10px] text-stone-400 dark:text-white/40 mt-0.5">
+            <div className="flex-shrink-0 text-right" aria-label={`${daysLeft} Tage verbleibend`}>
+              <p className="font-serif text-4xl font-bold text-white leading-none">{daysLeft}</p>
+              <p className="text-white/60 text-[11px] mt-0.5">
                 {daysLeft === 1 ? 'Tag' : 'Tage'}
               </p>
             </div>
           </div>
-        ) : (
+        </div>
+      ) : (
+        <Card className="p-4">
           <div className="flex items-center gap-3">
-            <span className="text-2xl" aria-hidden="true">
-              🏁
-            </span>
+            <span className="text-2xl" aria-hidden="true">🏁</span>
             <div>
               <p className="font-medium text-stone-900 dark:text-white text-sm">Voting beendet</p>
               {winner ? (
@@ -117,8 +130,8 @@ export function VotingPage() {
               )}
             </div>
           </div>
-        )}
-      </Card>
+        </Card>
+      )}
 
       {/* Current Leader (during voting) */}
       {votingOpen && leader && (
