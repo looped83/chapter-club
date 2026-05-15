@@ -70,10 +70,10 @@ export function VotingPage() {
       {/* Header */}
       <div>
         <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">
-          Reading Backlog
+          Leseliste
         </h1>
         <p className="text-stone-500 dark:text-white/50 text-sm mt-0.5">
-          Gemeinsame Leseliste · Voting für {MONTH_NAMES[month]} {year}
+          Gemeinsame Wunschliste · Voting für {MONTH_NAMES[month]} {year}
         </p>
       </div>
 
@@ -165,7 +165,7 @@ export function VotingPage() {
       ) : (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-stone-900 dark:text-white">
-            Backlog ({activeBooks.length})
+            Leseliste ({activeBooks.length})
           </h2>
           {sortedBooks.map((book) => (
             <BacklogBookCard
