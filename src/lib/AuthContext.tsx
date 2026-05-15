@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useMemo } from 'react'
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from 'react'
 import type { Session, User } from '@supabase/supabase-js'
 import { supabase } from './supabase'
 import type { Profile } from '@/types/database'
@@ -8,6 +8,7 @@ interface AuthContextValue {
   user: User | null
   profile: Profile | null
   loading: boolean
+  refreshProfile: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextValue>({
   user: null,
   profile: null,
   loading: true,
+  refreshProfile: async () => {},
 })
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -58,9 +60,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  const refreshProfile = useCallback(() => {
+    const userId = session?.user?.id
+    if (userId) return fetchProfile(userId)
+    return Promise.resolve()
+  }, [session?.user?.id])
+
   const value = useMemo(
-    () => ({ session, user: session?.user ?? null, profile, loading }),
-    [session, profile, loading],
+    () => ({ session, user: session?.user ?? null, profile, loading, refreshProfile }),
+    [session, profile, loading, refreshProfile],
   )
 
   return (
