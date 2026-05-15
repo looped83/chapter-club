@@ -12,8 +12,13 @@
     @apply bg-stone-50 text-stone-900 font-sans dark:bg-stone-950 dark:text-white;
   }
 
-  *:focus-visible {
+  *:focus-visible:not(input):not(textarea) {
     @apply outline-none ring-2 ring-brand-400 ring-offset-2;
+  }
+
+  input:focus-visible,
+  textarea:focus-visible {
+    @apply outline-none ring-0 ring-offset-0;
   }
 }
 
