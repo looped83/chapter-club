@@ -32,7 +32,6 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
     await upsert.mutateAsync({ bookId, userId: user.id, progressPercent: percent, status, mood: current?.mood ?? null })
     setSaved(true)
     onSaved?.()
-    setTimeout(() => setSaved(false), 2500)
   }
 
   return (

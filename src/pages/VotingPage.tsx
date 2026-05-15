@@ -39,22 +39,9 @@ export function VotingPage() {
     [activeBooks],
   )
 
-  const myVotedBookId = useMemo(
-    () => activeBooks.find((b) => b.is_my_vote)?.id ?? null,
-    [activeBooks],
-  )
-
-  const leader = useMemo(
-    () => sortedBooks.find((b) => b.vote_count > 0) ?? null,
-    [sortedBooks],
-  )
-
-  const winner = useMemo(() => {
-    if (votingOpen) return null
-    const top = sortedBooks[0]
-    if (!top || top.vote_count === 0) return null
-    return top
-  }, [votingOpen, sortedBooks])
+  const myVotedBookId = activeBooks.find((b) => b.is_my_vote)?.id ?? null
+  const leader = sortedBooks.find((b) => b.vote_count > 0) ?? null
+  const winner = !votingOpen && sortedBooks[0]?.vote_count ? sortedBooks[0] : null
 
   if (isLoading) return <PageSpinner />
 
