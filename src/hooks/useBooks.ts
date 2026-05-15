@@ -16,6 +16,7 @@ export function useBooks() {
       return data as BookWithProfile[]
     },
     staleTime: STALE_TIMES.long,
+    gcTime: STALE_TIMES.long * 2,
   })
 }
 
@@ -33,5 +34,6 @@ export function useBook(bookId: string) {
     },
     enabled: !!bookId,
     staleTime: STALE_TIMES.long,
+    gcTime: STALE_TIMES.long * 2,
   })
 }

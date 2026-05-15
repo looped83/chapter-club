@@ -16,5 +16,6 @@ export function useCurrentBook() {
       return data as BookWithProfile | null
     },
     staleTime: STALE_TIMES.long,
+    gcTime: STALE_TIMES.long * 2,
   })
 }

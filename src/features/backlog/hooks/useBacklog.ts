@@ -19,9 +19,8 @@ function voteQueryKey() {
 
 export function useBacklogBooks(userId: string) {
   const { month, year } = getVotingTarget()
-  const queryKey = queryKeys.backlog(month, year)
   return useQuery({
-    queryKey,
+    queryKey: queryKeys.backlogUser(month, year, userId),
     queryFn: async () => {
       const [books, votes] = await Promise.all([fetchBacklogBooks(), fetchVotesForMonth(month, year)])
       const voteCounts = new Map<string, number>()
@@ -34,6 +33,7 @@ export function useBacklogBooks(userId: string) {
       })) as BacklogBookWithVotes[]
     },
     staleTime: STALE_TIMES.short,
+    gcTime: STALE_TIMES.short * 2,
     enabled: !!userId,
   })
 }

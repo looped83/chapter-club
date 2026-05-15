@@ -17,6 +17,7 @@ export function useBookReviews(bookId: string) {
     },
     enabled: !!bookId,
     staleTime: STALE_TIMES.medium,
+    gcTime: STALE_TIMES.medium * 2,
   })
 }
 
@@ -35,6 +36,7 @@ export function useMyReview(bookId: string, userId: string) {
     },
     enabled: !!bookId && !!userId,
     staleTime: STALE_TIMES.medium,
+    gcTime: STALE_TIMES.medium * 2,
   })
 }
 
