@@ -11,6 +11,10 @@ export default defineConfig({
   },
   base: '/chapter-club/',
   build: {
+    minify: 'esbuild',
+    esbuildOptions: {
+      drop: ['console', 'debugger'],
+    },
     rollupOptions: {
       output: {
         manualChunks: {
