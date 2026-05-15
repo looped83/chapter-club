@@ -120,7 +120,7 @@ export function BookDetailPage() {
               </div>
               {book.profiles && (
                 <p className="text-white/40 text-xs mt-0.5">
-                  vorgeschlagen von {book.profiles.avatar_emoji} {book.profiles.display_name}
+                  vorgeschlagen von <span aria-hidden="true">{book.profiles.avatar_emoji}</span> {book.profiles.display_name}
                 </p>
               )}
               {book.description && (
@@ -143,7 +143,7 @@ export function BookDetailPage() {
             <Card className="p-3">
               <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Am begeistertsten</p>
               <div className="flex flex-col items-center gap-1 text-center">
-                <span className="text-2xl">{enthusiasticReader.profiles?.avatar_emoji}</span>
+                <span className="text-2xl" aria-hidden="true">{enthusiasticReader.profiles?.avatar_emoji}</span>
                 <p className="text-xs font-medium text-stone-900 dark:text-white truncate w-full">{enthusiasticReader.profiles?.display_name}</p>
                 <p className="text-xs text-brand-600 dark:text-brand-400 font-bold">{Number(enthusiasticReader.rating).toFixed(1)} ★</p>
               </div>
@@ -153,7 +153,7 @@ export function BookDetailPage() {
             <Card className="p-3">
               <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Kritischste Stimme</p>
               <div className="flex flex-col items-center gap-1 text-center">
-                <span className="text-2xl">{criticalReader.profiles?.avatar_emoji}</span>
+                <span className="text-2xl" aria-hidden="true">{criticalReader.profiles?.avatar_emoji}</span>
                 <p className="text-xs font-medium text-stone-900 dark:text-white truncate w-full">{criticalReader.profiles?.display_name}</p>
                 <p className="text-xs text-stone-500 dark:text-white/50 font-bold">{Number(criticalReader.rating).toFixed(1)} ★</p>
               </div>
@@ -163,7 +163,7 @@ export function BookDetailPage() {
             <Card className="p-3">
               <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Am weitesten gelesen</p>
               <div className="flex flex-col items-center gap-1 text-center">
-                <span className="text-2xl">{topReader.profiles?.avatar_emoji}</span>
+                <span className="text-2xl" aria-hidden="true">{topReader.profiles?.avatar_emoji}</span>
                 <p className="text-xs font-medium text-stone-900 dark:text-white truncate w-full">{topReader.profiles?.display_name}</p>
                 <p className="text-xs text-green-700 dark:text-green-400 font-bold">{topReader.progress_percent}%</p>
               </div>
@@ -400,7 +400,14 @@ function ProgressSummary({ progress }: { progress: ReadingProgress }) {
           <span className="text-sm text-stone-600 dark:text-white/60">{READING_STATUS_LABELS[progress.status] ?? progress.status}</span>
           <span className="text-sm font-bold text-brand-600 dark:text-brand-400">{progress.progress_percent}%</span>
         </div>
-        <div className="h-2 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+        <div
+          className="h-2 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden"
+          role="progressbar"
+          aria-valuenow={progress.progress_percent}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label={`Lesefortschritt: ${progress.progress_percent}%`}
+        >
           <div
             className="h-full bg-brand-400 rounded-full transition-all duration-500"
             style={{ width: `${progress.progress_percent}%` }}

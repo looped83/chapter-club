@@ -24,7 +24,7 @@ export function LibraryPage() {
   if (!books.length) {
     return (
       <div className="flex flex-col items-center py-20 gap-4 text-center">
-        <div className="text-5xl">📚</div>
+        <div className="text-5xl" aria-hidden="true">📚</div>
         <h2 className="font-serif text-xl font-bold text-stone-900 dark:text-white">Noch keine Bücher</h2>
         <p className="text-stone-500 dark:text-white/50 text-sm max-w-xs">
           Sobald das erste Buch eingetragen ist, erscheint es hier.
@@ -36,11 +36,13 @@ export function LibraryPage() {
   return (
     <div className="flex flex-col gap-6">
       <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Bibliothek</h1>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-2 md:grid-cols-3 gap-4 list-none m-0 p-0">
         {books.map((book) => (
-          <BookCard key={book.id} book={book} />
+          <li key={book.id}>
+            <BookCard book={book} />
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   )
 }
@@ -62,6 +64,7 @@ function BookCard({ book }: { book: BookWithProfile }) {
       {/* Cover card */}
       <Link
         to={`/book/${book.id}`}
+        aria-label={`${book.title} von ${book.author} – Details ansehen`}
         className="group relative rounded-2xl overflow-hidden aspect-[2/3] block ring-1 ring-black/10 dark:ring-white/10 hover:ring-black/20 dark:hover:ring-white/20 transition-all"
       >
         <BookCover
@@ -69,7 +72,7 @@ function BookCard({ book }: { book: BookWithProfile }) {
           coverUrl={book.cover_url}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" aria-hidden="true" />
         <div className="absolute inset-x-0 bottom-0 p-3 flex flex-col gap-1">
           <h3 className="text-white text-sm font-semibold leading-tight line-clamp-2">
             {book.title}

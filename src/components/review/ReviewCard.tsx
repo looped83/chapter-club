@@ -14,7 +14,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
 
       {/* Avatar + rating — mirrors emoji | mood in GroupProgress */}
       <div className="flex items-start justify-between">
-        <span className="text-3xl leading-none">{review.profiles?.avatar_emoji ?? '📚'}</span>
+        <span className="text-3xl leading-none" aria-hidden="true">{review.profiles?.avatar_emoji ?? '📚'}</span>
         <div className="flex flex-col items-end gap-0.5">
           <StarRating rating={Number(review.rating)} size="sm" />
           <span className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
@@ -48,7 +48,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
           )}
           {review.pace && (
             <span className="bg-stone-100 dark:bg-white/10 text-stone-500 dark:text-white/60 text-[10px] px-1.5 py-0.5 rounded-full">
-              ⏱ {PACE_LABELS[review.pace]}
+              <span aria-hidden="true">⏱</span> {PACE_LABELS[review.pace]}
             </span>
           )}
           {review.would_reread != null && (
@@ -58,7 +58,7 @@ export function ReviewCard({ review }: ReviewCardProps) {
                 ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                 : 'bg-stone-100 dark:bg-white/10 text-stone-400 dark:text-white/40',
             ].join(' ')}>
-              {review.would_reread ? '↩ Nochmal' : '↩ Einmal reicht'}
+              <span aria-hidden="true">↩</span> {review.would_reread ? 'Nochmal' : 'Einmal reicht'}
             </span>
           )}
         </div>
