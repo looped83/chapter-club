@@ -1,6 +1,6 @@
-import type { Profile } from '@/types/database'
+import type { Profile, BacklogStatus } from '@/types/database'
 
-export type BacklogStatus = 'active' | 'selected' | 'archived'
+export type { BacklogStatus }
 
 export interface BacklogBook {
   id: string
