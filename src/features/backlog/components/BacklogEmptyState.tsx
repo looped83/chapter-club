@@ -1,3 +1,5 @@
+import { Button } from '@/components/ui/Button'
+
 interface BacklogEmptyStateProps {
   onAddClick: () => void
 }
@@ -15,13 +17,9 @@ export function BacklogEmptyState({ onAddClick }: BacklogEmptyStateProps) {
         Fügt Bücher hinzu, die ihr zusammen lesen möchtet. Sie bleiben dauerhaft gespeichert und
         können in jedem Monat gewählt werden.
       </p>
-      <button
-        type="button"
-        onClick={onAddClick}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2"
-      >
+      <Button variant="primary" onClick={onAddClick}>
         + Erstes Buch hinzufügen
-      </button>
+      </Button>
     </div>
   )
 }

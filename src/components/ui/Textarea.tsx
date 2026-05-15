@@ -1,5 +1,6 @@
 import { forwardRef } from 'react'
 import { cn } from '@/lib/cn'
+import { slugifyId } from '@/lib/id'
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string
@@ -9,7 +10,7 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, hint, id, className = '', ...props }, ref) => {
-    const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
+    const inputId = id ?? (label ? slugifyId(label) : undefined)
     return (
       <div className="flex flex-col gap-1.5">
         {label && (

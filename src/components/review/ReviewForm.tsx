@@ -61,29 +61,16 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
   })
 
   useEffect(() => {
-    if (existing) {
-      reset({
-        rating: Number(existing.rating),
-        reviewText: existing.review_text ?? '',
-        favoriteQuote: existing.favorite_quote ?? '',
-        containsSpoilers: existing.contains_spoilers,
-        emotionalImpact: existing.emotional_impact ?? null,
-        wouldReread: existing.would_reread ?? null,
-        pace: existing.pace ?? null,
-        oneWord: existing.one_word ?? '',
-      })
-    } else {
-      reset({
-        rating: 0,
-        reviewText: '',
-        favoriteQuote: '',
-        containsSpoilers: false,
-        emotionalImpact: null,
-        wouldReread: null,
-        pace: null,
-        oneWord: '',
-      })
-    }
+    reset({
+      rating: existing ? Number(existing.rating) : 0,
+      reviewText: existing?.review_text ?? '',
+      favoriteQuote: existing?.favorite_quote ?? '',
+      containsSpoilers: existing?.contains_spoilers ?? false,
+      emotionalImpact: existing?.emotional_impact ?? null,
+      wouldReread: existing?.would_reread ?? null,
+      pace: existing?.pace ?? null,
+      oneWord: existing?.one_word ?? '',
+    })
   }, [existing, reset])
 
   const ratingValue = watch('rating')
