@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { ExpandableText } from '@/components/ui/ExpandableText'
 import { useArchiveBacklogBook } from '../hooks/useBacklog'
 import { BacklogEditForm } from './BacklogEditForm'
+import { ERROR_MESSAGES } from '@/lib/constants'
 import type { BacklogBookWithVotes } from '../types'
 
 interface BacklogBookCardProps {
@@ -72,31 +73,38 @@ export const BacklogBookCard = memo(function BacklogBookCard({
 
       {/* Owner actions – absolute bottom-right */}
       {isOwner && isActive && (
-        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-3">
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
-          >
-            Bearbeiten
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (window.confirm(`„${book.title}" aus der Leseliste entfernen?`)) {
-                archive.mutate(book.id)
-              }
-            }}
-            disabled={archive.isPending}
-            className="text-xs text-white/30 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
-          >
-            Entfernen
-          </button>
+        <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end gap-1">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsEditing(true)}
+              className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
+            >
+              Bearbeiten
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (window.confirm(`„${book.title}" aus der Leseliste entfernen?`)) {
+                  archive.mutate(book.id)
+                }
+              }}
+              disabled={archive.isPending}
+              className="text-xs text-white/30 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
+            >
+              Entfernen
+            </button>
+          </div>
+          {archive.isError && (
+            <p role="alert" className="text-[10px] text-red-400">
+              {ERROR_MESSAGES.deleteFailed}
+            </p>
+          )}
         </div>
       )}
 
       {/* Content */}
-      <div className={cn('relative z-10 p-4 flex gap-4', isOwner && isActive && 'pb-9')}>
+      <div className={cn('relative z-10 p-4 flex gap-4', isOwner && isActive && (archive.isError ? 'pb-12' : 'pb-9'))}>
         {/* Cover */}
         <div className="flex-shrink-0 w-16 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 self-start">
           <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
