@@ -19,10 +19,7 @@ export function useBacklogBooks(userId: string) {
   return useQuery({
     queryKey: VOTE_QUERY_KEY,
     queryFn: async () => {
-      const [books, votes] = await Promise.all([
-        fetchBacklogBooks(),
-        fetchVotesForMonth(VOTE_MONTH, VOTE_YEAR),
-      ])
+      const [books, votes] = await Promise.all([fetchBacklogBooks(), fetchVotesForMonth(VOTE_MONTH, VOTE_YEAR)])
       const voteCounts = new Map<string, number>()
       for (const v of votes) voteCounts.set(v.suggestion_id, (voteCounts.get(v.suggestion_id) ?? 0) + 1)
       const myVote = votes.find((v) => v.user_id === userId)

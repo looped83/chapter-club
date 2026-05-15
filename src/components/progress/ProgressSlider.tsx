@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import { useUpsertProgress } from '@/hooks/useBookProgress'
 import { useAuth } from '@/lib/AuthContext'
 import { Button } from '@/components/ui/Button'
@@ -21,11 +21,11 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
 
   const upsert = useUpsertProgress()
 
-  const handlePercentChange = useCallback((val: number) => {
+  function handlePercentChange(val: number) {
     setPercent(val)
     if (val > 0 && status === 'not_started') setStatus('reading')
     setSaved(false)
-  }, [status])
+  }
 
   async function handleSave() {
     if (!user) return

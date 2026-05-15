@@ -1,4 +1,4 @@
-import type { ReadingStatus } from '@/types/database'
+import type { ReadingStatus, Pace } from '@/types/database'
 
 export const MONTH_NAMES = [
   '', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
@@ -19,3 +19,9 @@ export const READING_STATUS_LABELS: Record<ReadingStatus, string> = {
 }
 
 export const IMPACT_LABELS = ['', '😐', '🙂', '😮', '😢', '🤯']
+
+export const PACE_LABELS: Record<Pace, string> = {
+  too_slow: 'Zu langsam',
+  just_right: 'Genau richtig',
+  too_fast: 'Zu schnell',
+}

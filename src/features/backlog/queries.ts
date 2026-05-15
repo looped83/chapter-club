@@ -11,14 +11,14 @@ export async function fetchBacklogBooks(): Promise<BacklogBookWithProfile[]> {
   return (data ?? []) as BacklogBookWithProfile[]
 }
 
-export async function fetchVotesForMonth(month: number, year: number): Promise<BacklogVote[]> {
+export async function fetchVotesForMonth(month: number, year: number): Promise<Pick<BacklogVote, 'suggestion_id' | 'user_id'>[]> {
   const { data, error } = await supabase
     .from('suggestion_votes')
-    .select('id, suggestion_id, user_id, target_month, target_year, created_at, updated_at')
+    .select('suggestion_id, user_id')
     .eq('target_month', month)
     .eq('target_year', year)
   if (error) throw error
-  return (data ?? []) as BacklogVote[]
+  return (data ?? []) as Pick<BacklogVote, 'suggestion_id' | 'user_id'>[]
 }
 
 export async function addBacklogBook(input: {

@@ -1,17 +1,11 @@
 import { Badge } from '@/components/ui/Badge'
 import { StarRating } from '@/components/book/StarRating'
 import { ExpandableText } from '@/components/ui/ExpandableText'
-import { IMPACT_LABELS } from '@/lib/constants'
-import type { ReviewWithProfile, Pace } from '@/types/database'
+import { IMPACT_LABELS, PACE_LABELS } from '@/lib/constants'
+import type { ReviewWithProfile } from '@/types/database'
 
 interface ReviewCardProps {
   review: ReviewWithProfile
-}
-
-const PACE_LABELS: Record<Pace, string> = {
-  too_slow: 'Zu langsam',
-  just_right: 'Genau richtig',
-  too_fast: 'Zu schnell',
 }
 
 export function ReviewCard({ review }: ReviewCardProps) {
