@@ -155,19 +155,21 @@ export function VotingPage() {
 
       {/* Add Book */}
       <div>
-        <Button
-          variant={showAddForm ? 'secondary' : 'primary'}
-          onClick={() => setShowAddForm((v) => !v)}
-        >
-          {showAddForm ? 'Abbrechen' : '+ Buch hinzufügen'}
-        </Button>
+        {!showAddForm && (
+          <Button variant="primary" onClick={() => setShowAddForm(true)}>
+            + Buch hinzufügen
+          </Button>
+        )}
 
         {showAddForm && (
-          <Card className="p-5 mt-4">
+          <Card className="p-5">
             <h2 className="font-semibold text-stone-900 dark:text-white mb-4">
-              Buch zum Backlog hinzufügen
+              Buch zur Leseliste hinzufügen
             </h2>
-            <BacklogAddForm onSubmitted={() => setShowAddForm(false)} />
+            <BacklogAddForm
+              onSubmitted={() => setShowAddForm(false)}
+              onCancel={() => setShowAddForm(false)}
+            />
           </Card>
         )}
       </div>
