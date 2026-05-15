@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button'
 import { StarPicker } from '@/components/ui/StarPicker'
 import { Textarea } from '@/components/ui/Textarea'
 import { Input } from '@/components/ui/Input'
-import { IMPACT_LABELS } from '@/lib/constants'
+import { IMPACT_LABELS, PACE_LABELS } from '@/lib/constants'
 import type { Review, Pace } from '@/types/database'
 
 const schema = z.object({
@@ -23,12 +23,6 @@ const schema = z.object({
 })
 
 type FormData = z.infer<typeof schema>
-
-const PACE_LABELS: Record<Pace, string> = {
-  too_slow: 'Zu langsam',
-  just_right: 'Genau richtig',
-  too_fast: 'Zu schnell',
-}
 
 interface ReviewFormProps {
   bookId: string
