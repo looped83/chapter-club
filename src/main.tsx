@@ -20,9 +20,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <HashRouter>
-        <ThemeProvider><AuthProvider>
-          <App />
-        </AuthProvider></ThemeProvider>
+        <ThemeProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ThemeProvider>
       </HashRouter>
     </QueryClientProvider>
   </StrictMode>

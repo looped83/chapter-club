@@ -1,10 +1,8 @@
-interface CardProps {
-  children: React.ReactNode
-  className?: string
+interface CardProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType
 }
 
-export function Card({ children, className = '', as: Tag = 'div' }: CardProps) {
+export function Card({ children, className = '', as: Tag = 'div', ...rest }: CardProps) {
   return (
     <Tag
       className={[
@@ -12,6 +10,7 @@ export function Card({ children, className = '', as: Tag = 'div' }: CardProps) {
         'dark:bg-white/[0.07] dark:border-white/10 dark:shadow-none dark:backdrop-blur-sm',
         className,
       ].join(' ')}
+      {...rest}
     >
       {children}
     </Tag>
