@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import type { ReadingProgressWithProfile } from '@/types/database'
 
 interface GroupProgressProps {
@@ -37,10 +38,15 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
     )
   }
 
-  const avg =
-    progressList.reduce((sum, p) => sum + p.progress_percent, 0) / progressList.length
+  const avg = useMemo(
+    () => progressList.reduce((sum, p) => sum + p.progress_percent, 0) / progressList.length,
+    [progressList],
+  )
 
-  const sorted = [...progressList].sort((a, b) => b.progress_percent - a.progress_percent)
+  const sorted = useMemo(
+    () => [...progressList].sort((a, b) => b.progress_percent - a.progress_percent),
+    [progressList],
+  )
 
   return (
     <div className="flex flex-col gap-4">

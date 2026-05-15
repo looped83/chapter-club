@@ -12,7 +12,7 @@ interface BacklogLeaderProps {
 
 export function BacklogLeader({ leader, targetMonth, targetYear, votingOpen }: BacklogLeaderProps) {
   return (
-    <Card className="p-4" aria-label={votingOpen ? 'Aktuell führendes Buch' : 'Gewinnerbuch'}>
+    <Card as="section" className="p-4" aria-label={votingOpen ? 'Aktuell führendes Buch' : 'Gewinnerbuch'}>
       <p className="text-xs text-stone-500 dark:text-white/50 font-medium uppercase tracking-wide mb-3">
         {votingOpen ? '📊 Aktuell führend' : '🏆 Gewinner'} · {MONTH_NAMES[targetMonth]}{' '}
         {targetYear}

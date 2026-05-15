@@ -1,26 +1,13 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useUpdateBacklogBook } from '../hooks/useBacklog'
 import type { BacklogBook } from '../types'
+import { backlogBookSchema, type BacklogBookFormData } from '../schemas'
 
-const schema = z.object({
-  title: z.string().min(1, 'Titel ist erforderlich').max(200),
-  author: z.string().min(1, 'Autor:in ist erforderlich').max(200),
-  coverUrl: z
-    .string()
-    .url('Ungültige URL – bitte vollständige URL mit https:// eingeben')
-    .optional()
-    .or(z.literal(''))
-    .default(''),
-  description: z.string().max(1000).optional().default(''),
-  reason: z.string().max(500).optional().default(''),
-})
-
-type FormData = z.infer<typeof schema>
+type FormData = BacklogBookFormData
 
 interface BacklogEditFormProps {
   book: BacklogBook
@@ -35,7 +22,7 @@ export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<FormData>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(backlogBookSchema),
     defaultValues: {
       title: book.title,
       author: book.author,
@@ -71,6 +58,12 @@ export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
         autoComplete="off"
         {...register('author')}
       />
+      <Textarea
+        label="Warum dieses Buch? (optional)"
+        rows={2}
+        error={errors.reason?.message}
+        {...register('reason')}
+      />
       <Input
         label="Cover-URL (optional)"
         type="url"
@@ -82,12 +75,6 @@ export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
         rows={3}
         error={errors.description?.message}
         {...register('description')}
-      />
-      <Textarea
-        label="Warum dieses Buch? (optional)"
-        rows={2}
-        error={errors.reason?.message}
-        {...register('reason')}
       />
 
       {updateBook.isError && (

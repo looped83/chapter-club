@@ -44,7 +44,10 @@ export function VotingPage() {
     [activeBooks],
   )
 
-  const leader = sortedBooks.find((b) => b.vote_count > 0) ?? null
+  const leader = useMemo(
+    () => sortedBooks.find((b) => b.vote_count > 0) ?? null,
+    [sortedBooks],
+  )
 
   const winner = useMemo(() => {
     if (votingOpen) return null

@@ -1,26 +1,13 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
 import { useAuth } from '@/lib/AuthContext'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAddBacklogBook } from '../hooks/useBacklog'
+import { backlogBookSchema, type BacklogBookFormData } from '../schemas'
 
-const schema = z.object({
-  title: z.string().min(1, 'Titel ist erforderlich').max(200),
-  author: z.string().min(1, 'Autor:in ist erforderlich').max(200),
-  coverUrl: z
-    .string()
-    .url('Ungültige URL – bitte vollständige URL mit https:// eingeben')
-    .optional()
-    .or(z.literal(''))
-    .default(''),
-  description: z.string().max(1000).optional().default(''),
-  reason: z.string().max(500).optional().default(''),
-})
-
-type FormData = z.infer<typeof schema>
+type FormData = BacklogBookFormData
 
 interface BacklogAddFormProps {
   onSubmitted?: () => void
@@ -36,7 +23,7 @@ export function BacklogAddForm({ onSubmitted, onCancel }: BacklogAddFormProps) {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  } = useForm<FormData>({ resolver: zodResolver(backlogBookSchema) })
 
   async function onSubmit(data: FormData) {
     if (!user) return
