@@ -1,5 +1,6 @@
 import { forwardRef } from 'react'
 import { cn } from '@/lib/cn'
+import { slugifyId } from '@/lib/id'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -9,7 +10,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, hint, id, className = '', ...props }, ref) => {
-    const inputId = id ?? label?.toLowerCase().replace(/\s+/g, '-')
+    const inputId = id ?? (label ? slugifyId(label) : undefined)
     return (
       <div className="flex flex-col gap-1.5">
         {label && (

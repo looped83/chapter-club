@@ -1,9 +1,9 @@
-import { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 
-const DOT_PATTERN_STYLE = {
+const DOT_PATTERN_STYLE: React.CSSProperties = {
   backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
   backgroundSize: '20px 20px',
-} as const
+}
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
