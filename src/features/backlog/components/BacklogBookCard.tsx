@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { cn } from '@/lib/cn'
 import { BookCover } from '@/components/book/BookCover'
 import { Button } from '@/components/ui/Button'
@@ -17,7 +17,7 @@ interface BacklogBookCardProps {
   isWinner?: boolean
 }
 
-export function BacklogBookCard({
+export const BacklogBookCard = memo(function BacklogBookCard({
   book,
   currentUserId,
   myVotedBookId,
@@ -163,4 +163,4 @@ export function BacklogBookCard({
       </div>
     </div>
   )
-}
+})
