@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/Button'
 import { READING_STATUS_LABELS, ERROR_MESSAGES } from '@/lib/constants'
 import type { ReadingProgress, ReadingStatus } from '@/types/database'
 
-const FORM_STATUSES: ReadingStatus[] = ['not_started', 'reading', 'paused', 'abandoned']
+const FORM_STATUSES: ReadingStatus[] = ['not_started', 'reading', 'finished', 'paused', 'abandoned']
 
 interface ProgressSliderProps {
   bookId: string
