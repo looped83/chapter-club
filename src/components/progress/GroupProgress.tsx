@@ -13,29 +13,44 @@ const STATUS_LABEL: Record<string, string> = {
 }
 
 const STATUS_COLOR: Record<string, string> = {
-  not_started: 'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
+  not_started: 'text-stone-400 dark:text-white/40 bg-stone-100 dark:bg-white/10',
   reading: 'text-brand-600 dark:text-brand-300 bg-brand-50 dark:bg-brand-500/20',
   finished: 'text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-500/20',
   paused: 'text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-500/20',
   abandoned: 'text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/20',
 }
 
+const BAR_COLOR: Record<string, string> = {
+  not_started: 'bg-stone-300 dark:bg-white/20',
+  reading: 'bg-gradient-to-r from-brand-400 to-brand-500',
+  finished: 'bg-gradient-to-r from-green-400 to-green-500',
+  paused: 'bg-gradient-to-r from-amber-400 to-amber-500',
+  abandoned: 'bg-gradient-to-r from-red-400 to-red-500',
+}
+
 export function GroupProgress({ progressList }: GroupProgressProps) {
   if (!progressList.length) {
     return (
-      <p className="text-sm text-stone-400 dark:text-white/40 italic">Noch keine Fortschritte eingetragen.</p>
+      <p className="text-sm text-stone-400 dark:text-white/40 italic">
+        Noch keine Fortschritte eingetragen.
+      </p>
     )
   }
 
   const avg =
     progressList.reduce((sum, p) => sum + p.progress_percent, 0) / progressList.length
 
+  const sorted = [...progressList].sort((a, b) => b.progress_percent - a.progress_percent)
+
   return (
-    <div className="flex flex-col gap-5">
-      {/* Group average — prominent */}
-      <div className="flex items-end gap-4">
-        <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none">{Math.round(avg)}<span className="text-2xl text-stone-400 dark:text-white/50">%</span></p>
-        <div className="flex-1 pb-1">
+    <div className="flex flex-col gap-4">
+      {/* Group average */}
+      <div className="flex items-end gap-3">
+        <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none">
+          {Math.round(avg)}
+          <span className="text-2xl font-bold text-brand-500 dark:text-brand-400">%</span>
+        </p>
+        <div className="flex-1 pb-1.5">
           <div className="h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-brand-400 to-brand-500 rounded-full transition-all duration-700"
@@ -43,39 +58,51 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
             />
           </div>
         </div>
+        <p className="text-xs text-stone-400 dark:text-white/40 pb-1.5 flex-shrink-0">Ø Gruppe</p>
       </div>
 
-      {/* Per-person tiles — same layout as ReviewCard */}
-      <div className="grid grid-cols-2 gap-3">
-        {progressList.map((p) => (
-          <div key={p.id} className="flex flex-col gap-2.5 bg-stone-50 dark:bg-white/[0.06] rounded-2xl p-3 border border-stone-100 dark:border-white/10">
-            {/* Avatar (left) | status pill (right) */}
-            <div className="flex items-start justify-between gap-1">
-              <span className="text-3xl leading-none">{p.profiles?.avatar_emoji ?? '📚'}</span>
-              <span className={[
-                'text-[10px] font-medium px-1.5 py-0.5 rounded-full mt-0.5',
-                STATUS_COLOR[p.status] ?? 'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
-              ].join(' ')}>
-                {STATUS_LABEL[p.status] ?? p.status}
+      {/* Per-person rows – all in one tile */}
+      <div className="flex flex-col gap-3">
+        {sorted.map((p) => (
+          <div key={p.id} className="flex items-center gap-3">
+            {/* Avatar + name */}
+            <div className="flex items-center gap-2 w-24 flex-shrink-0">
+              <span className="text-xl leading-none flex-shrink-0">
+                {p.profiles?.avatar_emoji ?? '📚'}
+              </span>
+              <span className="text-xs font-semibold text-stone-800 dark:text-white/90 truncate">
+                {p.profiles?.display_name?.split(' ')[0] ?? '–'}
               </span>
             </div>
 
-            {/* Name */}
-            <span className="text-xs font-semibold text-stone-900 dark:text-white truncate">
-              {p.profiles?.display_name ?? 'Unbekannt'}
+            {/* Status pill */}
+            <span
+              className={[
+                'text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0',
+                STATUS_COLOR[p.status] ??
+                  'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
+              ].join(' ')}
+            >
+              {STATUS_LABEL[p.status] ?? p.status}
             </span>
 
-            {/* Bar + percent — bottom */}
-            <div className="flex items-center gap-2">
-              <div className="h-2 flex-1 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-brand-400 rounded-full transition-all duration-500"
-                  style={{ width: `${p.progress_percent}%` }}
-                />
-              </div>
-              <span className="font-serif text-base font-bold text-brand-600 dark:text-brand-400 leading-none flex-shrink-0">
-                {p.progress_percent}<span className="text-[10px] font-normal text-stone-400 dark:text-white/40">%</span>
+            {/* Progress bar */}
+            <div className="flex-1 h-2.5 bg-stone-100 dark:bg-white/10 rounded-full overflow-hidden">
+              <div
+                className={[
+                  'h-full rounded-full transition-all duration-500',
+                  BAR_COLOR[p.status] ?? 'bg-brand-400',
+                ].join(' ')}
+                style={{ width: `${p.progress_percent}%` }}
+              />
+            </div>
+
+            {/* Percentage */}
+            <div className="w-10 text-right flex-shrink-0">
+              <span className="font-serif text-sm font-bold text-brand-600 dark:text-brand-400 leading-none">
+                {p.progress_percent}
               </span>
+              <span className="text-xs font-bold text-brand-500 dark:text-brand-400">%</span>
             </div>
           </div>
         ))}
