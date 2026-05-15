@@ -40,6 +40,12 @@ export default {
         '2xl': '1rem',
         '3xl': '1.5rem',
       },
+      boxShadow: {
+        'focus-brand':      '0 0 0 3px rgba(228,168,74,0.22), 0 0 14px rgba(228,168,74,0.14)',
+        'focus-brand-dark': '0 0 0 3px rgba(228,168,74,0.32), 0 0 18px rgba(228,168,74,0.20)',
+        'focus-red':        '0 0 0 3px rgba(239,68,68,0.22),  0 0 14px rgba(239,68,68,0.14)',
+        'focus-red-dark':   '0 0 0 3px rgba(239,68,68,0.32),  0 0 18px rgba(239,68,68,0.20)',
+      },
     },
   },
   plugins: [],
