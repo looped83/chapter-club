@@ -71,8 +71,33 @@ export function BacklogBookCard({
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/80" aria-hidden="true" />
 
+      {/* Owner actions – absolute bottom-right */}
+      {isOwner && isActive && (
+        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
+          >
+            Bearbeiten
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (window.confirm(`„${book.title}" aus der Leseliste entfernen?`)) {
+                archive.mutate(book.id)
+              }
+            }}
+            disabled={archive.isPending}
+            className="text-xs text-white/30 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
+          >
+            Entfernen
+          </button>
+        </div>
+      )}
+
       {/* Content */}
-      <div className="relative z-10 p-4 flex gap-4">
+      <div className={['relative z-10 p-4 flex gap-4', isOwner && isActive ? 'pb-9' : ''].join(' ')}>
         {/* Cover */}
         <div className="flex-shrink-0 w-16 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 self-start">
           <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
@@ -118,8 +143,8 @@ export function BacklogBookCard({
             />
           )}
 
-          <div className="flex flex-wrap items-center gap-2 mt-1">
-            {votingOpen && isActive && (
+          {votingOpen && isActive && (
+            <div className="mt-1">
               <Button
                 variant={hasMyVote ? 'primary' : 'secondary'}
                 size="sm"
@@ -131,32 +156,8 @@ export function BacklogBookCard({
               >
                 {hasMyVote ? '✓ Meine Stimme' : hasOtherVote ? 'Stimme ändern' : 'Abstimmen'}
               </Button>
-            )}
-
-            {isOwner && isActive && (
-              <>
-                <button
-                  type="button"
-                  onClick={() => setIsEditing(true)}
-                  className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
-                >
-                  Bearbeiten
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (window.confirm(`„${book.title}" aus dem Backlog entfernen?`)) {
-                      archive.mutate(book.id)
-                    }
-                  }}
-                  disabled={archive.isPending}
-                  className="text-xs text-white/30 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
-                >
-                  Entfernen
-                </button>
-              </>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
