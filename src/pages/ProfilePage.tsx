@@ -27,7 +27,7 @@ const THEME_OPTIONS: { value: Theme; label: string; icon: string }[] = [
 ]
 
 export function ProfilePage() {
-  const { profile, user } = useAuth()
+  const { profile, user, refreshProfile } = useAuth()
   const { theme, setTheme } = useTheme()
   const [saved, setSaved] = useState(false)
   const [saveError, setSaveError] = useState(false)
@@ -67,6 +67,7 @@ export function ProfilePage() {
     if (error) {
       setSaveError(true)
     } else {
+      await refreshProfile()
       setSaved(true)
       if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
       savedTimerRef.current = setTimeout(() => setSaved(false), 2500)
