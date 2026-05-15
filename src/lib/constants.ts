@@ -30,4 +30,5 @@ export const ERROR_MESSAGES = {
   saveFailed: 'Fehler beim Speichern. Bitte erneut versuchen.',
   addFailed: 'Fehler beim Hinzufügen. Bitte versuche es erneut.',
   voteFailed: 'Abstimmen fehlgeschlagen. Bitte erneut versuchen.',
+  deleteFailed: 'Fehler beim Löschen. Bitte erneut versuchen.',
 } as const
