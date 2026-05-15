@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { queryKeys } from '@/lib/queryKeys'
+import { queryKeys, STALE_TIMES } from '@/lib/queryKeys'
 import {
   fetchBacklogBooks,
   fetchVotesForMonth,
@@ -29,7 +29,7 @@ export function useBacklogBooks(userId: string) {
         is_my_vote: myVote?.suggestion_id === book.id,
       })) as BacklogBookWithVotes[]
     },
-    staleTime: 1000 * 30,
+    staleTime: STALE_TIMES.short,
     enabled: !!userId,
   })
 }

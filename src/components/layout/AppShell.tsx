@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
+import { cn } from '@/lib/cn'
 import { useAuth } from '@/lib/AuthContext'
 
 const navItems = [
@@ -34,12 +35,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <Link
                       to={to}
                       aria-current={active ? 'page' : undefined}
-                      className={[
+                      className={cn(
                         'px-4 py-2 rounded-xl text-sm font-medium transition-colors block',
                         active
                           ? 'bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white'
                           : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10',
-                      ].join(' ')}
+                      )}
                     >
                       {label}
                     </Link>
@@ -76,10 +77,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <li key={to}>
                 <Link
                   to={to}
-                  className={[
+                  className={cn(
                     'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
                     active ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
-                  ].join(' ')}
+                  )}
                   aria-current={active ? 'page' : undefined}
                 >
                   <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
@@ -92,10 +93,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <li>
             <Link
               to="/profile"
-              className={[
+              className={cn(
                 'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
                 location.pathname === '/profile' ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
-              ].join(' ')}
+              )}
               aria-current={location.pathname === '/profile' ? 'page' : undefined}
               aria-label="Profil"
             >

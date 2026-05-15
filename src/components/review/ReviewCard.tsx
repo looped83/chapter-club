@@ -1,3 +1,4 @@
+import { cn } from '@/lib/cn'
 import { Badge } from '@/components/ui/Badge'
 import { StarRating } from '@/components/book/StarRating'
 import { ExpandableText } from '@/components/ui/ExpandableText'
@@ -52,12 +53,12 @@ export function ReviewCard({ review }: ReviewCardProps) {
             </span>
           )}
           {review.would_reread != null && (
-            <span className={[
+            <span className={cn(
               'text-[10px] px-1.5 py-0.5 rounded-full',
               review.would_reread
                 ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                 : 'bg-stone-100 dark:bg-white/10 text-stone-400 dark:text-white/40',
-            ].join(' ')}>
+            )}>
               <span aria-hidden="true">↩</span> {review.would_reread ? 'Nochmal' : 'Einmal reicht'}
             </span>
           )}

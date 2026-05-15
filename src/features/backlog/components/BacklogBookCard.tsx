@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cn } from '@/lib/cn'
 import { BookCover } from '@/components/book/BookCover'
 import { Button } from '@/components/ui/Button'
 import { ExpandableText } from '@/components/ui/ExpandableText'
@@ -46,10 +47,10 @@ export function BacklogBookCard({
 
   return (
     <div
-      className={[
+      className={cn(
         'relative overflow-hidden rounded-2xl transition-all',
-        isWinner ? 'ring-2 ring-brand-400' : '',
-      ].join(' ')}
+        isWinner && 'ring-2 ring-brand-400',
+      )}
     >
       {/* Blurred cover background */}
       {book.cover_url ? (
@@ -97,7 +98,7 @@ export function BacklogBookCard({
       )}
 
       {/* Content */}
-      <div className={['relative z-10 p-4 flex gap-4', isOwner && isActive ? 'pb-9' : ''].join(' ')}>
+      <div className={cn('relative z-10 p-4 flex gap-4', isOwner && isActive && 'pb-9')}>
         {/* Cover */}
         <div className="flex-shrink-0 w-16 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 self-start">
           <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />

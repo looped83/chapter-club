@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cn } from '@/lib/cn'
 import { useUpsertProgress } from '@/hooks/useBookProgress'
 import { useAuth } from '@/lib/AuthContext'
 import { Button } from '@/components/ui/Button'
@@ -76,12 +77,12 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
               key={s}
               type="button"
               onClick={() => { setStatus(s); setSaved(false) }}
-              className={[
+              className={cn(
                 'px-3 py-1.5 rounded-xl text-xs font-medium transition-colors border',
                 status === s
                   ? 'bg-brand-500 text-white border-brand-500'
                   : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
-              ].join(' ')}
+              )}
               aria-pressed={status === s}
             >
               {READING_STATUS_LABELS[s]}

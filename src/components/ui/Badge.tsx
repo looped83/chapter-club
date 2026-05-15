@@ -1,3 +1,5 @@
+import { cn } from '@/lib/cn'
+
 type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'brand'
 
 interface BadgeProps {
@@ -17,11 +19,11 @@ const variantClasses: Record<BadgeVariant, string> = {
 export function Badge({ children, variant = 'default', className = '' }: BadgeProps) {
   return (
     <span
-      className={[
+      className={cn(
         'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
         variantClasses[variant],
         className,
-      ].join(' ')}
+      )}
     >
       {children}
     </span>

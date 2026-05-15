@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { cn } from '@/lib/cn'
 import type { ReadingProgressWithProfile } from '@/types/database'
 
 interface GroupProgressProps {
@@ -34,6 +35,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; barColor: st
 }
 
 const FALLBACK_STATUS_CONFIG = {
+  label: '',
   color: 'text-stone-500 dark:text-white/40 bg-stone-100 dark:bg-white/10',
   barColor: 'bg-brand-400',
 }
@@ -95,10 +97,10 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
 
             {/* Status pill */}
             <span
-              className={[
+              className={cn(
                 'text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0',
                 (STATUS_CONFIG[p.status] ?? FALLBACK_STATUS_CONFIG).color,
-              ].join(' ')}
+              )}
             >
               {STATUS_CONFIG[p.status]?.label ?? p.status}
             </span>
@@ -113,10 +115,10 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
               aria-label={`${p.profiles?.display_name?.split(' ')[0] ?? 'Person'}: ${p.progress_percent}%`}
             >
               <div
-                className={[
+                className={cn(
                   'h-full rounded-full transition-all duration-500',
                   (STATUS_CONFIG[p.status] ?? FALLBACK_STATUS_CONFIG).barColor,
-                ].join(' ')}
+                )}
                 style={{ width: `${p.progress_percent}%` }}
               />
             </div>

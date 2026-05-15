@@ -1,4 +1,5 @@
 import { useEffect, useCallback } from 'react'
+import { cn } from '@/lib/cn'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -145,12 +146,12 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
               key={n}
               type="button"
               onClick={() => handleEmotionalImpactClick(n)}
-              className={[
+              className={cn(
                 'flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all',
                 emotionalImpact === n
                   ? 'border-brand-400 bg-brand-500/20 scale-105'
                   : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
-              ].join(' ')}
+              )}
               aria-pressed={emotionalImpact === n}
               aria-label={`Emotionaler Impact ${n} von 5: ${IMPACT_LABELS[n]}`}
             >
@@ -170,12 +171,12 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
               key={p}
               type="button"
               onClick={() => handlePaceClick(p)}
-              className={[
+              className={cn(
                 'px-3 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 pace === p
                   ? 'bg-brand-500 text-white border-brand-500'
                   : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
-              ].join(' ')}
+              )}
               aria-pressed={pace === p}
             >
               {PACE_LABELS[p]}
@@ -193,12 +194,12 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
               key={String(val)}
               type="button"
               onClick={() => handleWouldRereadClick(val)}
-              className={[
+              className={cn(
                 'px-4 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 wouldReread === val
                   ? 'bg-brand-500 text-white border-brand-500'
                   : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
-              ].join(' ')}
+              )}
               aria-pressed={wouldReread === val}
             >
               {val ? '✓ Ja' : '✗ Nein'}

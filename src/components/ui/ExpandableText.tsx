@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { cn } from '@/lib/cn'
 
 interface ExpandableTextProps {
   text: string
@@ -32,7 +33,7 @@ export function ExpandableText({
     <div>
       <p
         ref={ref}
-        className={[className, !expanded ? (CLAMP[lines] ?? 'line-clamp-2') : ''].join(' ')}
+        className={cn(className, !expanded && (CLAMP[lines] ?? 'line-clamp-2'))}
       >
         {text}
       </p>

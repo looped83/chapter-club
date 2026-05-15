@@ -1,3 +1,9 @@
+export const STALE_TIMES = {
+  short: 30_000,
+  medium: 60_000,
+  long: 300_000,
+} as const
+
 export const queryKeys = {
   currentBook: ['books', 'current'] as const,
   books: ['books'] as const,
