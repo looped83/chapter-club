@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentBook } from '@/hooks/useCurrentBook'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -37,7 +37,7 @@ export function DashboardPage() {
 
   if (!book) return <EmptyState />
 
-  const ratings = reviews.map((r) => Number(r.rating))
+  const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
 
   return (
     <div className="flex flex-col gap-5">

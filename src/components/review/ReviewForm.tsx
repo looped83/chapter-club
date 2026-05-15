@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -87,6 +87,18 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
   const wouldReread = watch('wouldReread')
   const pace = watch('pace')
 
+  const handleEmotionalImpactClick = useCallback((n: number) => {
+    setValue('emotionalImpact', emotionalImpact === n ? null : n, { shouldDirty: true })
+  }, [emotionalImpact, setValue])
+
+  const handlePaceClick = useCallback((p: Pace) => {
+    setValue('pace', pace === p ? null : p, { shouldDirty: true })
+  }, [pace, setValue])
+
+  const handleWouldRereadClick = useCallback((val: boolean) => {
+    setValue('wouldReread', wouldReread === val ? null : val, { shouldDirty: true })
+  }, [wouldReread, setValue])
+
   async function onSubmit(data: FormData) {
     if (!user) return
     await upsert.mutateAsync({
@@ -132,7 +144,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
             <button
               key={n}
               type="button"
-              onClick={() => setValue('emotionalImpact', emotionalImpact === n ? null : n, { shouldDirty: true })}
+              onClick={() => handleEmotionalImpactClick(n)}
               className={[
                 'flex flex-col items-center gap-1 px-3 py-2 rounded-xl border transition-all',
                 emotionalImpact === n
@@ -157,7 +169,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
             <button
               key={p}
               type="button"
-              onClick={() => setValue('pace', pace === p ? null : p, { shouldDirty: true })}
+              onClick={() => handlePaceClick(p)}
               className={[
                 'px-3 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 pace === p
@@ -180,7 +192,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
             <button
               key={String(val)}
               type="button"
-              onClick={() => setValue('wouldReread', wouldReread === val ? null : val, { shouldDirty: true })}
+              onClick={() => handleWouldRereadClick(val)}
               className={[
                 'px-4 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 wouldReread === val

@@ -16,7 +16,7 @@ export function useBookProgress(bookId: string) {
       return (data ?? []) as ReadingProgressWithProfile[]
     },
     enabled: !!bookId,
-    staleTime: 1000 * 30,
+    staleTime: 1000 * 60 * 2,
   })
 }
 
@@ -34,7 +34,7 @@ export function useMyProgress(bookId: string, userId: string) {
       return data as ReadingProgress | null
     },
     enabled: !!bookId && !!userId,
-    staleTime: 1000 * 30,
+    staleTime: 1000 * 60 * 2,
   })
 }
 
