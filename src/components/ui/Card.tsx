@@ -1,10 +1,11 @@
+import { memo } from 'react'
 import { cn } from '@/lib/cn'
 
 interface CardProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType
 }
 
-export function Card({ children, className = '', as: Tag = 'div', ...rest }: CardProps) {
+export const Card = memo(function Card({ children, className = '', as: Tag = 'div', ...rest }: CardProps) {
   return (
     <Tag
       className={cn(
@@ -17,4 +18,4 @@ export function Card({ children, className = '', as: Tag = 'div', ...rest }: Car
       {children}
     </Tag>
   )
-}
+})

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import { useCurrentBook } from '@/hooks/useCurrentBook'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -27,6 +27,23 @@ export function DashboardPage() {
 
   const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
 
+  const bgStyle = useMemo(() => book?.cover_url ? {
+    backgroundImage: `url(${book.cover_url})`,
+    backgroundSize: 'cover' as const,
+    backgroundPosition: 'center' as const,
+    filter: 'blur(28px)',
+  } : undefined, [book?.cover_url])
+
+  const toggleProgress = useCallback(() => {
+    setShowProgress(v => !v)
+    setShowReview(false)
+  }, [])
+
+  const toggleReview = useCallback(() => {
+    setShowReview(v => !v)
+    setShowProgress(false)
+  }, [])
+
   if (isLoading) return <PageSpinner />
 
   if (error) {
@@ -49,12 +66,7 @@ export function DashboardPage() {
         {book.cover_url ? (
           <div
             className="absolute inset-0 scale-110"
-            style={{
-              backgroundImage: `url(${book.cover_url})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'blur(28px)',
-            }}
+            style={bgStyle}
             aria-hidden="true"
           />
         ) : (
@@ -103,7 +115,7 @@ export function DashboardPage() {
           {/* Actions */}
           <div className="flex items-center gap-3 mt-5 flex-wrap justify-center">
             <button
-              onClick={() => { setShowProgress((v) => !v); setShowReview(false) }}
+              onClick={toggleProgress}
               aria-expanded={showProgress}
               aria-controls="dashboard-progress-editor"
               className="px-5 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
@@ -111,7 +123,7 @@ export function DashboardPage() {
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
             </button>
             <button
-              onClick={() => { setShowReview((v) => !v); setShowProgress(false) }}
+              onClick={toggleReview}
               aria-expanded={showReview}
               aria-controls="dashboard-review-editor"
               className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback, memo } from 'react'
 import { cn } from '@/lib/cn'
 import { useUpsertProgress } from '@/hooks/useBookProgress'
 import { useAuth } from '@/lib/AuthContext'
@@ -14,7 +14,7 @@ interface ProgressSliderProps {
   onSaved?: () => void
 }
 
-export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps) {
+export const ProgressSlider = memo(function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps) {
   const { user } = useAuth()
   const [percent, setPercent] = useState(current?.progress_percent ?? 0)
   const [status, setStatus] = useState<ReadingStatus>(current?.status ?? 'not_started')
@@ -22,18 +22,18 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
 
   const upsert = useUpsertProgress()
 
-  function handlePercentChange(val: number) {
+  const handlePercentChange = useCallback((val: number) => {
     setPercent(val)
     if (val > 0 && status === 'not_started') setStatus('reading')
     setSaved(false)
-  }
+  }, [status])
 
-  async function handleSave() {
+  const handleSave = useCallback(async () => {
     if (!user) return
     await upsert.mutateAsync({ bookId, userId: user.id, progressPercent: percent, status, mood: current?.mood ?? null })
     setSaved(true)
     onSaved?.()
-  }
+  }, [user, upsert, bookId, percent, status, current?.mood, onSaved])
 
   return (
     <div className="flex flex-col gap-4">
@@ -107,4 +107,4 @@ export function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps
       )}
     </div>
   )
-}
+})
