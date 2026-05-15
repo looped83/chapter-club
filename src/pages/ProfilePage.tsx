@@ -138,7 +138,7 @@ export function ProfilePage() {
           variant="ghost"
           size="sm"
           className="mt-3 text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/10"
-          onClick={() => supabase.auth.signOut()}
+          onClick={() => { supabase.auth.signOut().catch((err) => console.error('Sign out failed:', err)) }}
         >
           Abmelden
         </Button>

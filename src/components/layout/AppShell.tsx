@@ -25,21 +25,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link to="/" className="font-serif text-xl font-bold text-stone-900 dark:text-white tracking-tight hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
             📖 Chapter Club
           </Link>
-          <nav className="flex items-center gap-1" aria-label="Hauptnavigation">
-            {navItems.map(({ to, label }) => (
-              <Link
-                key={to}
-                to={to}
-                className={[
-                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors',
-                  isNavActive(to, location.pathname)
-                    ? 'bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white'
-                    : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100 dark:text-white/50 dark:hover:text-white dark:hover:bg-white/10',
-                ].join(' ')}
-              >
-                {label}
-              </Link>
-            ))}
+          <nav aria-label="Hauptnavigation">
+            <ul className="flex items-center gap-1 list-none m-0 p-0">
+              {navItems.map(({ to, label }) => {
+                const active = isNavActive(to, location.pathname)
+                return (
+                  <li key={to}>
+                    <Link
+                      to={to}
+                      aria-current={active ? 'page' : undefined}
+                      className={[
+                        'px-4 py-2 rounded-xl text-sm font-medium transition-colors block',
+                        active
+                          ? 'bg-brand-50 text-brand-700 dark:bg-white/10 dark:text-white'
+                          : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100 dark:text-white/60 dark:hover:text-white dark:hover:bg-white/10',
+                      ].join(' ')}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
           </nav>
           <Link
             to="/profile"
@@ -62,38 +69,41 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-stone-950/95 backdrop-blur border-t border-stone-200 dark:border-white/10"
         aria-label="Mobile Navigation"
       >
-        <div className="flex items-center justify-around h-16 px-2">
+        <ul className="flex items-center justify-around h-16 px-2 list-none m-0 p-0 w-full">
           {navItems.map(({ to, label, icon: Icon }) => {
             const active = isNavActive(to, location.pathname)
             return (
-              <Link
-                key={to}
-                to={to}
-                className={[
-                  'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
-                  active ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
-                ].join(' ')}
-                aria-current={active ? 'page' : undefined}
-              >
-                <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
-                <span className="text-[10px] font-medium truncate">{label}</span>
-              </Link>
+              <li key={to}>
+                <Link
+                  to={to}
+                  className={[
+                    'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
+                    active ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
+                  ].join(' ')}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <Icon className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+                  <span className="text-[10px] font-medium truncate">{label}</span>
+                </Link>
+              </li>
             )
           })}
           {/* Avatar als Profil-Link */}
-          <Link
-            to="/profile"
-            className={[
-              'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
-              location.pathname === '/profile' ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
-            ].join(' ')}
-            aria-current={location.pathname === '/profile' ? 'page' : undefined}
-            aria-label="Profil"
-          >
-            <span className="text-xl leading-none h-5 flex items-center">{profile?.avatar_emoji ?? '👤'}</span>
-            <span className="text-[10px] font-medium truncate">{profile?.display_name?.split(' ')[0] ?? 'Profil'}</span>
-          </Link>
-        </div>
+          <li>
+            <Link
+              to="/profile"
+              className={[
+                'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
+                location.pathname === '/profile' ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
+              ].join(' ')}
+              aria-current={location.pathname === '/profile' ? 'page' : undefined}
+              aria-label="Profil"
+            >
+              <span className="text-xl leading-none h-5 flex items-center">{profile?.avatar_emoji ?? '👤'}</span>
+              <span className="text-[10px] font-medium truncate">{profile?.display_name?.split(' ')[0] ?? 'Profil'}</span>
+            </Link>
+          </li>
+        </ul>
       </nav>
     </div>
   )

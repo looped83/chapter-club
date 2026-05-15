@@ -41,6 +41,7 @@ export function ExpandableText({
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
+          aria-label={expanded ? 'Text einklappen' : 'Text vollständig anzeigen'}
           className={toggleClassName}
         >
           {expanded ? 'weniger' : 'mehr'}

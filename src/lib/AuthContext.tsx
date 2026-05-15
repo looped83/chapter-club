@@ -50,7 +50,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .single()
       if (error) throw error
       setProfile(data)
-    } catch {
+    } catch (err) {
+      console.error('Failed to fetch user profile:', err)
       setProfile(null)
     } finally {
       setLoading(false)

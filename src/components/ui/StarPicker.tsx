@@ -59,16 +59,22 @@ export function StarPicker({ value, onChange, readOnly = false, size = 'md' }: S
               <>
                 {/* left half → half star */}
                 <div
+                  role="button"
+                  tabIndex={0}
                   className="absolute left-0 top-0 w-1/2 h-full cursor-pointer"
                   onMouseEnter={() => setHovered(star - 0.5)}
                   onClick={() => onChange(star - 0.5)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onChange(star - 0.5) } }}
                   aria-label={`${star - 0.5} Sterne`}
                 />
                 {/* right half → full star */}
                 <div
+                  role="button"
+                  tabIndex={0}
                   className="absolute right-0 top-0 w-1/2 h-full cursor-pointer"
                   onMouseEnter={() => setHovered(star)}
                   onClick={() => onChange(star)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onChange(star) } }}
                   aria-label={`${star} Sterne`}
                 />
               </>
