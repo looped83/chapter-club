@@ -25,6 +25,7 @@ export const BookCover = memo(function BookCover({ title, coverUrl, className = 
         src={coverUrl}
         alt={`Cover: ${title}`}
         loading="lazy"
+        decoding="async"
         className={cn('object-cover', className)}
       />
     )
