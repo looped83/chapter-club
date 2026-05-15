@@ -24,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             'text-stone-900 dark:text-white',
             'placeholder:text-stone-400 dark:placeholder:text-white/30',
             'bg-white dark:bg-white/10 transition duration-150',
-            'focus:outline-none focus:shadow-focus-brand dark:focus:shadow-focus-brand-dark',
+            'focus:outline-none focus:border-transparent focus:shadow-focus-brand dark:focus:shadow-focus-brand-dark',
             error
               ? 'border-red-400 focus:shadow-focus-red dark:focus:shadow-focus-red-dark'
               : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
