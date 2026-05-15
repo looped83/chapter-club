@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useCallback } from 'react'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
@@ -43,9 +43,7 @@ export function VotingPage() {
   const leader = sortedBooks.find((b) => b.vote_count > 0) ?? null
   const winner = !votingOpen && sortedBooks[0]?.vote_count ? sortedBooks[0] : null
 
-  if (isLoading) return <PageSpinner />
-
-  async function handleVote(bookId: string) {
+  const handleVote = useCallback(async (bookId: string) => {
     if (!user || !votingOpen) return
     await castVote.mutateAsync({
       userId: user.id,
@@ -53,7 +51,9 @@ export function VotingPage() {
       targetMonth: month,
       targetYear: year,
     })
-  }
+  }, [user, votingOpen, castVote, month, year])
+
+  if (isLoading) return <PageSpinner />
 
   return (
     <div className="flex flex-col gap-6">

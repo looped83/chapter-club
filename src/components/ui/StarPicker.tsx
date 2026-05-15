@@ -1,4 +1,4 @@
-import { useState, useId } from 'react'
+import { useState, useId, memo } from 'react'
 
 interface StarPickerProps {
   value: number
@@ -9,7 +9,7 @@ interface StarPickerProps {
 
 const sizes = { sm: 'w-5 h-5', md: 'w-8 h-8', lg: 'w-10 h-10' }
 
-function StarSvg({ fillAmount, index, instanceId }: { fillAmount: number; index: number; instanceId: string }) {
+const StarSvg = memo(function StarSvg({ fillAmount, index, instanceId }: { fillAmount: number; index: number; instanceId: string }) {
   const clipId = `${instanceId}-s${index}`
   const fillWidth = Math.round(fillAmount * 24)
 
@@ -36,7 +36,7 @@ function StarSvg({ fillAmount, index, instanceId }: { fillAmount: number; index:
       />
     </svg>
   )
-}
+})
 
 export function StarPicker({ value, onChange, readOnly = false, size = 'md' }: StarPickerProps) {
   const [hovered, setHovered] = useState<number | null>(null)

@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { cn } from '@/lib/cn'
 import { Badge } from '@/components/ui/Badge'
 import { StarRating } from '@/components/book/StarRating'
@@ -9,7 +10,7 @@ interface ReviewCardProps {
   review: ReviewWithProfile
 }
 
-export function ReviewCard({ review }: ReviewCardProps) {
+export const ReviewCard = memo(function ReviewCard({ review }: ReviewCardProps) {
   return (
     <div className="flex flex-col gap-2.5 bg-stone-50 dark:bg-white/[0.06] rounded-2xl p-3 border border-stone-100 dark:border-white/10">
 
@@ -89,4 +90,4 @@ export function ReviewCard({ review }: ReviewCardProps) {
       )}
     </div>
   )
-}
+})

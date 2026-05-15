@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useBooks } from '@/hooks/useBooks'
 import { useBookReviews } from '@/hooks/useReviews'
@@ -50,7 +50,7 @@ export function LibraryPage() {
 
 const BookCard = memo(function BookCard({ book }: { book: BookWithProfile }) {
   const { data: reviews = [] } = useBookReviews(book.id)
-  const ratings = reviews.map((r) => Number(r.rating))
+  const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
 
   return (
     <div className="flex flex-col gap-1.5">
