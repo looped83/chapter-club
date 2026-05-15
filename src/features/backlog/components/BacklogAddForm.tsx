@@ -24,9 +24,10 @@ type FormData = z.infer<typeof schema>
 
 interface BacklogAddFormProps {
   onSubmitted?: () => void
+  onCancel?: () => void
 }
 
-export function BacklogAddForm({ onSubmitted }: BacklogAddFormProps) {
+export function BacklogAddForm({ onSubmitted, onCancel }: BacklogAddFormProps) {
   const { user } = useAuth()
   const addBook = useAddBacklogBook()
 
@@ -67,6 +68,13 @@ export function BacklogAddForm({ onSubmitted }: BacklogAddFormProps) {
         autoComplete="off"
         {...register('author')}
       />
+      <Textarea
+        label="Warum dieses Buch? (optional)"
+        placeholder="Ich schlage es vor, weil…"
+        rows={2}
+        error={errors.reason?.message}
+        {...register('reason')}
+      />
       <Input
         label="Cover-URL (optional)"
         type="url"
@@ -81,13 +89,6 @@ export function BacklogAddForm({ onSubmitted }: BacklogAddFormProps) {
         error={errors.description?.message}
         {...register('description')}
       />
-      <Textarea
-        label="Warum dieses Buch? (optional)"
-        placeholder="Ich schlage es vor, weil…"
-        rows={2}
-        error={errors.reason?.message}
-        {...register('reason')}
-      />
 
       {addBook.isError && (
         <p
@@ -99,8 +100,18 @@ export function BacklogAddForm({ onSubmitted }: BacklogAddFormProps) {
       )}
 
       <Button type="submit" loading={isSubmitting || addBook.isPending}>
-        Zum Backlog hinzufügen
+        Zur Leseliste hinzufügen
       </Button>
+
+      {onCancel && (
+        <button
+          type="button"
+          onClick={onCancel}
+          className="text-sm text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors text-center"
+        >
+          Abbrechen
+        </button>
+      )}
     </form>
   )
 }
