@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn'
 import { useUpsertProgress } from '@/hooks/useBookProgress'
 import { useAuth } from '@/lib/AuthContext'
 import { Button } from '@/components/ui/Button'
-import { READING_STATUS_LABELS } from '@/lib/constants'
+import { READING_STATUS_LABELS, ERROR_MESSAGES } from '@/lib/constants'
 import type { ReadingProgress, ReadingStatus } from '@/types/database'
 
 const FORM_STATUSES: ReadingStatus[] = ['not_started', 'reading', 'paused', 'abandoned']
@@ -30,9 +30,13 @@ export const ProgressSlider = memo(function ProgressSlider({ bookId, current, on
 
   const handleSave = useCallback(async () => {
     if (!user) return
-    await upsert.mutateAsync({ bookId, userId: user.id, progressPercent: percent, status, mood: current?.mood ?? null })
-    setSaved(true)
-    onSaved?.()
+    try {
+      await upsert.mutateAsync({ bookId, userId: user.id, progressPercent: percent, status, mood: current?.mood ?? null })
+      setSaved(true)
+      onSaved?.()
+    } catch {
+      // error displayed via upsert.isError
+    }
   }, [user, upsert, bookId, percent, status, current?.mood, onSaved])
 
   return (
@@ -102,7 +106,7 @@ export const ProgressSlider = memo(function ProgressSlider({ bookId, current, on
 
       {upsert.isError && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          Fehler beim Speichern. Bitte erneut versuchen.
+          {ERROR_MESSAGES.saveFailed}
         </p>
       )}
     </div>

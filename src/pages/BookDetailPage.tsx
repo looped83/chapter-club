@@ -1,5 +1,6 @@
 import { useState, useRef, useMemo, useCallback } from 'react'
 import { cn } from '@/lib/cn'
+import { createBlurredBgStyle } from '@/lib/styles'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -19,15 +20,15 @@ import { ReviewCard } from '@/components/review/ReviewCard'
 import { MONTH_NAMES, READING_STATUS_LABELS } from '@/lib/constants'
 
 export function BookDetailPage() {
-  const { id } = useParams<{ id: string }>()
+  const { id = '' } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const location = useLocation()
   const { user } = useAuth()
-  const { data: book, isLoading } = useBook(id!)
-  const { data: progressList = [] } = useBookProgress(id!)
-  const { data: myProgress } = useMyProgress(id!, user?.id ?? '')
-  const { data: reviews = [] } = useBookReviews(id!)
-  const { data: myReview } = useMyReview(id!, user?.id ?? '')
+  const { data: book, isLoading, error } = useBook(id)
+  const { data: progressList = [] } = useBookProgress(id)
+  const { data: myProgress } = useMyProgress(id, user?.id ?? '')
+  const { data: reviews = [] } = useBookReviews(id)
+  const { data: myReview } = useMyReview(id, user?.id ?? '')
   const [tab, setTab] = useState<'progress' | 'reviews'>(
     (location.state as { tab?: string } | null)?.tab === 'reviews' ? 'reviews' : 'progress'
   )
@@ -80,17 +81,14 @@ export function BookDetailPage() {
     carouselRef.current?.scrollTo({ left: i * (carouselRef.current.clientWidth || 0), behavior: 'smooth' })
   }, [])
 
-  const bgStyle = useMemo(() => book?.cover_url ? {
-    backgroundImage: `url(${book.cover_url})`,
-    backgroundSize: 'cover' as const,
-    backgroundPosition: 'center' as const,
-    filter: 'blur(28px)',
-  } : undefined, [book?.cover_url])
+  const bgStyle = useMemo(() => createBlurredBgStyle(book?.cover_url), [book?.cover_url])
 
   if (isLoading) return <PageSpinner />
-  if (!book) return (
+  if (error || !book) return (
     <div className="text-center py-16">
-      <p className="text-stone-500 dark:text-white/50">Buch nicht gefunden.</p>
+      <p className="text-stone-500 dark:text-white/50">
+        {error ? 'Fehler beim Laden.' : 'Buch nicht gefunden.'}
+      </p>
       <Link to="/" className="text-brand-600 dark:text-brand-400 text-sm mt-2 block">← Zurück</Link>
     </div>
   )
@@ -314,8 +312,12 @@ export function BookDetailPage() {
                     <button
                       onClick={async () => {
                         if (!user) return
-                        await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user.id })
-                        setConfirmDelete(false)
+                        try {
+                          await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user.id })
+                          setConfirmDelete(false)
+                        } catch {
+                          // error displayed via deleteReview.isError
+                        }
                       }}
                       aria-label="Bewertung endgültig löschen"
                       className="text-xs text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"

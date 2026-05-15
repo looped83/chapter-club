@@ -9,6 +9,7 @@ import { useTheme, type Theme } from '@/lib/ThemeContext'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { ERROR_MESSAGES } from '@/lib/constants'
 
 const AVATARS = ['📚', '🌸', '☕', '🌙', '🦋', '🌿', '🎭', '🐝', '🌺', '🦉']
 
@@ -29,6 +30,7 @@ export function ProfilePage() {
   const { profile, user } = useAuth()
   const { theme, setTheme } = useTheme()
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState(false)
   const savedTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
@@ -57,11 +59,14 @@ export function ProfilePage() {
 
   async function onSubmit(data: FormData) {
     if (!user) return
+    setSaveError(false)
     const { error } = await supabase
       .from('profiles')
       .update({ display_name: data.display_name, avatar_emoji: data.avatar_emoji })
       .eq('id', user.id)
-    if (!error) {
+    if (error) {
+      setSaveError(true)
+    } else {
       setSaved(true)
       if (savedTimerRef.current) clearTimeout(savedTimerRef.current)
       savedTimerRef.current = setTimeout(() => setSaved(false), 2500)
@@ -114,6 +119,11 @@ export function ProfilePage() {
           <Button type="submit" loading={isSubmitting} disabled={!isDirty} className="w-full">
             {saved ? '✓ Gespeichert' : 'Profil speichern'}
           </Button>
+          {saveError && (
+            <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+              {ERROR_MESSAGES.saveFailed}
+            </p>
+          )}
         </form>
       </Card>
 

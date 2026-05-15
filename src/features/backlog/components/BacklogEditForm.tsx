@@ -6,15 +6,16 @@ import { Textarea } from '@/components/ui/Textarea'
 import { useUpdateBacklogBook } from '../hooks/useBacklog'
 import type { BacklogBook } from '../types'
 import { backlogBookSchema, type BacklogBookFormData } from '../schemas'
+import { ERROR_MESSAGES } from '@/lib/constants'
 
 type FormData = BacklogBookFormData
 
 interface BacklogEditFormProps {
   book: BacklogBook
-  onDone: () => void
+  onSuccess: () => void
 }
 
-export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
+export function BacklogEditForm({ book, onSuccess }: BacklogEditFormProps) {
   const updateBook = useUpdateBacklogBook()
 
   const {
@@ -41,7 +42,7 @@ export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
       coverUrl: data.coverUrl || null,
       reason: data.reason || null,
     })
-    onDone()
+    onSuccess()
   }
 
   return (
@@ -82,7 +83,7 @@ export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
           role="alert"
           className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/20 rounded-xl px-3 py-2"
         >
-          Fehler beim Speichern. Bitte versuche es erneut.
+          {ERROR_MESSAGES.saveFailed}
         </p>
       )}
 
@@ -90,7 +91,7 @@ export function BacklogEditForm({ book, onDone }: BacklogEditFormProps) {
         <Button type="submit" loading={isSubmitting || updateBook.isPending}>
           Speichern
         </Button>
-        <Button type="button" variant="secondary" onClick={onDone}>
+        <Button type="button" variant="secondary" onClick={onSuccess}>
           Abbrechen
         </Button>
       </div>

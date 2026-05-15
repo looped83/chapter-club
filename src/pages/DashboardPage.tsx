@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react'
 import { Link } from 'react-router-dom'
+import { createBlurredBgStyle } from '@/lib/styles'
 import { useCurrentBook } from '@/hooks/useCurrentBook'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview } from '@/hooks/useReviews'
@@ -27,12 +28,7 @@ export function DashboardPage() {
 
   const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
 
-  const bgStyle = useMemo(() => book?.cover_url ? {
-    backgroundImage: `url(${book.cover_url})`,
-    backgroundSize: 'cover' as const,
-    backgroundPosition: 'center' as const,
-    filter: 'blur(28px)',
-  } : undefined, [book?.cover_url])
+  const bgStyle = useMemo(() => createBlurredBgStyle(book?.cover_url), [book?.cover_url])
 
   const toggleProgress = useCallback(() => {
     setShowProgress(v => !v)

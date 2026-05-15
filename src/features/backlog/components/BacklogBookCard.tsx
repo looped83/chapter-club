@@ -1,5 +1,6 @@
 import { useState, memo, useMemo } from 'react'
 import { cn } from '@/lib/cn'
+import { createBlurredBgStyle } from '@/lib/styles'
 import { BookCover } from '@/components/book/BookCover'
 import { Button } from '@/components/ui/Button'
 import { ExpandableText } from '@/components/ui/ExpandableText'
@@ -29,12 +30,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
   const [isEditing, setIsEditing] = useState(false)
   const archive = useArchiveBacklogBook()
 
-  const bgStyle = useMemo(() => book.cover_url ? {
-    backgroundImage: `url(${book.cover_url})`,
-    backgroundSize: 'cover' as const,
-    backgroundPosition: 'center' as const,
-    filter: 'blur(24px)',
-  } : undefined, [book.cover_url])
+  const bgStyle = useMemo(() => createBlurredBgStyle(book.cover_url, 24), [book.cover_url])
 
   const isOwner = book.suggested_by === currentUserId
   const isActive = book.status === 'active'
@@ -47,7 +43,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-stone-900 dark:text-white text-sm">Buch bearbeiten</h3>
         </div>
-        <BacklogEditForm book={book} onDone={() => setIsEditing(false)} />
+        <BacklogEditForm book={book} onSuccess={() => setIsEditing(false)} />
       </div>
     )
   }

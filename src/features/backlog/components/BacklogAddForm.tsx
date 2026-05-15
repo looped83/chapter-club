@@ -6,15 +6,16 @@ import { Input } from '@/components/ui/Input'
 import { Textarea } from '@/components/ui/Textarea'
 import { useAddBacklogBook } from '../hooks/useBacklog'
 import { backlogBookSchema, type BacklogBookFormData } from '../schemas'
+import { ERROR_MESSAGES } from '@/lib/constants'
 
 type FormData = BacklogBookFormData
 
 interface BacklogAddFormProps {
-  onSubmitted?: () => void
+  onSuccess?: () => void
   onCancel?: () => void
 }
 
-export function BacklogAddForm({ onSubmitted, onCancel }: BacklogAddFormProps) {
+export function BacklogAddForm({ onSuccess, onCancel }: BacklogAddFormProps) {
   const { user } = useAuth()
   const addBook = useAddBacklogBook()
 
@@ -36,7 +37,7 @@ export function BacklogAddForm({ onSubmitted, onCancel }: BacklogAddFormProps) {
       reason: data.reason || null,
     })
     reset()
-    onSubmitted?.()
+    onSuccess?.()
   }
 
   return (
@@ -82,7 +83,7 @@ export function BacklogAddForm({ onSubmitted, onCancel }: BacklogAddFormProps) {
           role="alert"
           className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-500/20 rounded-xl px-3 py-2"
         >
-          Fehler beim Hinzufügen. Bitte versuche es erneut.
+          {ERROR_MESSAGES.addFailed}
         </p>
       )}
 
