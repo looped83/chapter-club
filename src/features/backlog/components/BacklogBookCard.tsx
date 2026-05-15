@@ -43,7 +43,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-stone-900 dark:text-white text-sm">Buch bearbeiten</h3>
         </div>
-        <BacklogEditForm book={book} onDone={() => setIsEditing(false)} />
+        <BacklogEditForm book={book} onSuccess={() => setIsEditing(false)} />
       </div>
     )
   }

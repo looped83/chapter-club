@@ -8,7 +8,7 @@ import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { MONTH_NAMES } from '@/lib/constants'
+import { ERROR_MESSAGES, MONTH_NAMES } from '@/lib/constants'
 import { useBacklogBooks, useCastBacklogVote } from '@/features/backlog/hooks/useBacklog'
 import { BacklogBookCard } from '@/features/backlog/components/BacklogBookCard'
 import { BacklogAddForm } from '@/features/backlog/components/BacklogAddForm'
@@ -50,12 +50,16 @@ export function VotingPage() {
 
   const handleVote = useCallback(async (bookId: string) => {
     if (!user || !votingOpen) return
-    await castVote.mutateAsync({
-      userId: user.id,
-      bookId,
-      targetMonth: month,
-      targetYear: year,
-    })
+    try {
+      await castVote.mutateAsync({
+        userId: user.id,
+        bookId,
+        targetMonth: month,
+        targetYear: year,
+      })
+    } catch {
+      // error shown via castVote.isError below
+    }
   }, [user, votingOpen, castVote, month, year])
 
   if (isLoading) return <PageSpinner />
@@ -158,7 +162,7 @@ export function VotingPage() {
               Buch zur Leseliste hinzufügen
             </h2>
             <BacklogAddForm
-              onSubmitted={() => setShowAddForm(false)}
+              onSuccess={() => setShowAddForm(false)}
               onCancel={() => setShowAddForm(false)}
             />
           </Card>
@@ -189,6 +193,12 @@ export function VotingPage() {
             ))}
           </ul>
         </div>
+      )}
+
+      {castVote.isError && (
+        <p role="alert" className="text-sm text-red-600 dark:text-red-400 text-center">
+          {ERROR_MESSAGES.voteFailed}
+        </p>
       )}
     </div>
   )

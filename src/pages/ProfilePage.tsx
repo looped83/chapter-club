@@ -9,6 +9,7 @@ import { useTheme, type Theme } from '@/lib/ThemeContext'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { ERROR_MESSAGES } from '@/lib/constants'
 
 const AVATARS = ['📚', '🌸', '☕', '🌙', '🦋', '🌿', '🎭', '🐝', '🌺', '🦉']
 
@@ -120,7 +121,7 @@ export function ProfilePage() {
           </Button>
           {saveError && (
             <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-              Fehler beim Speichern. Bitte erneut versuchen.
+              {ERROR_MESSAGES.saveFailed}
             </p>
           )}
         </form>

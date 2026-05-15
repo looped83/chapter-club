@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/Button'
 import { StarPicker } from '@/components/ui/StarPicker'
 import { Textarea } from '@/components/ui/Textarea'
 import { Input } from '@/components/ui/Input'
-import { IMPACT_LABELS, PACE_LABELS } from '@/lib/constants'
+import { IMPACT_LABELS, PACE_LABELS, ERROR_MESSAGES } from '@/lib/constants'
 import type { Review, Pace } from '@/types/database'
 
 const IMPACT_VALUES = [1, 2, 3, 4, 5] as const
@@ -255,7 +255,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
 
       {upsert.isError && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
-          Fehler beim Speichern. Bitte erneut versuchen.
+          {ERROR_MESSAGES.saveFailed}
         </p>
       )}
 

@@ -25,3 +25,9 @@ export const PACE_LABELS: Record<Pace, string> = {
   just_right: 'Genau richtig',
   too_fast: 'Zu schnell',
 }
+
+export const ERROR_MESSAGES = {
+  saveFailed: 'Fehler beim Speichern. Bitte erneut versuchen.',
+  addFailed: 'Fehler beim Hinzufügen. Bitte versuche es erneut.',
+  voteFailed: 'Abstimmen fehlgeschlagen. Bitte erneut versuchen.',
+} as const
