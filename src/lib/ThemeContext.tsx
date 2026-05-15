@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, type ReactNode } from 'react'
 
 export type Theme = 'light' | 'dark' | 'system'
 
@@ -34,13 +34,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener('change', handler)
   }, [theme])
 
-  function setTheme(t: Theme) {
+  const setTheme = useCallback((t: Theme) => {
     setThemeState(t)
     try { localStorage.setItem('theme', t) } catch (e) { console.warn('Failed to persist theme', e) }
-  }
+  }, [])
+
+  const value = useMemo(
+    () => ({ theme, setTheme, resolvedTheme }),
+    [theme, setTheme, resolvedTheme],
+  )
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   )

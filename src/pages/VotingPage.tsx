@@ -1,4 +1,9 @@
 import { useState, useMemo, useCallback } from 'react'
+
+const DOT_PATTERN_STYLE = {
+  backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
+  backgroundSize: '20px 20px',
+} as const
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
@@ -72,11 +77,7 @@ export function VotingPage() {
         <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 p-5 shadow-lg shadow-brand-500/25">
           <div
             className="absolute inset-0 opacity-[0.07]"
-            style={{
-              backgroundImage:
-                'radial-gradient(circle, white 1px, transparent 1px)',
-              backgroundSize: '20px 20px',
-            }}
+            style={DOT_PATTERN_STYLE}
             aria-hidden="true"
           />
           <div className="relative flex items-center gap-4">
