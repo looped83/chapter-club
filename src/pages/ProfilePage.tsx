@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
+import { cn } from '@/lib/cn'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -95,12 +96,12 @@ export function ProfilePage() {
                   key={emoji}
                   type="button"
                   onClick={() => handleAvatarSelect(emoji)}
-                  className={[
+                  className={cn(
                     'w-11 h-11 rounded-xl text-2xl transition-all border',
                     selectedEmoji === emoji
                       ? 'ring-2 ring-brand-400 border-brand-400 scale-110'
                       : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
-                  ].join(' ')}
+                  )}
                   aria-label={`Avatar ${emoji}`}
                   aria-pressed={selectedEmoji === emoji}
                 >
@@ -125,12 +126,12 @@ export function ProfilePage() {
               key={value}
               type="button"
               onClick={() => setTheme(value)}
-              className={[
+              className={cn(
                 'flex-1 flex flex-col items-center gap-1 py-2.5 rounded-xl text-xs font-medium transition-colors',
                 theme === value
                   ? 'bg-white dark:bg-white/15 text-stone-900 dark:text-white shadow-sm'
                   : 'text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white/70',
-              ].join(' ')}
+              )}
               aria-pressed={theme === value}
             >
               <span className="text-base leading-none">{icon}</span>

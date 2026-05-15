@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo, useCallback } from 'react'
+import { cn } from '@/lib/cn'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
 import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
@@ -145,7 +146,7 @@ export function BookDetailPage() {
 
       {/* ── Highlights ── */}
       {reviews.length >= 2 && (
-        <div className={['grid gap-3', criticalReader && criticalReader.id !== enthusiasticReader?.id ? 'grid-cols-3' : 'grid-cols-2'].join(' ')}>
+        <div className={cn('grid gap-3', criticalReader && criticalReader.id !== enthusiasticReader?.id ? 'grid-cols-3' : 'grid-cols-2')}>
           {enthusiasticReader && (
             <Card className="p-3">
               <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Am begeistertsten</p>
@@ -193,12 +194,12 @@ export function BookDetailPage() {
             aria-controls={`tabpanel-${t}`}
             id={`tab-${t}`}
             onClick={() => { setTab(t); setCarouselIndex(0); setConfirmDelete(false) }}
-            className={[
+            className={cn(
               'flex-1 py-2 rounded-xl text-sm font-medium transition-colors',
               tab === t
                 ? 'bg-white dark:bg-white/15 text-stone-900 dark:text-white shadow-sm'
                 : 'text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white/70',
-            ].join(' ')}
+            )}
           >
             {t === 'progress' ? 'Fortschritt' : `Bewertungen${reviews.length > 0 ? ` (${reviews.length})` : ''}`}
           </button>
@@ -363,19 +364,19 @@ export function BookDetailPage() {
                 <div className="flex justify-center gap-1.5 mt-3 md:hidden" role="group" aria-label="Bewertung auswählen">
                   {sortedReviews.map((r, i) => (
                     <button
-                      key={i}
+                      key={r.id}
                       type="button"
                       aria-label={`Bewertung von ${r.profiles?.display_name ?? i + 1}`}
                       aria-current={i === carouselIndex ? 'true' : undefined}
                       onClick={() => {
                         carouselRef.current?.scrollTo({ left: i * carouselRef.current.clientWidth, behavior: 'smooth' })
                       }}
-                      className={[
+                      className={cn(
                         'rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400',
                         i === carouselIndex
                           ? 'w-4 h-1.5 bg-brand-400'
                           : 'w-1.5 h-1.5 bg-stone-300 dark:bg-white/20',
-                      ].join(' ')}
+                      )}
                     />
                   ))}
                 </div>

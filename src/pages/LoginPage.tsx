@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { cn } from '@/lib/cn'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -72,12 +73,12 @@ export function LoginPage() {
             {authError && (
               <p
                 role="alert"
-                className={[
+                className={cn(
                   'text-sm rounded-xl px-3 py-2',
                   authError.startsWith('Bestätigung')
                     ? 'bg-green-50 dark:bg-green-500/20 text-green-700 dark:text-green-400'
                     : 'bg-red-50 dark:bg-red-500/20 text-red-600 dark:text-red-400',
-                ].join(' ')}
+                )}
               >
                 {authError}
               </p>

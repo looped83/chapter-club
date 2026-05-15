@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+import { cn } from '@/lib/cn'
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string
@@ -20,7 +21,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           ref={ref}
           id={inputId}
           rows={4}
-          className={[
+          className={cn(
             'w-full rounded-xl border px-3.5 py-2.5 text-sm',
             'text-stone-900 dark:text-white',
             'placeholder:text-stone-400 dark:placeholder:text-white/30',
@@ -30,7 +31,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               ? 'border-red-400 focus:shadow-focus-red dark:focus:shadow-focus-red-dark'
               : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
             className,
-          ].join(' ')}
+          )}
           aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
           aria-invalid={error ? 'true' : undefined}
           {...props}

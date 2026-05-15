@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { cn } from '@/lib/cn'
 
 interface BookCoverProps {
   title: string
@@ -24,18 +25,14 @@ export const BookCover = memo(function BookCover({ title, coverUrl, className = 
         src={coverUrl}
         alt={`Cover: ${title}`}
         loading="lazy"
-        className={['object-cover', className].join(' ')}
+        className={cn('object-cover', className)}
       />
     )
   }
   const gradient = colorForTitle(title)
   return (
     <div
-      className={[
-        'flex items-end justify-center bg-gradient-to-b p-2',
-        gradient,
-        className,
-      ].join(' ')}
+      className={cn('flex items-end justify-center bg-gradient-to-b p-2', gradient, className)}
       aria-hidden="true"
     >
       <span className="text-white/80 text-xs font-serif font-bold text-center leading-tight line-clamp-3">

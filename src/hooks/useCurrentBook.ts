@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { queryKeys } from '@/lib/queryKeys'
+import { queryKeys, STALE_TIMES } from '@/lib/queryKeys'
 import type { BookWithProfile } from '@/types/database'
 
 export function useCurrentBook() {
@@ -15,6 +15,6 @@ export function useCurrentBook() {
       if (error) throw error
       return data as BookWithProfile | null
     },
-    staleTime: 1000 * 60 * 5,
+    staleTime: STALE_TIMES.long,
   })
 }

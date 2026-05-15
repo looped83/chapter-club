@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { queryKeys } from '@/lib/queryKeys'
+import { queryKeys, STALE_TIMES } from '@/lib/queryKeys'
 import type { Review, ReviewWithProfile } from '@/types/database'
 
 export function useBookReviews(bookId: string) {
@@ -16,7 +16,7 @@ export function useBookReviews(bookId: string) {
       return (data ?? []) as ReviewWithProfile[]
     },
     enabled: !!bookId,
-    staleTime: 1000 * 60,
+    staleTime: STALE_TIMES.medium,
   })
 }
 
@@ -34,7 +34,7 @@ export function useMyReview(bookId: string, userId: string) {
       return data as Review | null
     },
     enabled: !!bookId && !!userId,
-    staleTime: 1000 * 60,
+    staleTime: STALE_TIMES.medium,
   })
 }
 
