@@ -104,12 +104,16 @@ export function DashboardPage() {
           <div className="flex items-center gap-3 mt-5 flex-wrap justify-center">
             <button
               onClick={() => { setShowProgress((v) => !v); setShowReview(false) }}
+              aria-expanded={showProgress}
+              aria-controls="dashboard-progress-editor"
               className="px-5 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
             >
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
             </button>
             <button
               onClick={() => { setShowReview((v) => !v); setShowProgress(false) }}
+              aria-expanded={showReview}
+              aria-controls="dashboard-review-editor"
               className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             >
               {showReview ? 'Schließen' : myReview ? 'Bearbeiten' : 'Bewerten'}
@@ -128,7 +132,7 @@ export function DashboardPage() {
 
       {/* ── Inline progress editor ── */}
       {showProgress && (
-        <Card className="p-5">
+        <Card id="dashboard-progress-editor" className="p-5">
           <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Mein Fortschritt</h3>
           <ProgressSlider
             bookId={book.id}
@@ -140,7 +144,7 @@ export function DashboardPage() {
 
       {/* ── Inline review editor ── */}
       {showReview && (
-        <Card className="p-5">
+        <Card id="dashboard-review-editor" className="p-5">
           <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Meine Bewertung</h3>
           <ReviewForm
             bookId={book.id}
@@ -165,25 +169,27 @@ export function DashboardPage() {
               Alle ansehen
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3">
+          <ul className="grid grid-cols-2 gap-3 list-none m-0 p-0">
             {reviews.map((r) => (
-              <Link
-                key={r.id}
-                to={`/book/${book.id}`}
-                state={{ tab: 'reviews' }}
-                className="flex flex-col items-center gap-2 bg-stone-100 dark:bg-white/10 rounded-2xl px-3 py-4 hover:bg-stone-200 dark:hover:bg-white/15 transition-colors"
-              >
-                <span className="text-3xl leading-none">{r.profiles?.avatar_emoji ?? '📚'}</span>
-                <span className="text-xs font-medium text-stone-600 dark:text-white/70 truncate w-full text-center">
-                  {r.profiles?.display_name}
-                </span>
-                <StarRating rating={Number(r.rating)} size="sm" />
-                <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
-                  {Number(r.rating).toFixed(1)}
-                </span>
-              </Link>
+              <li key={r.id}>
+                <Link
+                  to={`/book/${book.id}`}
+                  state={{ tab: 'reviews' }}
+                  aria-label={`Bewertung von ${r.profiles?.display_name ?? 'Unbekannt'}: ${Number(r.rating).toFixed(1)} von 5 Sternen`}
+                  className="flex flex-col items-center gap-2 bg-stone-100 dark:bg-white/10 rounded-2xl px-3 py-4 hover:bg-stone-200 dark:hover:bg-white/15 transition-colors"
+                >
+                  <span className="text-3xl leading-none" aria-hidden="true">{r.profiles?.avatar_emoji ?? '📚'}</span>
+                  <span className="text-xs font-medium text-stone-600 dark:text-white/70 truncate w-full text-center">
+                    {r.profiles?.display_name}
+                  </span>
+                  <StarRating rating={Number(r.rating)} size="sm" />
+                  <span className="text-sm font-bold text-brand-600 dark:text-brand-400" aria-hidden="true">
+                    {Number(r.rating).toFixed(1)}
+                  </span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </Card>
       )}
     </div>

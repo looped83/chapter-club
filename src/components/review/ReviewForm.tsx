@@ -68,6 +68,17 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
         pace: existing.pace ?? null,
         oneWord: existing.one_word ?? '',
       })
+    } else {
+      reset({
+        rating: 0,
+        reviewText: '',
+        favoriteQuote: '',
+        containsSpoilers: false,
+        emotionalImpact: null,
+        wouldReread: null,
+        pace: null,
+        oneWord: '',
+      })
     }
   }, [existing, reset])
 
@@ -129,7 +140,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
                   : 'border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               ].join(' ')}
               aria-pressed={emotionalImpact === n}
-              aria-label={`Impact ${n}`}
+              aria-label={`Emotionaler Impact ${n} von 5: ${IMPACT_LABELS[n]}`}
             >
               <span className="text-xl">{IMPACT_LABELS[n]}</span>
               <span className="text-xs text-stone-400 dark:text-white/40">{n}</span>
@@ -212,8 +223,9 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
         {...register('favoriteQuote')}
       />
 
-      <label className="flex items-center gap-2.5 cursor-pointer">
+      <label htmlFor="review-contains-spoilers" className="flex items-center gap-2.5 cursor-pointer">
         <input
+          id="review-contains-spoilers"
           type="checkbox"
           className="rounded border-stone-300 dark:border-white/30 accent-brand-500 w-4 h-4"
           {...register('containsSpoilers')}

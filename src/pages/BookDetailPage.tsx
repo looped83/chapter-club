@@ -94,6 +94,7 @@ export function BookDetailPage() {
         <div className="relative z-10 p-5">
           <button
             onClick={() => navigate(-1)}
+            aria-label="Zur vorherigen Seite"
             className="inline-flex items-center gap-1 text-white/60 hover:text-white text-xs mb-4 transition-colors"
           >
             ← Zurück
@@ -172,10 +173,18 @@ export function BookDetailPage() {
       )}
 
       {/* ── Tabs ── */}
-      <div className="flex gap-1 bg-stone-100 dark:bg-white/10 rounded-2xl p-1">
+      <div
+        role="tablist"
+        aria-label="Buchdetails"
+        className="flex gap-1 bg-stone-100 dark:bg-white/10 rounded-2xl p-1"
+      >
         {(['progress', 'reviews'] as const).map((t) => (
           <button
             key={t}
+            role="tab"
+            aria-selected={tab === t}
+            aria-controls={`tabpanel-${t}`}
+            id={`tab-${t}`}
             onClick={() => { setTab(t); setCarouselIndex(0); setConfirmDelete(false) }}
             className={[
               'flex-1 py-2 rounded-xl text-sm font-medium transition-colors',
@@ -190,7 +199,7 @@ export function BookDetailPage() {
       </div>
 
       {tab === 'progress' && (
-        <div className="flex flex-col gap-4">
+        <div id="tabpanel-progress" role="tabpanel" aria-labelledby="tab-progress" className="flex flex-col gap-4">
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-900 dark:text-white">Mein Fortschritt</h3>
@@ -238,7 +247,7 @@ export function BookDetailPage() {
       )}
 
       {tab === 'reviews' && (
-        <div className="flex flex-col gap-4">
+        <div id="tabpanel-reviews" role="tabpanel" aria-labelledby="tab-reviews" className="flex flex-col gap-4">
           {/* ── Meine Bewertung ── */}
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
@@ -278,19 +287,22 @@ export function BookDetailPage() {
                   </span>
                 </div>
                 {confirmDelete && (
-                  <div className="flex items-center gap-2 pt-1">
+                  <div role="alertdialog" aria-label="Bewertung löschen bestätigen" className="flex items-center gap-2 pt-1">
                     <span className="text-xs text-stone-400 dark:text-white/50">Wirklich löschen?</span>
                     <button
                       onClick={async () => {
-                        await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user!.id })
+                        if (!user) return
+                        await deleteReview.mutateAsync({ reviewId: myReview.id, bookId: book.id, userId: user.id })
                         setConfirmDelete(false)
                       }}
+                      aria-label="Bewertung endgültig löschen"
                       className="text-xs text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
                     >
                       Ja
                     </button>
                     <button
                       onClick={() => setConfirmDelete(false)}
+                      aria-label="Löschen abbrechen"
                       className="text-xs text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors"
                     >
                       Nein

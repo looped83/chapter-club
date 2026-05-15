@@ -80,7 +80,7 @@ export function VotingPage() {
             aria-hidden="true"
           />
           <div className="relative flex items-center gap-4">
-            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl">
+            <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center text-2xl" aria-hidden="true">
               🗳️
             </div>
             <div className="flex-1 min-w-0">
@@ -172,18 +172,21 @@ export function VotingPage() {
           <h2 className="font-semibold text-stone-900 dark:text-white">
             Leseliste ({activeBooks.length})
           </h2>
-          {sortedBooks.map((book) => (
-            <BacklogBookCard
-              key={book.id}
-              book={book}
-              currentUserId={user?.id ?? ''}
-              myVotedBookId={myVotedBookId}
-              onVote={handleVote}
-              votingOpen={votingOpen}
-              isVoting={castVote.isPending}
-              isWinner={!votingOpen && winner?.id === book.id}
-            />
-          ))}
+          <ul className="flex flex-col gap-4 list-none m-0 p-0">
+            {sortedBooks.map((book) => (
+              <li key={book.id}>
+                <BacklogBookCard
+                  book={book}
+                  currentUserId={user?.id ?? ''}
+                  myVotedBookId={myVotedBookId}
+                  onVote={handleVote}
+                  votingOpen={votingOpen}
+                  isVoting={castVote.isPending}
+                  isWinner={!votingOpen && winner?.id === book.id}
+                />
+              </li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
