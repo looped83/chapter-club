@@ -49,17 +49,19 @@ export function BookDetailPage() {
     [reviews, user?.id]
   )
 
-  const { topReader, criticalReader, enthusiasticReader } = useMemo(() => ({
-    topReader: progressList.reduce<typeof progressList[0] | null>(
-      (best, p) => (!best || p.progress_percent > best.progress_percent) ? p : best, null
-    ),
-    criticalReader: reviews.reduce<typeof reviews[0] | null>(
-      (worst, r) => (!worst || r.rating < worst.rating) ? r : worst, null
-    ),
-    enthusiasticReader: reviews.reduce<typeof reviews[0] | null>(
-      (best, r) => (!best || r.rating > best.rating) ? r : best, null
-    ),
-  }), [progressList, reviews])
+  const { topReader, criticalReader, enthusiasticReader } = useMemo(() => {
+    let topReader: typeof progressList[0] | null = null
+    for (const p of progressList) {
+      if (!topReader || p.progress_percent > topReader.progress_percent) topReader = p
+    }
+    let criticalReader: typeof reviews[0] | null = null
+    let enthusiasticReader: typeof reviews[0] | null = null
+    for (const r of reviews) {
+      if (!criticalReader || r.rating < criticalReader.rating) criticalReader = r
+      if (!enthusiasticReader || r.rating > enthusiasticReader.rating) enthusiasticReader = r
+    }
+    return { topReader, criticalReader, enthusiasticReader }
+  }, [progressList, reviews])
 
   const handleCarouselKeyDown = useCallback((e: React.KeyboardEvent) => {
     const el = carouselRef.current
