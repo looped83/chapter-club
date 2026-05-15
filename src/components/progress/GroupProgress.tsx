@@ -59,7 +59,7 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
     <div className="flex flex-col gap-4">
       {/* Group average */}
       <div className="flex items-end gap-3">
-        <p className="font-serif text-4xl font-bold text-stone-900 dark:text-white leading-none" aria-label={`Gruppendurchschnitt: ${Math.round(avg)} Prozent`}>
+        <p className="font-serif text-4xl font-bold text-brand-500 dark:text-brand-400 leading-none" aria-label={`Gruppendurchschnitt: ${Math.round(avg)} Prozent`}>
           {Math.round(avg)}
           <span className="text-2xl font-bold text-brand-500 dark:text-brand-400" aria-hidden="true">%</span>
         </p>
