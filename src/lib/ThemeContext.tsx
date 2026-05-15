@@ -36,7 +36,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   function setTheme(t: Theme) {
     setThemeState(t)
-    try { localStorage.setItem('theme', t) } catch {}
+    try { localStorage.setItem('theme', t) } catch (e) { console.warn('Failed to persist theme', e) }
   }
 
   return (

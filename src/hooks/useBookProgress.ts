@@ -26,7 +26,7 @@ export function useMyProgress(bookId: string, userId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('reading_progress')
-        .select('*')
+        .select('id, book_id, user_id, progress_percent, status, mood, updated_at')
         .eq('book_id', bookId)
         .eq('user_id', userId)
         .maybeSingle()

@@ -33,7 +33,7 @@ export function VotingPage() {
       [...activeBooks].sort(
         (a, b) =>
           b.vote_count - a.vote_count ||
-          new Date(a.created_at).getTime() - new Date(b.created_at).getTime() ||
+          a.created_at.localeCompare(b.created_at) ||
           a.id.localeCompare(b.id),
       ),
     [activeBooks],

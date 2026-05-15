@@ -12,14 +12,18 @@ import {
 import type { BacklogBookWithVotes } from '../types'
 import { getVotingTarget } from '../utils/votingMonth'
 
-const { month: VOTE_MONTH, year: VOTE_YEAR } = getVotingTarget()
-const VOTE_QUERY_KEY = queryKeys.backlog(VOTE_MONTH, VOTE_YEAR)
+function voteQueryKey() {
+  const { month, year } = getVotingTarget()
+  return queryKeys.backlog(month, year)
+}
 
 export function useBacklogBooks(userId: string) {
+  const { month, year } = getVotingTarget()
+  const queryKey = queryKeys.backlog(month, year)
   return useQuery({
-    queryKey: VOTE_QUERY_KEY,
+    queryKey,
     queryFn: async () => {
-      const [books, votes] = await Promise.all([fetchBacklogBooks(), fetchVotesForMonth(VOTE_MONTH, VOTE_YEAR)])
+      const [books, votes] = await Promise.all([fetchBacklogBooks(), fetchVotesForMonth(month, year)])
       const voteCounts = new Map<string, number>()
       for (const v of votes) voteCounts.set(v.suggestion_id, (voteCounts.get(v.suggestion_id) ?? 0) + 1)
       const myVote = votes.find((v) => v.user_id === userId)
@@ -38,7 +42,7 @@ export function useCastBacklogVote() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: castVote,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: VOTE_QUERY_KEY }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: voteQueryKey() }),
   })
 }
 
@@ -61,7 +65,7 @@ export function useAddBacklogBook() {
         cover_url: input.coverUrl,
         reason: input.reason,
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: VOTE_QUERY_KEY }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: voteQueryKey() }),
   })
 }
 
@@ -83,7 +87,7 @@ export function useUpdateBacklogBook() {
         cover_url: input.coverUrl,
         reason: input.reason,
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: VOTE_QUERY_KEY }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: voteQueryKey() }),
   })
 }
 
@@ -91,7 +95,7 @@ export function useArchiveBacklogBook() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: archiveBacklogBook,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: VOTE_QUERY_KEY }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: voteQueryKey() }),
   })
 }
 
@@ -99,6 +103,6 @@ export function useSetBookSelected() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: setBookSelected,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: VOTE_QUERY_KEY }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: voteQueryKey() }),
   })
 }

@@ -26,7 +26,7 @@ export function useMyReview(bookId: string, userId: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('reviews')
-        .select('*')
+        .select('id, book_id, user_id, rating, review_text, favorite_quote, contains_spoilers, emotional_impact, would_reread, pace, one_word, created_at, updated_at')
         .eq('book_id', bookId)
         .eq('user_id', userId)
         .maybeSingle()
