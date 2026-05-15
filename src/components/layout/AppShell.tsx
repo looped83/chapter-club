@@ -4,7 +4,7 @@ import { useAuth } from '@/lib/AuthContext'
 const navItems = [
   { to: '/', label: 'Home', icon: HomeIcon },
   { to: '/library', label: 'Bibliothek', icon: LibraryIcon },
-  { to: '/voting', label: 'Voting', icon: VotingIcon },
+  { to: '/voting', label: 'Backlog', icon: VotingIcon },
 ]
 
 function isNavActive(to: string, pathname: string): boolean {

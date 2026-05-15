@@ -9,7 +9,7 @@ Eine charmante, private Buddy-Read-App für unsere 4er Lesegruppe.
 - **Reviews** – Rating 1–10, Text, Lieblingszitat, Spoiler-Flag
 - **Bibliothek** – alle bisherigen Bücher als Grid mit Durchschnittsrating
 - **Buchdetailseite** – Fortschritte, Reviews, Highlights (begeistert / kritischste Stimme)
-- **Voting** – Buchvorschläge einreichen, abstimmen, automatischer Gewinner
+- **Reading Backlog** – persistente gemeinsame Leseliste, mehrere Bücher pro Nutzerin, monatliches Voting mit automatischem Gewinner
 - **Auth** – E-Mail-Login via Supabase, nur eingeloggte Nutzerinnen
 
 ## Tech Stack
@@ -118,17 +118,77 @@ https://looped83.github.io/chapter-club/
 
 ---
 
+## Reading Backlog & Voting
+
+### Konzept
+
+Der Backlog ist eine persistente, gemeinsame Leseliste. Bücher bleiben dauerhaft gespeichert und können in jedem Monat gewählt werden.
+
+**Status-Werte eines Backlog-Buchs:**
+
+| Status     | Bedeutung                                           |
+|------------|-----------------------------------------------------|
+| `active`   | Im Backlog, wählbar                                 |
+| `selected` | Als Monatsbuch ausgewählt                           |
+| `archived` | Manuell entfernt, nicht mehr wählbar               |
+
+**Voting-Regeln:**
+- Jede Nutzerin hat pro Zielmonat genau eine Stimme
+- Stimme kann bis Monatsende geändert werden
+- Gewinner = aktives Buch mit den meisten Stimmen
+- Tie-Breaker: 1. ältestes `created_at`, 2. kleinste `id` (deterministisch)
+
+### Supabase: Migration ausführen
+
+Nach dem ersten Deployment **muss** folgende Migration einmalig im Supabase SQL Editor ausgeführt werden:
+
+```
+supabase/migration_backlog_v2.sql
+```
+
+Dies erweitert `book_suggestions` um:
+- `status` Spalte
+- `updated_at` Spalte
+- Entfernt den 1-Vorschlag-pro-Monat-Constraint
+
+### Gewinner als Monatsbuch übernehmen
+
+Nach Voting-Ende (Monatsende) den Gewinner manuell setzen:
+
+```sql
+-- 1. Gewinnerbuch als 'selected' markieren
+UPDATE book_suggestions SET status = 'selected' WHERE id = '<gewinner-uuid>';
+
+-- 2. Als offizielles Monatsbuch eintragen
+INSERT INTO books (title, author, description, cover_url, month, year, is_current)
+SELECT title, author, description, cover_url, <monat>, <jahr>, true
+FROM book_suggestions WHERE id = '<gewinner-uuid>';
+```
+
+### RLS-Einschränkung dokumentiert
+
+Die Regel "Nur für aktive Bücher voten" kann in Supabase RLS nicht cross-table durchgesetzt werden. Sie wird im Frontend defensiv umgesetzt: Vote-Buttons werden für nicht-aktive Bücher ausgeblendet.
+
+---
+
 ## Projektstruktur
 
 ```
 src/
+├── features/
+│   └── backlog/
+│       ├── components/   # BacklogBookCard, BacklogAddForm, …
+│       ├── hooks/        # useBacklog.ts (TanStack Query)
+│       ├── utils/        # votingMonth.ts, votingWinner.ts
+│       ├── queries.ts    # Supabase-Queries
+│       └── types.ts      # BacklogBook, BacklogVote, …
 ├── components/
 │   ├── ui/          # Basiskomponenten (Button, Input, Card, Badge, …)
 │   ├── layout/      # AppShell (Navigation)
 │   ├── book/        # BookCover, StarRating
 │   ├── progress/    # ProgressSlider, GroupProgress
 │   ├── review/      # ReviewForm, ReviewCard
-│   └── voting/      # SuggestionForm, SuggestionCard
+│   └── voting/      # SuggestionForm, SuggestionCard (legacy)
 ├── hooks/           # TanStack Query Hooks
 │   ├── useBooks.ts
 │   ├── useBookProgress.ts
@@ -138,11 +198,11 @@ src/
 │   ├── supabase.ts  # Supabase Client
 │   ├── AuthContext.tsx
 │   └── queryKeys.ts
-├── pages/           # Route-Komponenten
+├── pages/
 │   ├── DashboardPage.tsx
 │   ├── BookDetailPage.tsx
 │   ├── LibraryPage.tsx
-│   ├── VotingPage.tsx
+│   ├── VotingPage.tsx   # Reading Backlog (Route: /voting)
 │   └── ProfilePage.tsx
 └── types/
     └── database.ts  # TypeScript Interfaces

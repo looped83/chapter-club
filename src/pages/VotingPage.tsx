@@ -1,97 +1,118 @@
 import { useState, useMemo } from 'react'
-import { useSuggestions, useMyVote, useCastVote } from '@/hooks/useVoting'
 import { useAuth } from '@/lib/AuthContext'
 import { PageSpinner } from '@/components/ui/Spinner'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
-import { SuggestionCard } from '@/components/voting/SuggestionCard'
-import { SuggestionForm } from '@/components/voting/SuggestionForm'
-import type { BookSuggestionWithProfile } from '@/types/database'
 import { MONTH_NAMES } from '@/lib/constants'
-
-function getVotingMonth(): { month: number; year: number } {
-  const now = new Date()
-  const next = new Date(now.getFullYear(), now.getMonth() + 1, 1)
-  return { month: next.getMonth() + 1, year: next.getFullYear() }
-}
-
-function isVotingOpen(): boolean {
-  return new Date() <= new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0, 23, 59, 59)
-}
-
-function getWinner(suggestions: BookSuggestionWithProfile[]): BookSuggestionWithProfile | null {
-  if (!suggestions.length) return null
-  return suggestions.reduce((best, s) => {
-    if (s.vote_count > best.vote_count) return s
-    if (s.vote_count === best.vote_count) {
-      return new Date(s.created_at) < new Date(best.created_at) ? s : best
-    }
-    return best
-  })
-}
+import { useBacklogBooks, useCastBacklogVote } from '@/features/backlog/hooks/useBacklog'
+import { BacklogBookCard } from '@/features/backlog/components/BacklogBookCard'
+import { BacklogAddForm } from '@/features/backlog/components/BacklogAddForm'
+import { BacklogEmptyState } from '@/features/backlog/components/BacklogEmptyState'
+import { BacklogLeader } from '@/features/backlog/components/BacklogLeader'
+import {
+  getVotingTarget,
+  isVotingOpen,
+  getDaysUntilVotingEnd,
+} from '@/features/backlog/utils/votingMonth'
 
 export function VotingPage() {
   const { user } = useAuth()
-  const { month, year } = getVotingMonth()
+  const { month, year } = getVotingTarget()
   const votingOpen = isVotingOpen()
+  const daysLeft = getDaysUntilVotingEnd()
 
-  const { data: suggestions = [], isLoading } = useSuggestions(month, year)
-  const { data: myVote } = useMyVote(user?.id ?? '', month, year)
-  const castVote = useCastVote(month, year)
+  const { data: books = [], isLoading } = useBacklogBooks(user?.id ?? '')
+  const castVote = useCastBacklogVote()
 
-  const [showForm, setShowForm] = useState(false)
-  const hasMysuggestion = suggestions.some((s) => s.suggested_by === user?.id)
+  const [showAddForm, setShowAddForm] = useState(false)
 
-  const winner = getWinner(suggestions)
-  const sortedSuggestions = useMemo(
-    () => [...suggestions].sort((a, b) => b.vote_count - a.vote_count),
-    [suggestions]
+  const activeBooks = useMemo(() => books.filter((b) => b.status === 'active'), [books])
+
+  const sortedBooks = useMemo(
+    () =>
+      [...activeBooks].sort(
+        (a, b) =>
+          b.vote_count - a.vote_count ||
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime() ||
+          a.id.localeCompare(b.id),
+      ),
+    [activeBooks],
   )
 
-  const now = new Date()
-  const daysLeft = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate() - now.getDate()
+  const myVotedBookId = useMemo(
+    () => activeBooks.find((b) => b.is_my_vote)?.id ?? null,
+    [activeBooks],
+  )
+
+  const leader = sortedBooks.find((b) => b.vote_count > 0) ?? null
+
+  const winner = useMemo(() => {
+    if (votingOpen) return null
+    const top = sortedBooks[0]
+    if (!top || top.vote_count === 0) return null
+    return top
+  }, [votingOpen, sortedBooks])
 
   if (isLoading) return <PageSpinner />
 
-  const myVoteId = myVote?.suggestion_id ?? null
-
-  async function handleVote(suggestionId: string) {
+  async function handleVote(bookId: string) {
     if (!user || !votingOpen) return
-    await castVote.mutateAsync({ userId: user.id, suggestionId })
+    await castVote.mutateAsync({
+      userId: user.id,
+      bookId,
+      targetMonth: month,
+      targetYear: year,
+    })
   }
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
       <div>
-        <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">Voting</h1>
+        <h1 className="font-serif text-2xl font-bold text-stone-900 dark:text-white">
+          Reading Backlog
+        </h1>
         <p className="text-stone-500 dark:text-white/50 text-sm mt-0.5">
-          Nächster Monat: {MONTH_NAMES[month]} {year}
+          Gemeinsame Leseliste · Voting für {MONTH_NAMES[month]} {year}
         </p>
       </div>
 
-      {/* Status banner */}
+      {/* Status Banner */}
       <Card className="p-4">
         {votingOpen ? (
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🗳️</span>
+            <span className="text-2xl" aria-hidden="true">
+              🗳️
+            </span>
             <div>
               <p className="font-medium text-stone-900 dark:text-white text-sm">Voting läuft</p>
-              <p className="text-xs text-stone-500 dark:text-white/50">Bis Monatsende abstimmen</p>
+              <p className="text-xs text-stone-500 dark:text-white/50">
+                Stimmt ab, welches Buch im {MONTH_NAMES[month]} gelesen wird
+              </p>
             </div>
-            <div className="ml-auto text-right">
-              <p className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">{daysLeft}</p>
-              <p className="text-[10px] text-stone-400 dark:text-white/40 mt-0.5">{daysLeft === 1 ? 'Tag' : 'Tage'}</p>
+            <div className="ml-auto text-right" aria-label={`${daysLeft} Tage verbleibend`}>
+              <p className="font-serif text-xl font-bold text-brand-600 dark:text-brand-400 leading-none">
+                {daysLeft}
+              </p>
+              <p className="text-[10px] text-stone-400 dark:text-white/40 mt-0.5">
+                {daysLeft === 1 ? 'Tag' : 'Tage'}
+              </p>
             </div>
           </div>
         ) : (
           <div className="flex items-center gap-3">
-            <span className="text-2xl">🏁</span>
+            <span className="text-2xl" aria-hidden="true">
+              🏁
+            </span>
             <div>
               <p className="font-medium text-stone-900 dark:text-white text-sm">Voting beendet</p>
-              {winner && (
+              {winner ? (
                 <p className="text-xs text-brand-600 dark:text-brand-400">
                   Gewinner: <strong>{winner.title}</strong>
+                </p>
+              ) : (
+                <p className="text-xs text-stone-500 dark:text-white/50">
+                  Keine Stimmen abgegeben
                 </p>
               )}
             </div>
@@ -99,51 +120,63 @@ export function VotingPage() {
         )}
       </Card>
 
-      {/* Vorschlag einreichen */}
-      {votingOpen && !hasMysuggestion && (
-        <div>
-          <Button
-            variant={showForm ? 'secondary' : 'primary'}
-            onClick={() => setShowForm((v) => !v)}
-          >
-            {showForm ? 'Abbrechen' : '+ Buch vorschlagen'}
-          </Button>
-
-          {showForm && (
-            <Card className="p-5 mt-4">
-              <h2 className="font-semibold text-stone-900 dark:text-white mb-4">Buch vorschlagen</h2>
-              <SuggestionForm month={month} year={year} onSubmitted={() => setShowForm(false)} />
-            </Card>
-          )}
-        </div>
+      {/* Current Leader (during voting) */}
+      {votingOpen && leader && (
+        <BacklogLeader
+          leader={leader}
+          targetMonth={month}
+          targetYear={year}
+          votingOpen={true}
+        />
       )}
 
-      {hasMysuggestion && votingOpen && (
-        <p className="text-sm text-stone-600 dark:text-white/50 bg-stone-100 dark:bg-white/10 rounded-xl px-4 py-3">
-          ✓ Du hast bereits einen Vorschlag eingereicht.
-        </p>
+      {/* Winner (after voting ends) */}
+      {!votingOpen && winner && (
+        <BacklogLeader
+          leader={winner}
+          targetMonth={month}
+          targetYear={year}
+          votingOpen={false}
+        />
       )}
 
-      {/* Suggestions list */}
-      {suggestions.length === 0 ? (
-        <div className="text-center py-12 text-stone-400 dark:text-white/40">
-          <div className="text-4xl mb-3">📬</div>
-          <p className="text-sm">Noch keine Vorschläge für {MONTH_NAMES[month]}.</p>
-        </div>
+      {/* Add Book */}
+      <div>
+        <Button
+          variant={showAddForm ? 'secondary' : 'primary'}
+          onClick={() => setShowAddForm((v) => !v)}
+        >
+          {showAddForm ? 'Abbrechen' : '+ Buch hinzufügen'}
+        </Button>
+
+        {showAddForm && (
+          <Card className="p-5 mt-4">
+            <h2 className="font-semibold text-stone-900 dark:text-white mb-4">
+              Buch zum Backlog hinzufügen
+            </h2>
+            <BacklogAddForm onSubmitted={() => setShowAddForm(false)} />
+          </Card>
+        )}
+      </div>
+
+      {/* Book List */}
+      {activeBooks.length === 0 ? (
+        <BacklogEmptyState onAddClick={() => setShowAddForm(true)} />
       ) : (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-stone-900 dark:text-white">
-            Vorschläge ({suggestions.length})
+            Backlog ({activeBooks.length})
           </h2>
-          {sortedSuggestions.map((s) => (
-            <SuggestionCard
-              key={s.id}
-              suggestion={s}
-              isWinner={!votingOpen && winner?.id === s.id}
-              myVoteId={myVoteId}
+          {sortedBooks.map((book) => (
+            <BacklogBookCard
+              key={book.id}
+              book={book}
+              currentUserId={user?.id ?? ''}
+              myVotedBookId={myVotedBookId}
               onVote={handleVote}
               votingOpen={votingOpen}
               isVoting={castVote.isPending}
+              isWinner={!votingOpen && winner?.id === book.id}
             />
           ))}
         </div>
