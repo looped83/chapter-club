@@ -89,6 +89,11 @@ export interface SuggestionVote {
   updated_at: string
 }
 
+// Updated book_suggestions schema (Backlog V2)
+// Use types from src/features/backlog/types.ts for new code.
+// These are kept here for the Database generic below.
+export type BacklogStatus = 'active' | 'selected' | 'archived'
+
 // Supabase Database type (matches Supabase codegen format)
 export type Database = {
   public: {
@@ -138,15 +143,16 @@ export type Database = {
         Relationships: []
       }
       book_suggestions: {
-        Row: BookSuggestion
+        Row: BookSuggestion & { status: BacklogStatus; updated_at: string }
         Insert: {
           id?: string; title: string; author: string; description?: string | null
           cover_url?: string | null; reason?: string | null; suggested_by: string
-          target_month: number; target_year: number; created_at?: string
+          target_month?: number | null; target_year?: number | null
+          status?: BacklogStatus; created_at?: string; updated_at?: string
         }
         Update: {
           title?: string; author?: string; description?: string | null
-          cover_url?: string | null; reason?: string | null
+          cover_url?: string | null; reason?: string | null; status?: BacklogStatus
         }
         Relationships: []
       }

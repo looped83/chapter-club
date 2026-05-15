@@ -9,4 +9,5 @@ export const queryKeys = {
   profiles: ['profiles'] as const,
   suggestions: (month: number, year: number) => ['suggestions', month, year] as const,
   votes: (month: number, year: number) => ['votes', month, year] as const,
+  backlog: (month: number, year: number) => ['backlog', month, year] as const,
 }
