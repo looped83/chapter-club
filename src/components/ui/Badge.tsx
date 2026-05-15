@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { cn } from '@/lib/cn'
 
 type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'brand'
@@ -16,7 +17,7 @@ const variantClasses: Record<BadgeVariant, string> = {
   brand: 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-brand-300',
 }
 
-export function Badge({ children, variant = 'default', className = '' }: BadgeProps) {
+export const Badge = memo(function Badge({ children, variant = 'default', className = '' }: BadgeProps) {
   return (
     <span
       className={cn(
@@ -28,4 +29,4 @@ export function Badge({ children, variant = 'default', className = '' }: BadgePr
       {children}
     </span>
   )
-}
+})

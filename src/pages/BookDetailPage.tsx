@@ -70,6 +70,23 @@ export function BookDetailPage() {
     if (e.key === 'ArrowLeft')  { e.preventDefault(); el.scrollBy({ left: -el.clientWidth, behavior: 'smooth' }) }
   }, [])
 
+  const handleTabClick = useCallback((t: 'progress' | 'reviews') => {
+    setTab(t)
+    setCarouselIndex(0)
+    setConfirmDelete(false)
+  }, [])
+
+  const handleCarouselDotClick = useCallback((i: number) => {
+    carouselRef.current?.scrollTo({ left: i * (carouselRef.current.clientWidth || 0), behavior: 'smooth' })
+  }, [])
+
+  const bgStyle = useMemo(() => book?.cover_url ? {
+    backgroundImage: `url(${book.cover_url})`,
+    backgroundSize: 'cover' as const,
+    backgroundPosition: 'center' as const,
+    filter: 'blur(28px)',
+  } : undefined, [book?.cover_url])
+
   if (isLoading) return <PageSpinner />
   if (!book) return (
     <div className="text-center py-16">
@@ -87,12 +104,7 @@ export function BookDetailPage() {
         {book.cover_url ? (
           <div
             className="absolute inset-0 scale-110"
-            style={{
-              backgroundImage: `url(${book.cover_url})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              filter: 'blur(28px)',
-            }}
+            style={bgStyle}
             aria-hidden="true"
           />
         ) : (
@@ -195,7 +207,7 @@ export function BookDetailPage() {
             aria-selected={tab === t}
             aria-controls={`tabpanel-${t}`}
             id={`tab-${t}`}
-            onClick={() => { setTab(t); setCarouselIndex(0); setConfirmDelete(false) }}
+            onClick={() => handleTabClick(t)}
             className={cn(
               'flex-1 py-2 rounded-xl text-sm font-medium transition-colors',
               tab === t
@@ -370,9 +382,7 @@ export function BookDetailPage() {
                       type="button"
                       aria-label={`Bewertung von ${r.profiles?.display_name ?? i + 1}`}
                       aria-current={i === carouselIndex ? 'true' : undefined}
-                      onClick={() => {
-                        carouselRef.current?.scrollTo({ left: i * carouselRef.current.clientWidth, behavior: 'smooth' })
-                      }}
+                      onClick={() => handleCarouselDotClick(i)}
                       className={cn(
                         'rounded-full transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400',
                         i === carouselIndex
