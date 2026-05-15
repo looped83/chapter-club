@@ -25,6 +25,8 @@ export function DashboardPage() {
   const [showProgress, setShowProgress] = useState(false)
   const [showReview, setShowReview] = useState(false)
 
+  const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
+
   if (isLoading) return <PageSpinner />
 
   if (error) {
@@ -36,8 +38,6 @@ export function DashboardPage() {
   }
 
   if (!book) return <EmptyState />
-
-  const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
 
   return (
     <div className="flex flex-col gap-5">
