@@ -12,6 +12,9 @@ import { Input } from '@/components/ui/Input'
 import { IMPACT_LABELS, PACE_LABELS } from '@/lib/constants'
 import type { Review, Pace } from '@/types/database'
 
+const IMPACT_VALUES = [1, 2, 3, 4, 5] as const
+const PACE_VALUES: Pace[] = ['too_slow', 'just_right', 'too_fast']
+
 const schema = z.object({
   rating: z.number().min(0.5, 'Bitte eine Bewertung vergeben').max(5).multipleOf(0.5),
   reviewText: z.string().max(2000, 'Max. 2000 Zeichen').optional().default(''),
@@ -141,7 +144,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       <div>
         <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Emotionaler Impact</p>
         <div className="flex gap-2" role="group" aria-label="Emotionaler Impact">
-          {[1, 2, 3, 4, 5].map((n) => (
+          {IMPACT_VALUES.map((n) => (
             <button
               key={n}
               type="button"
@@ -166,7 +169,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
       <div>
         <p className="text-sm font-medium text-stone-700 dark:text-white/70 mb-2">Lesetempo</p>
         <div className="flex gap-2 flex-wrap" role="group" aria-label="Lesetempo">
-          {(['too_slow', 'just_right', 'too_fast'] as Pace[]).map((p) => (
+          {PACE_VALUES.map((p) => (
             <button
               key={p}
               type="button"

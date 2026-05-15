@@ -8,6 +8,7 @@ interface StarPickerProps {
 }
 
 const sizes = { sm: 'w-5 h-5', md: 'w-8 h-8', lg: 'w-10 h-10' }
+const STARS = [1, 2, 3, 4, 5] as const
 
 const StarSvg = memo(function StarSvg({ fillAmount, index, instanceId }: { fillAmount: number; index: number; instanceId: string }) {
   const clipId = `${instanceId}-s${index}`
@@ -50,7 +51,7 @@ export function StarPicker({ value, onChange, readOnly = false, size = 'md' }: S
       role={readOnly ? undefined : 'group'}
       aria-label={readOnly ? `${value} von 5 Sternen` : 'Bewertung wählen'}
     >
-      {[1, 2, 3, 4, 5].map((star) => {
+      {STARS.map((star) => {
         const fillAmount = Math.min(1, Math.max(0, display - (star - 1)))
         return (
           <div key={star} className={`relative ${sizes[size]} flex-shrink-0`}>

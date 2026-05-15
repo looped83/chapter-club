@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { useState, memo, useMemo } from 'react'
 import { cn } from '@/lib/cn'
 import { BookCover } from '@/components/book/BookCover'
 import { Button } from '@/components/ui/Button'
@@ -29,6 +29,13 @@ export const BacklogBookCard = memo(function BacklogBookCard({
   const [isEditing, setIsEditing] = useState(false)
   const archive = useArchiveBacklogBook()
 
+  const bgStyle = useMemo(() => book.cover_url ? {
+    backgroundImage: `url(${book.cover_url})`,
+    backgroundSize: 'cover' as const,
+    backgroundPosition: 'center' as const,
+    filter: 'blur(24px)',
+  } : undefined, [book.cover_url])
+
   const isOwner = book.suggested_by === currentUserId
   const isActive = book.status === 'active'
   const hasMyVote = myVotedBookId === book.id
@@ -56,12 +63,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
       {book.cover_url ? (
         <div
           className="absolute inset-0 scale-110"
-          style={{
-            backgroundImage: `url(${book.cover_url})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            filter: 'blur(24px)',
-          }}
+          style={bgStyle}
           aria-hidden="true"
         />
       ) : (

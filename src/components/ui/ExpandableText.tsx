@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, memo } from 'react'
 import { cn } from '@/lib/cn'
 
 interface ExpandableTextProps {
@@ -13,7 +13,7 @@ const CLAMP: Record<number, string> = {
   4: 'line-clamp-4', 5: 'line-clamp-5', 6: 'line-clamp-6',
 }
 
-export function ExpandableText({
+export const ExpandableText = memo(function ExpandableText({
   text,
   lines = 2,
   className = '',
@@ -50,4 +50,4 @@ export function ExpandableText({
       )}
     </div>
   )
-}
+})

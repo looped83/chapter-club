@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { cn } from '@/lib/cn'
 import type { ReadingProgressWithProfile } from '@/types/database'
 
@@ -40,7 +40,7 @@ const FALLBACK_STATUS_CONFIG = {
   barColor: 'bg-brand-400',
 }
 
-export function GroupProgress({ progressList }: GroupProgressProps) {
+export const GroupProgress = memo(function GroupProgress({ progressList }: GroupProgressProps) {
   if (!progressList.length) {
     return (
       <p className="text-sm text-stone-400 dark:text-white/40 italic">
@@ -135,4 +135,4 @@ export function GroupProgress({ progressList }: GroupProgressProps) {
       </div>
     </div>
   )
-}
+})
