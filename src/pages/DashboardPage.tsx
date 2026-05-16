@@ -103,7 +103,7 @@ export function DashboardPage() {
 
           {/* Suggested by */}
           {book.profiles && (
-            <p className="text-white/50 text-xs mt-2">
+            <p className="text-white/70 text-xs mt-2">
               vorgeschlagen von <span aria-hidden="true">{book.profiles.avatar_emoji}</span> {book.profiles.display_name}
             </p>
           )}
@@ -129,7 +129,7 @@ export function DashboardPage() {
             <Link
               to={`/book/${book.id}`}
               aria-label={`Details: ${book.title}`}
-              className="px-1 text-sm text-white/40 font-medium hover:text-white/70 transition-colors"
+              className="px-1 text-sm text-white/60 font-medium hover:text-white/90 transition-colors"
             >
               Details →
             </Link>

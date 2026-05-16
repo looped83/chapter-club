@@ -32,7 +32,7 @@ export function BacklogLeader({ leader, targetMonth, targetYear, votingOpen }: B
         </div>
       </div>
       {votingOpen && (
-        <p className="text-xs text-stone-400 dark:text-white/30 mt-3">
+        <p className="text-xs text-stone-500 dark:text-white/60 mt-3">
           Das Ergebnis ist bis Monatsende offen – deine Stimme zählt!
         </p>
       )}

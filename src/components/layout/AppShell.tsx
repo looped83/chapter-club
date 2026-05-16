@@ -79,7 +79,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   to={to}
                   className={cn(
                     'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
-                    active ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
+                    active ? 'text-brand-600 dark:text-brand-400' : 'text-stone-500 hover:text-stone-700 dark:text-white/60 dark:hover:text-white',
                   )}
                   aria-current={active ? 'page' : undefined}
                 >
@@ -95,7 +95,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               to="/profile"
               className={cn(
                 'flex flex-col items-center gap-0.5 px-3 py-2 rounded-xl transition-colors min-w-0',
-                location.pathname === '/profile' ? 'text-brand-600 dark:text-brand-400' : 'text-stone-400 hover:text-stone-700 dark:text-white/40 dark:hover:text-white',
+                location.pathname === '/profile' ? 'text-brand-600 dark:text-brand-400' : 'text-stone-500 hover:text-stone-700 dark:text-white/60 dark:hover:text-white',
               )}
               aria-current={location.pathname === '/profile' ? 'page' : undefined}
               aria-label="Profil"
