@@ -43,6 +43,16 @@ export const BacklogBookCard = memo(function BacklogBookCard({
       <div className="rounded-2xl bg-white dark:bg-white/10 border border-stone-100 dark:border-white/10 p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-stone-900 dark:text-white text-sm">Buch bearbeiten</h3>
+          <button
+            type="button"
+            onClick={() => setIsEditing(false)}
+            aria-label="Schließen"
+            className="text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M18 6 6 18M6 6l12 12" />
+            </svg>
+          </button>
         </div>
         <BacklogEditForm book={book} onSuccess={() => setIsEditing(false)} />
       </div>
@@ -71,40 +81,8 @@ export const BacklogBookCard = memo(function BacklogBookCard({
       )}
       <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-black/80" aria-hidden="true" />
 
-      {/* Owner actions – absolute bottom-right */}
-      {isOwner && isActive && (
-        <div className="absolute bottom-3 right-3 z-10 flex flex-col items-end gap-1">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => setIsEditing(true)}
-              className="text-xs text-white/60 hover:text-white/90 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
-            >
-              Bearbeiten
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (window.confirm(`„${book.title}" aus der Leseliste entfernen?`)) {
-                  archive.mutate(book.id)
-                }
-              }}
-              disabled={archive.isPending}
-              className="text-xs text-white/60 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
-            >
-              Entfernen
-            </button>
-          </div>
-          {archive.isError && (
-            <p role="alert" className="text-[10px] text-red-400">
-              {ERROR_MESSAGES.deleteFailed}
-            </p>
-          )}
-        </div>
-      )}
-
       {/* Content */}
-      <div className={cn('relative z-10 p-4 flex gap-4', isOwner && isActive && (archive.isError ? 'pb-12' : 'pb-9'))}>
+      <div className="relative z-10 p-4 flex gap-4">
         {/* Cover */}
         <div className="flex-shrink-0 w-16 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 self-start">
           <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
@@ -127,11 +105,47 @@ export const BacklogBookCard = memo(function BacklogBookCard({
               <h3 className="font-serif font-bold text-white leading-tight">{book.title}</h3>
               <p className="text-sm text-white/70">{book.author}</p>
             </div>
-            <div className="flex items-center gap-1 flex-shrink-0 text-sm font-semibold text-white/80 bg-white/10 rounded-full px-2.5 py-0.5">
-              <span aria-hidden="true">🗳️</span>
-              <span aria-label={`${book.vote_count} Stimmen`}>{book.vote_count}</span>
+            <div className="flex items-center gap-1.5 flex-shrink-0">
+              <div className="flex items-center gap-1 text-sm font-semibold text-white/80 bg-white/10 rounded-full px-2.5 py-0.5">
+                <span aria-hidden="true">🗳️</span>
+                <span aria-label={`${book.vote_count} Stimmen`}>{book.vote_count}</span>
+              </div>
+              {isOwner && isActive && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setIsEditing(true)}
+                    aria-label="Bearbeiten"
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 hover:bg-white/25 text-white/70 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.confirm(`„${book.title}" aus der Leseliste entfernen?`)) {
+                        archive.mutate(book.id)
+                      }
+                    }}
+                    disabled={archive.isPending}
+                    aria-label="Entfernen"
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 hover:bg-red-500/50 text-white/70 hover:text-white transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                </>
+              )}
             </div>
           </div>
+          {archive.isError && (
+            <p role="alert" className="text-[10px] text-red-400 mt-1">
+              {ERROR_MESSAGES.deleteFailed}
+            </p>
+          )}
 
           <p className="text-xs text-white/70">
             vorgeschlagen von <span aria-hidden="true">{book.profiles?.avatar_emoji}</span> {book.profiles?.display_name}
