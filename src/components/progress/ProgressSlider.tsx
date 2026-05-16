@@ -50,25 +50,26 @@ export const ProgressSlider = memo(function ProgressSlider({ bookId, current, on
           </label>
           <span className="text-sm font-semibold text-brand-600 dark:text-brand-400">{percent}%</span>
         </div>
-        <input
-          id="progress-slider"
-          type="range"
-          min={0}
-          max={100}
-          step={5}
-          value={percent}
-          onChange={(e) => handlePercentChange(Number(e.target.value))}
-          className="w-full h-2 rounded-full accent-brand-500 cursor-pointer"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={percent}
-          aria-label="Lesefortschritt in Prozent"
-        />
-        {/* Visual bar */}
-        <div className="mt-1.5 h-1.5 rounded-full bg-stone-100 dark:bg-white/10 overflow-hidden">
+        <div className="relative py-2">
+          <div className="absolute top-1/2 -translate-y-1/2 w-full h-2 rounded-full bg-stone-200 dark:bg-white/10" />
           <div
-            className="h-full rounded-full bg-brand-400 transition-all duration-300"
+            className="absolute top-1/2 -translate-y-1/2 h-2 rounded-full bg-brand-400 transition-[width] duration-150"
             style={{ width: `${percent}%` }}
+            aria-hidden="true"
+          />
+          <input
+            id="progress-slider"
+            type="range"
+            min={0}
+            max={100}
+            step={5}
+            value={percent}
+            onChange={(e) => handlePercentChange(Number(e.target.value))}
+            className="relative w-full appearance-none bg-transparent cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400 focus-visible:ring-offset-2 rounded-full [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-brand-500 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-runnable-track]:bg-transparent [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-brand-500 [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-track]:bg-transparent"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={percent}
+            aria-label="Lesefortschritt in Prozent"
           />
         </div>
       </div>

@@ -87,19 +87,16 @@ export function BacklogAddForm({ onSuccess, onCancel }: BacklogAddFormProps) {
         </p>
       )}
 
-      <Button type="submit" loading={isSubmitting || addBook.isPending}>
-        Zur Leseliste hinzufügen
-      </Button>
-
-      {onCancel && (
-        <button
-          type="button"
-          onClick={onCancel}
-          className="text-sm text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors text-center"
-        >
-          Abbrechen
-        </button>
-      )}
+      <div className="flex items-center gap-3">
+        <Button type="submit" loading={isSubmitting || addBook.isPending}>
+          Zur Leseliste hinzufügen
+        </Button>
+        {onCancel && (
+          <Button type="button" variant="secondary" onClick={onCancel}>
+            Abbrechen
+          </Button>
+        )}
+      </div>
     </form>
   )
 }

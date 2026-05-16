@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from 'react'
+import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { cn } from '@/lib/cn'
 import { createBlurredBgStyle } from '@/lib/styles'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
@@ -37,6 +37,16 @@ export function BookDetailPage() {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const [carouselIndex, setCarouselIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+  const progressCardRef = useRef<HTMLDivElement>(null)
+  const reviewCardRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (editingProgress) progressCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [editingProgress])
+
+  useEffect(() => {
+    if (editingReview) reviewCardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [editingReview])
   const deleteReview = useDeleteReview()
 
   const ratings = useMemo(() => reviews.map((r) => Number(r.rating)), [reviews])
@@ -220,6 +230,7 @@ export function BookDetailPage() {
 
       {tab === 'progress' && (
         <div id="tabpanel-progress" role="tabpanel" aria-labelledby="tab-progress" className="flex flex-col gap-4">
+          <div ref={progressCardRef}>
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-900 dark:text-white">Mein Fortschritt</h3>
@@ -234,9 +245,12 @@ export function BookDetailPage() {
               {editingProgress && (
                 <button
                   onClick={() => setEditingProgress(false)}
-                  className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
+                  aria-label="Schließen"
+                  className="text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white transition-colors"
                 >
-                  Abbrechen
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
                 </button>
               )}
             </div>
@@ -248,6 +262,7 @@ export function BookDetailPage() {
                 bookId={book.id}
                 current={myProgress ?? null}
                 onSaved={() => setEditingProgress(false)}
+                onCancel={() => setEditingProgress(false)}
               />
             ) : (
               <Button
@@ -259,6 +274,7 @@ export function BookDetailPage() {
               </Button>
             )}
           </Card>
+          </div>
           <Card className="p-5">
             <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Gruppen-Fortschritt</h3>
             <GroupProgress progressList={progressList} />
@@ -269,6 +285,7 @@ export function BookDetailPage() {
       {tab === 'reviews' && (
         <div id="tabpanel-reviews" role="tabpanel" aria-labelledby="tab-reviews" className="flex flex-col gap-4">
           {/* ── Meine Bewertung ── */}
+          <div ref={reviewCardRef}>
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-900 dark:text-white">Meine Bewertung</h3>
@@ -291,9 +308,12 @@ export function BookDetailPage() {
               {editingReview && (
                 <button
                   onClick={() => { setEditingReview(false); setConfirmDelete(false) }}
-                  className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
+                  aria-label="Schließen"
+                  className="text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white transition-colors"
                 >
-                  Abbrechen
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M18 6 6 18M6 6l12 12" />
+                  </svg>
                 </button>
               )}
             </div>
@@ -346,6 +366,7 @@ export function BookDetailPage() {
                 bookId={book.id}
                 existing={myReview ?? null}
                 onSaved={() => setEditingReview(false)}
+                onCancel={() => { setEditingReview(false); setConfirmDelete(false) }}
               />
             ) : (
               <Button
@@ -357,6 +378,7 @@ export function BookDetailPage() {
               </Button>
             )}
           </Card>
+          </div>
 
           {/* ── Alle Reviews ── eigene zuerst */}
           {reviews.length > 0 && (
