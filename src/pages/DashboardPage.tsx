@@ -33,7 +33,7 @@ export function DashboardPage() {
   const bgStyle = useMemo(() => createBlurredBgStyle(book?.cover_url), [book?.cover_url])
 
   useEffect(() => {
-    if (showProgress) progressRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    if (showProgress) progressRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [showProgress])
 
   useEffect(() => {
@@ -119,50 +119,30 @@ export function DashboardPage() {
           )}
 
           {/* Actions */}
-          <div className="flex flex-col items-center gap-2 mt-5">
-            <div className="flex items-center gap-3 flex-wrap justify-center">
-              <button
-                onClick={handleOpenProgress}
-                aria-expanded={showProgress}
-                aria-controls="dashboard-progress-editor"
-                className="px-5 py-2 bg-brand-700 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
-              >
-                Fortschritt eintragen
-              </button>
-              <button
-                onClick={handleOpenReview}
-                aria-expanded={showReview}
-                aria-controls="dashboard-review-editor"
-                className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-              >
-                {myReview ? 'Bearbeiten' : 'Bewerten'}
-              </button>
-              <Link
-                to={`/book/${book.id}`}
-                aria-label={`Details: ${book.title}`}
-                className="px-1 text-sm text-white/60 font-medium hover:text-white/90 transition-colors"
-              >
-                Details →
-              </Link>
-            </div>
-            {showProgress && (
-              <button
-                type="button"
-                onClick={() => setShowProgress(false)}
-                className="text-sm text-white/60 hover:text-white/90 transition-colors"
-              >
-                Abbrechen
-              </button>
-            )}
-            {showReview && (
-              <button
-                type="button"
-                onClick={() => setShowReview(false)}
-                className="text-sm text-white/60 hover:text-white/90 transition-colors"
-              >
-                Abbrechen
-              </button>
-            )}
+          <div className="flex items-center gap-3 mt-5 flex-wrap justify-center">
+            <button
+              onClick={handleOpenProgress}
+              aria-expanded={showProgress}
+              aria-controls="dashboard-progress-editor"
+              className="px-5 py-2 bg-brand-700 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
+            >
+              Fortschritt eintragen
+            </button>
+            <button
+              onClick={handleOpenReview}
+              aria-expanded={showReview}
+              aria-controls="dashboard-review-editor"
+              className="px-4 py-2 border border-white/25 text-white/75 rounded-xl text-sm font-medium hover:bg-white/10 hover:border-white/40 hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            >
+              {myReview ? 'Bearbeiten' : 'Bewerten'}
+            </button>
+            <Link
+              to={`/book/${book.id}`}
+              aria-label={`Details: ${book.title}`}
+              className="px-1 text-sm text-white/60 font-medium hover:text-white/90 transition-colors"
+            >
+              Details →
+            </Link>
           </div>
         </div>
 
@@ -171,28 +151,46 @@ export function DashboardPage() {
       {/* ── Inline progress editor ── */}
       {showProgress && (
         <div ref={progressRef}>
-        <Card id="dashboard-progress-editor" className="p-5">
-          <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Mein Fortschritt</h3>
-          <ProgressSlider
-            bookId={book.id}
-            current={myProgress ?? null}
-            onSaved={() => setShowProgress(false)}
-          />
-        </Card>
+          <Card id="dashboard-progress-editor" className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-stone-900 dark:text-white">Mein Fortschritt</h3>
+              <button
+                type="button"
+                onClick={() => setShowProgress(false)}
+                className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-700 dark:hover:text-white transition-colors"
+              >
+                Abbrechen
+              </button>
+            </div>
+            <ProgressSlider
+              bookId={book.id}
+              current={myProgress ?? null}
+              onSaved={() => setShowProgress(false)}
+            />
+          </Card>
         </div>
       )}
 
       {/* ── Inline review editor ── */}
       {showReview && (
         <div ref={reviewRef}>
-        <Card id="dashboard-review-editor" className="p-5">
-          <h3 className="font-semibold text-stone-900 dark:text-white mb-4">Meine Bewertung</h3>
-          <ReviewForm
-            bookId={book.id}
-            existing={myReview ?? null}
-            onSaved={() => setShowReview(false)}
-          />
-        </Card>
+          <Card id="dashboard-review-editor" className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-semibold text-stone-900 dark:text-white">Meine Bewertung</h3>
+              <button
+                type="button"
+                onClick={() => setShowReview(false)}
+                className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-700 dark:hover:text-white transition-colors"
+              >
+                Abbrechen
+              </button>
+            </div>
+            <ReviewForm
+              bookId={book.id}
+              existing={myReview ?? null}
+              onSaved={() => setShowReview(false)}
+            />
+          </Card>
         </div>
       )}
 
