@@ -78,7 +78,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="text-xs text-white/40 hover:text-white/70 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
+              className="text-xs text-white/60 hover:text-white/90 transition-colors underline underline-offset-2 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
             >
               Bearbeiten
             </button>
@@ -90,7 +90,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
                 }
               }}
               disabled={archive.isPending}
-              className="text-xs text-white/30 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
+              className="text-xs text-white/60 hover:text-red-400 transition-colors underline underline-offset-2 disabled:opacity-50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/50 rounded"
             >
               Entfernen
             </button>
@@ -133,7 +133,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
             </div>
           </div>
 
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-white/70">
             vorgeschlagen von <span aria-hidden="true">{book.profiles?.avatar_emoji}</span> {book.profiles?.display_name}
           </p>
 
@@ -146,7 +146,7 @@ export const BacklogBookCard = memo(function BacklogBookCard({
               text={book.description}
               lines={2}
               className="text-xs text-white/50 leading-relaxed"
-              toggleClassName="text-white/30 hover:text-white/60 text-xs mt-0.5 transition-colors"
+              toggleClassName="text-white/60 hover:text-white/90 text-xs mt-0.5 transition-colors"
             />
           )}
 

@@ -128,7 +128,7 @@ export function BookDetailPage() {
 
             {/* Info */}
             <div className="flex-1 min-w-0 flex flex-col gap-1.5">
-              <p className="text-white/50 text-xs tracking-widest uppercase">
+              <p className="text-white/70 text-xs tracking-widest uppercase">
                 {MONTH_NAMES[book.month]} {book.year}
               </p>
               <h1 className="font-serif text-xl font-bold text-white leading-tight">
@@ -139,7 +139,7 @@ export function BookDetailPage() {
                 <AverageRating ratings={ratings} onDark />
               </div>
               {book.profiles && (
-                <p className="text-white/40 text-xs mt-0.5">
+                <p className="text-white/60 text-xs mt-0.5">
                   vorgeschlagen von <span aria-hidden="true">{book.profiles.avatar_emoji}</span> {book.profiles.display_name}
                 </p>
               )}
@@ -148,7 +148,7 @@ export function BookDetailPage() {
                   text={book.description}
                   lines={2}
                   className="text-white/60 text-xs leading-relaxed mt-1"
-                  toggleClassName="text-white/40 hover:text-white/70 text-xs mt-0.5 transition-colors"
+                  toggleClassName="text-white/60 hover:text-white/90 text-xs mt-0.5 transition-colors"
                 />
               )}
             </div>
@@ -161,7 +161,7 @@ export function BookDetailPage() {
         <div className={cn('grid gap-3', criticalReader && criticalReader.id !== enthusiasticReader?.id ? 'grid-cols-3' : 'grid-cols-2')}>
           {enthusiasticReader && (
             <Card className="p-3">
-              <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Am begeistertsten</p>
+              <p className="text-xs text-stone-500 dark:text-white/60 mb-2 leading-tight">Am begeistertsten</p>
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-2xl" aria-hidden="true">{enthusiasticReader.profiles?.avatar_emoji}</span>
                 <p className="text-xs font-medium text-stone-900 dark:text-white truncate w-full">{enthusiasticReader.profiles?.display_name}</p>
@@ -171,7 +171,7 @@ export function BookDetailPage() {
           )}
           {criticalReader && criticalReader.id !== enthusiasticReader?.id && (
             <Card className="p-3">
-              <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Kritischste Stimme</p>
+              <p className="text-xs text-stone-500 dark:text-white/60 mb-2 leading-tight">Kritischste Stimme</p>
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-2xl" aria-hidden="true">{criticalReader.profiles?.avatar_emoji}</span>
                 <p className="text-xs font-medium text-stone-900 dark:text-white truncate w-full">{criticalReader.profiles?.display_name}</p>
@@ -181,7 +181,7 @@ export function BookDetailPage() {
           )}
           {topReader && (
             <Card className="p-3">
-              <p className="text-xs text-stone-400 dark:text-white/40 mb-2 leading-tight">Am weitesten gelesen</p>
+              <p className="text-xs text-stone-500 dark:text-white/60 mb-2 leading-tight">Am weitesten gelesen</p>
               <div className="flex flex-col items-center gap-1 text-center">
                 <span className="text-2xl" aria-hidden="true">{topReader.profiles?.avatar_emoji}</span>
                 <p className="text-xs font-medium text-stone-900 dark:text-white truncate w-full">{topReader.profiles?.display_name}</p>
@@ -210,7 +210,7 @@ export function BookDetailPage() {
               'flex-1 py-2 rounded-xl text-sm font-medium transition-colors',
               tab === t
                 ? 'bg-white dark:bg-white/15 text-stone-900 dark:text-white shadow-sm'
-                : 'text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white/70',
+                : 'text-stone-500 dark:text-white/60 hover:text-stone-700 dark:hover:text-white/70',
             )}
           >
             {t === 'progress' ? 'Fortschritt' : `Bewertungen${reviews.length > 0 ? ` (${reviews.length})` : ''}`}
@@ -234,7 +234,7 @@ export function BookDetailPage() {
               {editingProgress && (
                 <button
                   onClick={() => setEditingProgress(false)}
-                  className="text-sm text-stone-400 dark:text-white/40 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
+                  className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
                 >
                   Abbrechen
                 </button>
@@ -276,7 +276,7 @@ export function BookDetailPage() {
                 <div className="flex items-center gap-3">
                   <button
                     onClick={() => setConfirmDelete(true)}
-                    className="text-sm text-stone-400 dark:text-white/30 hover:text-red-500 dark:hover:text-red-400 transition-colors"
+                    className="text-sm text-stone-500 dark:text-white/60 hover:text-red-500 dark:hover:text-red-400 transition-colors"
                   >
                     Löschen
                   </button>
@@ -291,7 +291,7 @@ export function BookDetailPage() {
               {editingReview && (
                 <button
                   onClick={() => { setEditingReview(false); setConfirmDelete(false) }}
-                  className="text-sm text-stone-400 dark:text-white/40 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
+                  className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-600 dark:hover:text-white/70 transition-colors"
                 >
                   Abbrechen
                 </button>
@@ -309,7 +309,7 @@ export function BookDetailPage() {
                 {confirmDelete && (
                   <div role="alertdialog" aria-label="Bewertung löschen bestätigen" className="flex flex-col gap-1.5 pt-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-stone-400 dark:text-white/50">Wirklich löschen?</span>
+                      <span className="text-xs text-stone-500 dark:text-white/60">Wirklich löschen?</span>
                       <button
                         onClick={async () => {
                           if (!user) return
@@ -328,7 +328,7 @@ export function BookDetailPage() {
                       <button
                         onClick={() => setConfirmDelete(false)}
                         aria-label="Löschen abbrechen"
-                        className="text-xs text-stone-400 dark:text-white/30 hover:text-stone-600 dark:hover:text-white/60 transition-colors"
+                        className="text-xs text-stone-500 dark:text-white/60 hover:text-stone-600 dark:hover:text-white/80 transition-colors"
                       >
                         Nein
                       </button>
@@ -406,7 +406,7 @@ export function BookDetailPage() {
           )}
 
           {reviews.length === 0 && (
-            <div className="text-center py-8 text-stone-400 dark:text-white/40 text-sm">
+            <div className="text-center py-8 text-stone-500 dark:text-white/60 text-sm">
               Noch keine Bewertungen. Schreib die erste!
             </div>
           )}

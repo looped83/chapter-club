@@ -24,7 +24,7 @@ export const AverageRating = memo(function AverageRating({ ratings, onDark = fal
   )
 
   if (!ratings.length) return (
-    <span className={`text-sm ${onDark ? 'text-white/50' : 'text-stone-400'}`}>
+    <span className={`text-sm ${onDark ? 'text-white/50' : 'text-stone-500'}`}>
       Noch keine Bewertungen
     </span>
   )
@@ -34,7 +34,7 @@ export const AverageRating = memo(function AverageRating({ ratings, onDark = fal
       <span className={`text-sm font-medium ${onDark ? 'text-white/90' : 'text-stone-600'}`}>
         {avg.toFixed(1)}
       </span>
-      <span className={`text-xs ${onDark ? 'text-white/50' : 'text-stone-400'}`}>
+      <span className={`text-xs ${onDark ? 'text-white/50' : 'text-stone-500'}`}>
         ({ratings.length})
       </span>
     </span>

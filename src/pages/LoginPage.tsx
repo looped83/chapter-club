@@ -37,7 +37,7 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center p-4">
+    <main className="min-h-screen bg-stone-50 dark:bg-stone-950 flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -96,7 +96,7 @@ export function LoginPage() {
                 setMode(mode === 'login' ? 'signup' : 'login')
                 setAuthError(null)
               }}
-              className="text-sm text-stone-400 dark:text-white/40 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+              className="text-sm text-stone-500 dark:text-white/60 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
             >
               {mode === 'login'
                 ? 'Noch kein Konto? Registrieren'
@@ -105,6 +105,6 @@ export function LoginPage() {
           </div>
         </div>
       </div>
-    </div>
+    </main>
   )
 }
