@@ -12,9 +12,10 @@ interface ProgressSliderProps {
   bookId: string
   current: ReadingProgress | null
   onSaved?: () => void
+  onCancel?: () => void
 }
 
-export const ProgressSlider = memo(function ProgressSlider({ bookId, current, onSaved }: ProgressSliderProps) {
+export const ProgressSlider = memo(function ProgressSlider({ bookId, current, onSaved, onCancel }: ProgressSliderProps) {
   const { user } = useAuth()
   const [percent, setPercent] = useState(current?.progress_percent ?? 0)
   const [status, setStatus] = useState<ReadingStatus>(current?.status ?? 'not_started')
@@ -95,14 +96,20 @@ export const ProgressSlider = memo(function ProgressSlider({ bookId, current, on
         </div>
       </div>
 
-      <Button
-        onClick={handleSave}
-        loading={upsert.isPending}
-        variant={saved ? 'secondary' : 'primary'}
-        className="self-start"
-      >
-        {saved ? '✓ Gespeichert' : 'Fortschritt speichern'}
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button
+          onClick={handleSave}
+          loading={upsert.isPending}
+          variant={saved ? 'secondary' : 'primary'}
+        >
+          {saved ? '✓ Gespeichert' : 'Fortschritt speichern'}
+        </Button>
+        {onCancel && (
+          <Button type="button" variant="secondary" onClick={onCancel}>
+            Abbrechen
+          </Button>
+        )}
+      </div>
 
       {upsert.isError && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">

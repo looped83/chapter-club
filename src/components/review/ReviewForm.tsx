@@ -32,9 +32,10 @@ interface ReviewFormProps {
   bookId: string
   existing: Review | null
   onSaved?: () => void
+  onCancel?: () => void
 }
 
-export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
+export function ReviewForm({ bookId, existing, onSaved, onCancel }: ReviewFormProps) {
   const { user } = useAuth()
   const upsert = useUpsertReview()
 
@@ -236,9 +237,16 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
         <span className="text-sm text-stone-600 dark:text-white/70">Enthält Spoiler</span>
       </label>
 
-      <Button type="submit" loading={isSubmitting} disabled={!isDirty && !!existing} className="self-start">
-        {existing ? 'Bewertung aktualisieren' : 'Bewertung speichern'}
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button type="submit" loading={isSubmitting} disabled={!isDirty && !!existing}>
+          {existing ? 'Bewertung aktualisieren' : 'Bewertung speichern'}
+        </Button>
+        {onCancel && (
+          <Button type="button" variant="secondary" onClick={onCancel}>
+            Abbrechen
+          </Button>
+        )}
+      </div>
 
       {upsert.isError && (
         <p role="alert" className="text-sm text-red-600 dark:text-red-400">
