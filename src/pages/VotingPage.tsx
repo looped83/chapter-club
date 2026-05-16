@@ -78,7 +78,7 @@ export function VotingPage() {
 
       {/* Status Banner */}
       {votingOpen ? (
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-500 to-brand-600 p-5 shadow-lg shadow-brand-500/25">
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-brand-700 to-brand-800 p-5 shadow-lg shadow-brand-700/25">
           <div
             className="absolute inset-0 opacity-[0.07]"
             style={DOT_PATTERN_STYLE}
@@ -96,13 +96,13 @@ export function VotingPage() {
                 </span>
                 <p className="font-bold text-white text-base">Voting läuft!</p>
               </div>
-              <p className="text-white/75 text-xs">
+              <p className="text-white/90 text-xs">
                 Welches Buch lesen wir im {MONTH_NAMES[month]} {year}?
               </p>
             </div>
             <div className="flex-shrink-0 text-right" aria-label={`${daysLeft} Tage verbleibend`}>
               <p className="font-serif text-4xl font-bold text-white leading-none">{daysLeft}</p>
-              <p className="text-white/60 text-[11px] mt-0.5">
+              <p className="text-white/80 text-[11px] mt-0.5">
                 {daysLeft === 1 ? 'Tag' : 'Tage'}
               </p>
             </div>
