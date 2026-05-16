@@ -158,9 +158,21 @@ export function VotingPage() {
 
         {showAddForm && (
           <Card className="p-5">
-            <h2 className="font-semibold text-stone-900 dark:text-white mb-4">
-              Buch zur Leseliste hinzufügen
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold text-stone-900 dark:text-white">
+                Buch zur Leseliste hinzufügen
+              </h2>
+              <button
+                type="button"
+                onClick={() => setShowAddForm(false)}
+                aria-label="Schließen"
+                className="text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
             <BacklogAddForm
               onSuccess={() => setShowAddForm(false)}
               onCancel={() => setShowAddForm(false)}
