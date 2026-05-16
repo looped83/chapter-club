@@ -164,7 +164,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
               className={cn(
                 'px-3 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 pace === p
-                  ? 'bg-brand-500 text-white border-brand-500'
+                  ? 'bg-brand-700 text-white border-brand-700'
                   : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               )}
               aria-pressed={pace === p}
@@ -187,7 +187,7 @@ export function ReviewForm({ bookId, existing, onSaved }: ReviewFormProps) {
               className={cn(
                 'px-4 py-1.5 rounded-xl text-sm font-medium border transition-all',
                 wouldReread === val
-                  ? 'bg-brand-500 text-white border-brand-500'
+                  ? 'bg-brand-700 text-white border-brand-700'
                   : 'bg-stone-100 dark:bg-white/10 text-stone-600 dark:text-white/60 border-stone-200 dark:border-white/20 hover:border-stone-300 dark:hover:border-white/30',
               )}
               aria-pressed={wouldReread === val}
