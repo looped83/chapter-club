@@ -84,9 +84,11 @@ export const BacklogBookCard = memo(function BacklogBookCard({
       {/* Content */}
       <div className="relative z-10 p-4 flex gap-4">
         {/* Cover */}
-        <div className="flex-shrink-0 w-16 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 self-start">
-          <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
-        </div>
+        {book.cover_url && (
+          <div className="flex-shrink-0 w-16 rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 self-start">
+            <BookCover title={book.title} coverUrl={book.cover_url} className="w-full aspect-[2/3]" />
+          </div>
+        )}
 
         {/* Info */}
         <div className="flex-1 min-w-0 flex flex-col gap-1.5">
