@@ -114,7 +114,7 @@ export function DashboardPage() {
               onClick={toggleProgress}
               aria-expanded={showProgress}
               aria-controls="dashboard-progress-editor"
-              className="px-5 py-2 bg-brand-500 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
+              className="px-5 py-2 bg-brand-700 text-white rounded-xl text-sm font-semibold shadow hover:bg-brand-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-400"
             >
               {showProgress ? 'Schließen' : 'Fortschritt eintragen'}
             </button>
