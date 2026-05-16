@@ -40,6 +40,21 @@ export function useMyProgress(bookId: string, userId: string) {
   })
 }
 
+export function useDeleteProgress() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ progressId, bookId, userId }: { progressId: string; bookId: string; userId: string }) => {
+      const { error } = await supabase.from('reading_progress').delete().eq('id', progressId)
+      if (error) throw error
+      return { bookId, userId }
+    },
+    onSuccess: (_data, input) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookProgress(input.bookId) })
+      queryClient.invalidateQueries({ queryKey: queryKeys.myProgress(input.bookId, input.userId) })
+    },
+  })
+}
+
 interface UpsertProgressInput {
   bookId: string
   userId: string

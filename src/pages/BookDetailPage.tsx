@@ -3,7 +3,7 @@ import { cn } from '@/lib/cn'
 import { createBlurredBgStyle } from '@/lib/styles'
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom'
 import { useBook } from '@/hooks/useBooks'
-import { useBookProgress, useMyProgress } from '@/hooks/useBookProgress'
+import { useBookProgress, useMyProgress, useDeleteProgress } from '@/hooks/useBookProgress'
 import { useBookReviews, useMyReview, useDeleteReview } from '@/hooks/useReviews'
 import type { ReadingProgress } from '@/types/database'
 import { ExpandableText } from '@/components/ui/ExpandableText'
@@ -33,8 +33,10 @@ export function BookDetailPage() {
     (location.state as { tab?: string } | null)?.tab === 'reviews' ? 'reviews' : 'progress'
   )
   const [editingProgress, setEditingProgress] = useState(false)
+  const [confirmDeleteProgress, setConfirmDeleteProgress] = useState(false)
   const [editingReview, setEditingReview] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const deleteProgress = useDeleteProgress()
   const [carouselIndex, setCarouselIndex] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
   const progressCardRef = useRef<HTMLDivElement>(null)
@@ -235,15 +237,26 @@ export function BookDetailPage() {
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold text-stone-900 dark:text-white">Mein Fortschritt</h3>
               {myProgress && !editingProgress && (
-                <button
-                  onClick={() => setEditingProgress(true)}
-                  aria-label="Bearbeiten"
-                  className="flex items-center justify-center w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-700 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white/60 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
-                  </svg>
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setConfirmDeleteProgress(true)}
+                    aria-label="Löschen"
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-stone-100 hover:bg-red-50 text-stone-500 hover:text-red-500 dark:bg-white/10 dark:hover:bg-red-500/30 dark:text-white/60 dark:hover:text-red-400 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-400"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                    </svg>
+                  </button>
+                  <button
+                    onClick={() => setEditingProgress(true)}
+                    aria-label="Bearbeiten"
+                    className="flex items-center justify-center w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 text-stone-500 hover:text-stone-700 dark:bg-white/10 dark:hover:bg-white/20 dark:text-white/60 dark:hover:text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-400"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                    </svg>
+                  </button>
+                </div>
               )}
               {editingProgress && (
                 <button
@@ -257,6 +270,41 @@ export function BookDetailPage() {
                 </button>
               )}
             </div>
+
+            {confirmDeleteProgress && (
+              <div role="alertdialog" aria-label="Fortschritt löschen bestätigen" className="flex flex-col gap-1.5 mb-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-stone-500 dark:text-white/60">Fortschritt wirklich löschen?</span>
+                  <button
+                    onClick={async () => {
+                      if (!user || !myProgress) return
+                      try {
+                        await deleteProgress.mutateAsync({ progressId: myProgress.id, bookId: book.id, userId: user.id })
+                        setConfirmDeleteProgress(false)
+                      } catch {
+                        // error shown below
+                      }
+                    }}
+                    aria-label="Fortschritt endgültig löschen"
+                    className="text-xs text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 font-medium transition-colors"
+                  >
+                    Ja
+                  </button>
+                  <button
+                    onClick={() => setConfirmDeleteProgress(false)}
+                    aria-label="Löschen abbrechen"
+                    className="text-xs text-stone-500 dark:text-white/60 hover:text-stone-700 dark:hover:text-white transition-colors"
+                  >
+                    Nein
+                  </button>
+                </div>
+                {deleteProgress.isError && (
+                  <p role="alert" className="text-xs text-red-600 dark:text-red-400">
+                    {ERROR_MESSAGES.deleteFailed}
+                  </p>
+                )}
+              </div>
+            )}
 
             {myProgress && !editingProgress ? (
               <ProgressSummary progress={myProgress} />
