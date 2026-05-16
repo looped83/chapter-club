@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { ERROR_MESSAGES } from '@/lib/constants'
 
-const AVATARS = ['📚', '🌸', '☕', '🌙', '🦋', '🌿', '🎭', '🐝', '🌺', '🦉']
+const AVATARS = ['📚', '🌸', '☕', '🌙', '🦋', '🌿', '🎭', '🐝', '🌺', '🦉', '🌊', '✨']
 
 const schema = z.object({
   display_name: z.string().min(1, 'Name ist erforderlich').max(50),
@@ -157,10 +157,10 @@ export function ProfilePage() {
         <h2 className="font-semibold text-stone-900 dark:text-white mb-3">Account</h2>
         <p className="text-sm text-stone-500 dark:text-white/50">{user?.email}</p>
         <Button
-          variant="ghost"
+          variant="secondary"
           size="sm"
-          className="mt-3 text-red-500 dark:text-red-400 hover:text-red-400 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-500/10"
-          onClick={() => { supabase.auth.signOut().catch((err) => console.error('Sign out failed:', err)) }}
+          className="mt-3"
+          onClick={() => { supabase.auth.signOut().catch(() => {}) }}
         >
           Abmelden
         </Button>
