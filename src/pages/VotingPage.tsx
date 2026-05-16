@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 
 const DOT_PATTERN_STYLE: React.CSSProperties = {
   backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)',
@@ -30,6 +30,11 @@ export function VotingPage() {
   const castVote = useCastBacklogVote()
 
   const [showAddForm, setShowAddForm] = useState(false)
+  const addFormRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (showAddForm) addFormRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [showAddForm])
 
   const activeBooks = useMemo(() => books.filter((b) => b.status === 'active'), [books])
 
@@ -157,6 +162,7 @@ export function VotingPage() {
         )}
 
         {showAddForm && (
+          <div ref={addFormRef}>
           <Card className="p-5">
             <div className="flex items-center justify-between mb-4">
               <h2 className="font-semibold text-stone-900 dark:text-white">
@@ -178,6 +184,7 @@ export function VotingPage() {
               onCancel={() => setShowAddForm(false)}
             />
           </Card>
+          </div>
         )}
       </div>
 
