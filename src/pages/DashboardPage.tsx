@@ -157,15 +157,19 @@ export function DashboardPage() {
               <button
                 type="button"
                 onClick={() => setShowProgress(false)}
-                className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-700 dark:hover:text-white transition-colors"
+                aria-label="Schließen"
+                className="text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white transition-colors"
               >
-                Abbrechen
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
               </button>
             </div>
             <ProgressSlider
               bookId={book.id}
               current={myProgress ?? null}
               onSaved={() => setShowProgress(false)}
+              onCancel={() => setShowProgress(false)}
             />
           </Card>
         </div>
@@ -180,15 +184,19 @@ export function DashboardPage() {
               <button
                 type="button"
                 onClick={() => setShowReview(false)}
-                className="text-sm text-stone-500 dark:text-white/60 hover:text-stone-700 dark:hover:text-white transition-colors"
+                aria-label="Schließen"
+                className="text-stone-400 dark:text-white/40 hover:text-stone-700 dark:hover:text-white transition-colors"
               >
-                Abbrechen
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M18 6 6 18M6 6l12 12" />
+                </svg>
               </button>
             </div>
             <ReviewForm
               bookId={book.id}
               existing={myReview ?? null}
               onSaved={() => setShowReview(false)}
+              onCancel={() => setShowReview(false)}
             />
           </Card>
         </div>
